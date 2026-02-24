@@ -16,4 +16,9 @@ const blog = defineCollection({
 		}),
 });
 
+const vids = defineCollection({
+	// loader,
+	// schema
+})
+
 export const collections = { blog };

@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/Base.astro'
+import { XMLParser } from 'fast-xml-parser'
+
+const channelId = 'UCFpptpegJ_Ys54PGYwTYPPg'
+const rss = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`
+const parser = new XMLParser({ ignoreAttributes: false })
+const xml = await fetch(rss).then(res => res.text()).then((xml) => parser.parse(xml))
+const { feed: { title, author, entry: entries } } = xml
+// console.log( entries )
+---
+
+<BaseLayout title={title}>
+	{ entries.map((entry) => {
+			const { 'yt:videoid': id, link: {'@_href': link}, title, published } = entry
+			return (
+				<p>{id}</p><p>{link}</p><p>{title}</p><p>{published}</p>
+			)
+	}) }
+</BaseLayout>

@@ -1,9 +1,11 @@
 ---
-const { title } = Astro.props
-import { Activity } from '@lucide/astro'
+import Header from '../components/Header.astro'
+
 import 'open-props/normalize.min.css'
 /*@import "open-props/open-props.min.css";*/
 import '../global.css'
+
+const { title } = Astro.props
 ---
 
 <html lang="en">
@@ -15,40 +17,10 @@ import '../global.css'
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
-		<style>
-			header {
-				display: flex;
-				align-items: center;
-				margin-bottom: 1rem;
-				padding: .4rem .8rem;
-				box-shadow: 0px 0px 10px black;
-
-				/* h1 is 2em */
-				& :global(svg) {
-					width: 1em;
-					height: 1em;
-				}
-
-				&::after {
-					content: '';
-					flex: 1;
-				}
-			}
-			.title {
-				font-size: var(--font-size-5);
-				font-weight: var(--font-weight-7);
-				display: flex;
-				align-items: center;
-				gap: .75rem;
-				flex: 1;
-			}
-		</style>
 	</head>
 	<body>
-		<header>
-			<div class="title"><Activity /> days.</div>
-			<h1>{title !== "days" && title}</h1>
-		</header>
+		<Header title={title} />
 		<slot />
+		<footer>John Sherrell</footer>
 	</body>
 </html>
