@@ -9,7 +9,10 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.17.1"
+    "astro": "^5.17.1",
+    "cssnano": "^7.1.2",
+    "open-props": "^1.7.23",
+    "postcss-jit-props": "^1.0.16"
   },
   "devDependencies": {
     "wrangler": "^4.68.0"

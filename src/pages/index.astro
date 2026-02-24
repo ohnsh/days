@@ -1,18 +1,20 @@
 ---
-
+import BaseLayout from '../layouts/Base.astro'
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" href="/favicon.ico" sizes="32x32" />
-		<link rel="icon" type="image/png" href="/favicon.png" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Days">
+	<header>
+		<h1>Days.</h1>
+	</header>
+	<main>
+
+	</main>
+	<footer>
+	</footer>
+</BaseLayout>
+
+<style>
+	h1 {
+		margin-block: 0;
+	}
+</style>
