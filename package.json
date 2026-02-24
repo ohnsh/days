@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@astro-community/astro-embed-youtube": "^0.5.10",
+    "@astrojs/mdx": "^4.3.13",
     "@lucide/astro": "^0.575.0",
     "astro": "^5.17.1",
     "cssnano": "^7.1.2",
