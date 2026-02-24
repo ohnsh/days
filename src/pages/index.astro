@@ -1,34 +1,12 @@
 ---
 import BaseLayout from '../layouts/Base.astro'
 import { YouTube } from '@astro-community/astro-embed-youtube'
-import { Activity } from '@lucide/astro'
 ---
 
 <BaseLayout title="days">
-	<header>
-		<Activity /> 
-		<h1>days.</h1>
-	</header>
 	<main>
 		<YouTube id="AKzb2lnkp3c" posterQuality="max" />
 	</main>
 	<footer>
 	</footer>
 </BaseLayout>
-
-<style>
-	header {
-		display: flex;
-		align-items: center;
-		gap: .75rem;
-
-		/* h1 is 2em */
-		& :global(svg) {
-			width: 1.8em;
-			height: 1.8em;
-		}
-	}
-	h1 {
-		margin-block: 0;
-	}
-</style>
