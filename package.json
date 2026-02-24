@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@astro-community/astro-embed-youtube": "^0.5.10",
+    "@lucide/astro": "^0.575.0",
     "astro": "^5.17.1",
     "cssnano": "^7.1.2",
     "open-props": "^1.7.23",
