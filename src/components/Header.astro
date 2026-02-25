@@ -14,7 +14,7 @@ import { Activity } from '@lucide/astro'
 		align-items: center;
 		margin-bottom: 1rem;
 		padding: .4rem .8rem;
-		box-shadow: 0px 0px 10px black;
+		box-shadow: var(--shadow-2);
 
 		/* h1 is 2em */
 		& :global(svg) {
@@ -27,9 +27,11 @@ import { Activity } from '@lucide/astro'
 			flex: 1;
 		}
 	}
-	.title {
+	h1, .title {
 		font-size: var(--font-size-4);
-		font-weight: var(--font-weight-7);
+  		font-weight: var(--font-weight-7);
+	}
+	.title {
 		display: flex;
 		align-items: center;
 		gap: .75rem;
