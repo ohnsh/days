@@ -1,0 +1,21 @@
+---
+import { Image } from 'astro:assets'
+import type { CollectionEntry } from 'astro:content'
+
+interface Props {
+    post: CollectionEntry<'posts'>
+}
+
+const { post } = Astro.props
+---
+
+<a href={`/post/${post.id}/`}>
+    {post.data.heroImage && (
+        <Image width={720} height={360} src={post.data.heroImage} alt="" />
+    )}
+    <h4 class="title">{post.data.title}</h4>
+    <p>{post.data.description}</p>
+    <p class="date">
+        {post.data.pubDate.toLocaleDateString()}
+    </p>
+</a>

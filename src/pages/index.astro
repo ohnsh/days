@@ -1,7 +1,7 @@
 ---
-import BaseLayout from '../layouts/Base.astro'
+import BaseLayout from '@/layouts/Base.astro'
+import Post from '@/components/Post.astro'
 
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('posts')).sort(
@@ -11,25 +11,10 @@ const posts = (await getCollection('posts')).sort(
 
 <BaseLayout title="posts">
 	<main>
-		<section>
-			<ul>
-				{
-					posts.map((post) => (
-						<li>
-							<a href={`/post/${post.id}/`}>
-								{post.data.heroImage && (
-									<Image width={720} height={360} src={post.data.heroImage} alt="" />
-								)}
-								<h4 class="title">{post.data.title}</h4>
-								<p>{post.data.description}</p>
-								<p class="date">
-									{post.data.pubDate}
-								</p>
-							</a>
-						</li>
-					))
-				}
-			</ul>
-		</section>
+		{
+			posts.map((post) => (
+				<Post post={post} />
+			))
+		}
 	</main>
 </BaseLayout>
