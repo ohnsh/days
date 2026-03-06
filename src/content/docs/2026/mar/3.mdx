@@ -1,0 +1,47 @@
+---
+title: March 3, 2026
+date: 2026-03-03
+lastUpdated: 2026-03-05
+---
+
+import { YouTube } from '@astro-community/astro-embed-youtube'
+
+<YouTube id="cGvMmxDmb-w" posterQuality="max" />
+
+Sample code for generating OG images with Satori and Resvg:
+
+```ts
+// src/pages/og/[slug].png.ts
+import satori from 'satori';
+import { Resvg } from '@resvg/resvg-js';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { title: post.data.title },
+  }));
+}
+
+export const GET = async ({ props }) => {
+  // Satori requires a font as an ArrayBuffer
+  const fontData = await fetch('https://example.com').then(res => res.arrayBuffer());
+
+  const svg = await satori(
+    { type: 'div', props: { children: props.title, style: { fontSize: 60 } } },
+    { width: 1200, height: 630, fonts: [{ name: 'Inter', data: fontData }] }
+  );
+
+  const resvg = new Resvg(svg);
+  const pngData = resvg.render().asPng();
+
+  return new Response(pngData, { headers: { 'Content-Type': 'image/png' } });
+};
+```
+
+See also [astro-og-canvas](https://github.com/delucis/astro-og-canvas/tree/latest/packages/astro-og-canvas)
+and [astro-opengraph-images](https://github.com/shepherdjerred/monorepo/tree/main/packages/astro-opengraph-images).
+See also the frontmatter of this post for a method of setting the \<meta> tags manually.
+
+<YouTube id="xdc3BUCy3C8" posterQuality="max" />

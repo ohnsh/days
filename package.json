@@ -10,15 +10,22 @@
   },
   "dependencies": {
     "@astro-community/astro-embed-youtube": "^0.5.10",
-    "@astrojs/mdx": "^4.3.13",
-    "@lucide/astro": "^0.575.0",
-    "astro": "^5.17.1",
-    "cssnano": "^7.1.2",
-    "fast-xml-parser": "^5.3.7",
-    "open-props": "^1.7.23",
-    "postcss-jit-props": "^1.0.16"
+    "@astrojs/starlight": "^0.37.6",
+    "@lucide/astro": "^0.577.0",
+    "@mux/mux-player-astro": "^3.11.5",
+    "astro": "^5.18.0"
   },
   "devDependencies": {
-    "wrangler": "^4.68.0"
+    "prettier": "^3.8.1",
+    "wrangler": "^4.71.0"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "printWidth": 100,
+    "tabWidth": 2,
+    "objectWrap": "collapse",
+    "proseWrap": "always"
   }
 }
