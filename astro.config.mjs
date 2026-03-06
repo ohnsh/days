@@ -1,11 +1,13 @@
 // @ts-check
 import { defineConfig } from 'astro/config'
 import starlight from '@astrojs/starlight'
+import flexoki from 'starlight-theme-flexoki'
 
 // https://astro.build/config
 export default defineConfig({
   integrations: [
     starlight({
+      plugins: [flexoki()],
       title: 'days.',
       lastUpdated: true,
       routeMiddleware: '@/routeData.ts',
