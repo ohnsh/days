@@ -30,7 +30,11 @@ export default defineConfig({
         { label: 'March', autogenerate: { directory: '2026/mar' } },
         { label: 'February', autogenerate: { directory: '2026/feb' }, collapsed: true },
         { label: 'January', autogenerate: { directory: '2026/jan' }, collapsed: true },
-        { label: 'scratch.ohn.sh', link: 'https://scratch.ohn.sh', attrs: { target: '_blank' } },
+        {
+          label: 'scratch.ohn.sh',
+          link: 'https://scratch.ohn.sh',
+          attrs: { target: '_blank', style: 'margin-top: 2em' },
+        },
         { label: 'j.ohn.sh', link: 'https://j.ohn.sh', attrs: { target: '_blank' } },
       ],
     }),
