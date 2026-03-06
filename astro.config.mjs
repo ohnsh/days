@@ -22,7 +22,7 @@ export default defineConfig({
       // favicon value always rendered after custom tags, so it needs to be the preferred icon.
       favicon: '/favicon.svg',
       social: [
-        { icon: 'github', label: 'GitHub', href: 'https://github.com/ohnsh/scratch' },
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/ohnsh/days' },
         { icon: 'youtube', label: 'YouTube', href: 'https://youtube.com/@ohn-sh' },
         { icon: 'instagram', label: 'Instagram', href: 'https://instagram.com/j.ohn.sh' },
       ],
