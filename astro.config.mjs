@@ -5,16 +5,20 @@ import starlight from '@astrojs/starlight';
 // https://astro.build/config
 export default defineConfig({
 	integrations: [starlight({
-		title: 'days',
+		title: 'days.',
 		lastUpdated: true,
 		routeMiddleware: '@/routeData.ts',
-		// logo: { replacesTitle: true, dark: '@/assets/flask-conical-dark.svg', light: '@/assets/flask-conical-light.svg' },
-		// head: [
-		// 		{ tag: 'link', attrs: { rel: 'icon', href: '/favicon.ico', sizes: '32x32' } },
-		// 		{ tag: 'link', attrs: { rel: 'icon', href: '/flask-conical.png', type: 'image/png' } },
-		// 	],
-			// favicon value always rendered after custom tags, so it needs to be the preferred icon.
-			// favicon: '/flask-conical.svg',
+		logo: {
+			replacesTitle: false,
+			dark: '@/assets/days-dark.svg',
+			light: '@/assets/days-light.svg'
+		},
+		head: [
+				{ tag: 'link', attrs: { rel: 'icon', href: '/favicon.ico', sizes: '32x32' } },
+				{ tag: 'link', attrs: { rel: 'icon', href: '/favicon.png', type: 'image/png' } },
+			],
+		 // favicon value always rendered after custom tags, so it needs to be the preferred icon.
+		favicon: '/favicon.svg',
 		sidebar: [
 					{ label: 'March', autogenerate: { directory: '2026/mar' } },
 					{ label: 'February', autogenerate: { directory: '2026/feb' }, collapsed: true },
