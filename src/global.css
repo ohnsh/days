@@ -33,3 +33,10 @@
   --sl-color-gray-6: var(--srcery-background);
   --sl-color-black: var(--srcery-background);
 }
+
+.author {
+  font-size: 0.95em;
+  margin-top: -1.25em;
+  margin-bottom: 1.25em;
+  color: var(--sl-color-accent-high);
+}

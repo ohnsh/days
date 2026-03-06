@@ -27,6 +27,11 @@ export default defineConfig({
         { icon: 'instagram', label: 'Instagram', href: 'https://instagram.com/j.ohn.sh' },
       ],
       sidebar: [
+        {
+          label: 'John Sherrell',
+          link: 'https://j.ohn.sh',
+          attrs: { target: '_blank', class: 'author' },
+        },
         { label: 'March', autogenerate: { directory: '2026/mar' } },
         { label: 'February', autogenerate: { directory: '2026/feb' }, collapsed: true },
         { label: 'January', autogenerate: { directory: '2026/jan' }, collapsed: true },
