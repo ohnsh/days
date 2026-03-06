@@ -6,14 +6,16 @@
 }
 
 :root {
+  --sl-color-black: oklch(.2 0 0);
   --srcery-15: #fce8c3;
-  --sl-color-accent-high: var(--srcery-15);
+  --sl-color-accent-high: oklch(.94 .07 85);
   --sl-color-accent: oklch(.7 .25 85);
   --sl-color-accent-low: oklch(.5 .25 85);
 }
 :root[data-theme="light"] {
+  --sl-color-black: var(--color-paper);
   --sl-color-accent-low: var(--srcery-15);
-  --sl-color-accent: oklch(.7 .25 85);
+  --sl-color-accent: oklch(.75 .2 85);
   --sl-color-accent-high: oklch(.5 .25 85);
 }
 
