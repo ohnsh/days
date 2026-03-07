@@ -4,6 +4,14 @@ date: 2026-03-06
 ---
 
 import { YouTube } from '@astro-community/astro-embed-youtube'
+import { Code } from '@astrojs/starlight/components'
+import Recent_astro from '@/components/Recent.astro?raw'
+
+### Creating an index page.
+
+On a blog, the main (root) page should be a list of recent posts. Starlight doesn't that functionality built-in, so here's a first pass at a custom `<RecentPosts>` component. It's already being used at [days.ohn.sh](https://days.ohn.sh).
+
+<Code code={Recent_astro} lang="astro" title="Recent.astro" />
 
 <YouTube id="jkYk5JoXKls" posterQuality="max" />
 <YouTube id="09pphIWCXfo" posterQuality="max" />

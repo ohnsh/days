@@ -3,11 +3,9 @@
 }
 
 .hero {
+  /* Remove second column when there's no image. */
   grid-template-columns: auto;
-  /* or display: block; */
   padding-block-start: 2rem;
 }
 
-.tagline {
-  /* max-width: 80ch; */
-}
+.tagline { max-width: 80ch; }
