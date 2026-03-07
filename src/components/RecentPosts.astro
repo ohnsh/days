@@ -13,11 +13,14 @@ const filteredEntries = docEntries
   .sort((a, b) => {
     return b.data.date.getTime() - a.data.date.getTime() || a.data.title.localeCompare(b.data.title)
   })
-  .slice(0, 5)
+
+const numPosts = 5
 ---
 
 <section>
-  {filteredEntries.map((entry) => <Preview {entry} /><hr />)}
+  {filteredEntries.slice(0, numPosts).map((entry) =>
+    <Preview {entry} /><hr />
+  )}
 </section>
 <style>
   hr {

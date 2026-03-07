@@ -5,17 +5,23 @@ date: 2026-03-06
 
 import { YouTube } from '@astro-community/astro-embed-youtube'
 import { Code } from '@astrojs/starlight/components'
-import Recent_astro from '@/components/Recent.astro?raw'
+import RecentPosts_astro from '@/components/RecentPosts.astro?raw'
 
 ### Creating an index page.
 
-On a blog, the main (root) page should be a list of recent posts. Starlight doesn't that functionality built-in, so here's a first pass at a custom `<RecentPosts>` component. It's already being used at [days.ohn.sh](https://days.ohn.sh).
+On a blog, the main (root) page should contain a list of recent posts. Starlight doesn't have that functionality built-in, so here's a first pass at a custom `<RecentPosts>` component. It's already being used at [days.ohn.sh](https://days.ohn.sh).
 
-<Code code={Recent_astro} lang="astro" title="Recent.astro" />
+<Code code={RecentPosts_astro} lang="astro" title="RecentPosts.astro" />
+
+Notice that [Astro's JSX-like templates](https://docs.astro.build/en/reference/astro-syntax/) can contain unwrapped fragments like `<Preview /><hr />`. Additionally, since they only render once (at build time in this case), there's no need for a React-like `key` prop on map-generated elements.
+
+### Theme me
+
+It's not particularly hard to [customize Starlight's default theme](https://starlight.astro.build/guides/css-and-tailwind/#theming), but for now I've decided to use [Flexoki](https://delucis.github.io/starlight-theme-flexoki/) with mininimal customization. I had fiddled for too long with a custom dark mode and decided that a dual-mode theme was too much to think about at this stage of the project. I considered disabling light mode completely--a GitHub discussion has [unofficial instructions](https://github.com/withastro/starlight/discussions/949)--but using an off-the-shelf theme makes that unnecessary.
+
+[Srcery](https://github.com/srcery-colors) is my new favorite terminal theme, so the look may drift in that direction. (Flexoki with a gold-ish accent color is already pretty close.)
 
 <YouTube id="jkYk5JoXKls" posterQuality="max" />
 <YouTube id="09pphIWCXfo" posterQuality="max" />
 
 <YouTube id="nd17917a4Rc" posterQuality="max" />
-
-https://github.com/withastro/starlight/discussions/949

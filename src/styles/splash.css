@@ -5,7 +5,15 @@
 .hero {
   /* Remove second column when there's no image. */
   grid-template-columns: auto;
-  padding-block-start: 2rem;
+  padding-block-start: 3rem;
+
+  /* when centered */
+  padding-inline: min(3rem, 8%);
+  @media (min-width: 50rem) {
+    /* when not centered */
+    padding-inline-start: 0;
+  }
+
 }
 
 .tagline { max-width: 80ch; }

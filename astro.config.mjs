@@ -12,7 +12,8 @@ export default defineConfig({
       // pagefind: false,
       plugins: [flexoki()],
       title: 'days.',
-      lastUpdated: true,
+      description: 'A blog experiment that will emphasize automation. The idea is to bring in content from various sources (GitHub, YouTube, etc.) and allow the author to curate and customize the presentation.',
+      lastUpdated: false,
       routeMiddleware: '@/routeData.ts',
       logo: {
         replacesTitle: false,

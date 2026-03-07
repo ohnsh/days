@@ -10,6 +10,6 @@ import splash_css from '@/styles/splash.css?raw'
 
 [Yesterday](/2026/mar/6), I created (a rough version of) an Astro component that renders a stream of recent posts for a blog index page. I'm already using it on [days.ohn.sh](https://days.ohn.sh). For now, I'm using Astro's [Starlight](https://starlight.astro.build) documentation framework, which means the default styling isn't optimized for a blog.
 
-In Starlight, styles can be customized site-wide with the global `customCss` config option. In this case, I only wanted to modify the hero on the main index page. Luckily, you can `import` CSS into an MDX page just like you would in an Astro component. Doing so allows for page-specific CSS tweaks.
+In Starlight, styles can be customized site-wide with the global `customCss` config option. In this case, I only wanted to modify the hero on the main index page. Luckily, you can `import` CSS into an MDX page, just like you would in an Astro component. Doing so allows for page-specific CSS tweaks.
 
 <Code code={splash_css} lang="css" title="splash.css" />
