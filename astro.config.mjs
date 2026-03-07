@@ -2,8 +2,8 @@
 import { defineConfig } from 'astro/config'
 import starlight from '@astrojs/starlight'
 import flexoki from 'starlight-theme-flexoki'
-
 import mdx from '@astrojs/mdx'
+import rehypeExternalLinks from 'rehype-external-links'
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,7 +12,8 @@ export default defineConfig({
       // pagefind: false,
       plugins: [flexoki()],
       title: 'days.',
-      description: 'A blog experiment that will emphasize automation. The idea is to bring in content from various sources (GitHub, YouTube, etc.) and allow the author to curate and customize the presentation.',
+      description:
+        'A blog experiment that will emphasize automation. The idea is to bring in content from various sources (GitHub, YouTube, etc.) and allow the author to curate and customize the presentation.',
       lastUpdated: false,
       routeMiddleware: '@/routeData.ts',
       logo: {
@@ -49,6 +50,7 @@ export default defineConfig({
         { label: 'j.ohn.sh', link: 'https://j.ohn.sh', attrs: { target: '_blank' } },
       ],
     }),
-    mdx(),
+    mdx({ rehypePlugins: [[rehypeExternalLinks, { target: '_blank', rel: [] }]] }),
   ],
+  markdown: { rehypePlugins: [[rehypeExternalLinks, { target: '_blank', rel: [] }]] },
 })

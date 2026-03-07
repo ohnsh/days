@@ -16,6 +16,7 @@
     "@lucide/astro": "^0.577.0",
     "@mux/mux-player-astro": "^3.11.5",
     "astro": "^5.18.0",
+    "rehype-external-links": "^3.0.0",
     "starlight-theme-flexoki": "^0.2.2"
   },
   "devDependencies": {

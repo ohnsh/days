@@ -15,11 +15,15 @@ On a blog, the main (root) page should contain a list of recent posts. Starlight
 
 Notice that [Astro's JSX-like templates](https://docs.astro.build/en/reference/astro-syntax/) can contain unwrapped fragments like `<Preview /><hr />`. Additionally, since they only render once (at build time in this case), there's no need for a React-like `key` prop on map-generated elements.
 
+### starlight-blog
+
+The `<Preview />` component is adapted (but greatly simplified) from the excellent [HiDeoo/starlight-blog](https://github.com/HiDeoo/starlight-blog) project. I would just use the starlight-blog plugin directly, but I intend for this project to eventually be a blog platform itself. I'll likely remove the Starlight layer altogether at some point.
+
 ### Theme me
 
 It's not particularly hard to [customize Starlight's default theme](https://starlight.astro.build/guides/css-and-tailwind/#theming), but for now I've decided to use [Flexoki](https://delucis.github.io/starlight-theme-flexoki/) with mininimal customization. I had fiddled for too long with a custom dark mode and decided that a dual-mode theme was too much to think about at this stage of the project. I considered disabling light mode completely--a GitHub discussion has [unofficial instructions](https://github.com/withastro/starlight/discussions/949)--but using an off-the-shelf theme makes that unnecessary.
 
-[Srcery](https://github.com/srcery-colors) is my new favorite terminal theme, so the look may drift in that direction. (Flexoki with a gold-ish accent color is already pretty close.)
+The look may drift in the direction of [Srcery](https://github.com/srcery-colors), my new favorite terminal theme. (Flexoki with a gold-ish accent color is already pretty close.)
 
 <YouTube id="jkYk5JoXKls" posterQuality="max" />
 <YouTube id="09pphIWCXfo" posterQuality="max" />
