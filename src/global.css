@@ -8,7 +8,7 @@
 :root {
   --sl-color-black: oklch(.2 0 0);
   --srcery-15: #fce8c3;
-  --sl-color-accent-high: oklch(.94 .07 85);
+  --sl-color-accent-high: oklch(.94 .065 85);
   --sl-color-accent: oklch(.7 .25 85);
   --sl-color-accent-low: oklch(.5 .25 85);
 }

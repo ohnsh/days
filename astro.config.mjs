@@ -3,10 +3,13 @@ import { defineConfig } from 'astro/config'
 import starlight from '@astrojs/starlight'
 import flexoki from 'starlight-theme-flexoki'
 
+import mdx from '@astrojs/mdx'
+
 // https://astro.build/config
 export default defineConfig({
   integrations: [
     starlight({
+      // pagefind: false,
       plugins: [flexoki()],
       title: 'days.',
       lastUpdated: true,
@@ -45,5 +48,6 @@ export default defineConfig({
         { label: 'j.ohn.sh', link: 'https://j.ohn.sh', attrs: { target: '_blank' } },
       ],
     }),
+    mdx(),
   ],
 })
