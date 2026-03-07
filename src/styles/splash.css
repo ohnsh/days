@@ -1,0 +1,13 @@
+:root {
+  --sl-sidebar-width: 14rem;
+}
+
+.hero {
+  grid-template-columns: auto;
+  /* or display: block; */
+  padding-block-start: 2rem;
+}
+
+.tagline {
+  /* max-width: 80ch; */
+}

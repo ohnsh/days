@@ -19,7 +19,7 @@ export default defineConfig({
         dark: '@/assets/days-dark.svg',
         light: '@/assets/days-light.svg',
       },
-      customCss: ['@/global.css'],
+      customCss: ['@/styles/global.css'],
       head: [
         { tag: 'link', attrs: { rel: 'icon', href: '/favicon.ico', sizes: '32x32' } },
         { tag: 'link', attrs: { rel: 'icon', href: '/favicon.png', type: 'image/png' } },
