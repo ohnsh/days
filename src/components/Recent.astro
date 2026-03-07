@@ -17,5 +17,12 @@ const filteredEntries = docEntries
 ---
 
 <section>
-  {filteredEntries.map((entry) => <Preview {entry} />)}
+  {filteredEntries.map((entry) => <Preview {entry} /><hr />)}
 </section>
+<style>
+  hr {
+    margin-block: 3rem;
+    border: none;
+    border-top: 1px solid var(--sl-color-gray-5);
+  }
+</style>

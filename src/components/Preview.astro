@@ -12,15 +12,15 @@ const { Content } = await render(entry)
     <h2>
       <a href={`/${entry.id}`}>{entry.data.title}</a>
     </h2>
-    <div class="metadata not-content">
-      {
-        entry.data?.draft && (
+    {
+      entry.data?.draft && (
+        <div class="metadata not-content">
           <div class="badges">
             <Badge size="medium" text="draft" variant="caution" />
           </div>
-        )
-      }
-    </div>
+        </div>
+      )
+    }
   </header>
   <div class="sl-markdown-content">
     <Content components={{ YouTube }} />
@@ -28,14 +28,9 @@ const { Content } = await render(entry)
 </article>
 
 <style>
-  .preview {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
   h2 {
-    margin-bottom: 1.5rem;
+    font-size: var(--sl-text-lg);
+    font-weight: 600;
   }
 
   h2 a {
