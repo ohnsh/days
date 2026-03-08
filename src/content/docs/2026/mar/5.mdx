@@ -7,20 +7,24 @@ import { YouTube } from '@astro-community/astro-embed-youtube'
 
 ### Stupid sidebar tricks
 
-I wanted to add my name and some personal links to the main layout. Being a documentation framework, Starlight isn't really designed with that sort of thing in mind. I decided to use the sidebar, essentially dividing it into a header (for the author's name), main area, and footer (for external links). Note that the sidebar is hidden behind a menu button at mobile sizes.
+I wanted to add my name and some external (non-social) links to the main layout. Starlight, being a documentation framework, isn't really designed with that sort of thing in mind. I decided to use the sidebar, essentially dividing it into a header (for the author's name), main area, and footer (for external links). Note that the sidebar is hidden behind a menu button at mobile sizes.
 
-You can always [override the `<Sidebar>` component](https://starlight.astro.build/reference/overrides/#sidebar), which I probably should do. But for now, this kind of works, along with some custom CSS for the `.author` class.
+You can always [override the `<Sidebar>` component](https://starlight.astro.build/reference/overrides/#sidebar), which I probably should do. But for now, this config-only hack kind of works, along with some custom CSS for the `.author` class.
 
 ```js
+// astro.config.mjs
 {
   sidebar: [
+    // header area
     {
       label: 'John Sherrell',
       link: 'https://j.ohn.sh',
       attrs: { target: '_blank', class: 'author' },
     },
+    // main area
     { label: 'March', autogenerate: { directory: '2026/mar' } },
     ...,
+    // footer area
     {
       label: 'scratch.ohn.sh',
       link: 'https://scratch.ohn.sh',
@@ -34,6 +38,7 @@ You can always [override the `<Sidebar>` component](https://starlight.astro.buil
 ### How to favicon in Starlight
 
 ```js
+// astro.config.mjs
 {
   head: [
     {

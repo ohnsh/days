@@ -2,7 +2,6 @@
 import { defineConfig } from 'astro/config'
 import starlight from '@astrojs/starlight'
 import flexoki from 'starlight-theme-flexoki'
-import mdx from '@astrojs/mdx'
 import rehypeExternalLinks from 'rehype-external-links'
 
 // https://astro.build/config
@@ -21,7 +20,7 @@ export default defineConfig({
         dark: '@/assets/days-dark.svg',
         light: '@/assets/days-light.svg',
       },
-      customCss: ['@/styles/global.css'],
+      customCss: ['@/styles/global.css', '@/styles/splash.css'],
       head: [
         { tag: 'link', attrs: { rel: 'icon', href: '/favicon.ico', sizes: '32x32' } },
         { tag: 'link', attrs: { rel: 'icon', href: '/favicon.png', type: 'image/png' } },
@@ -34,14 +33,17 @@ export default defineConfig({
         { icon: 'instagram', label: 'Instagram', href: 'https://instagram.com/j.ohn.sh' },
       ],
       sidebar: [
+        // header area
         {
           label: 'John Sherrell',
           link: 'https://j.ohn.sh',
           attrs: { target: '_blank', class: 'author' },
         },
+        // main area
         { label: 'March', autogenerate: { directory: '2026/mar' } },
         { label: 'February', autogenerate: { directory: '2026/feb' }, collapsed: true },
         { label: 'January', autogenerate: { directory: '2026/jan' }, collapsed: true },
+        // footer area
         {
           label: 'scratch.ohn.sh',
           link: 'https://scratch.ohn.sh',
