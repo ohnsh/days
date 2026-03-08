@@ -5,15 +5,66 @@ date: 2026-03-05
 
 import { YouTube } from '@astro-community/astro-embed-youtube'
 
-<YouTube id="SHiOWMkumJk" posterQuality="max" />
-<YouTube id="rvGRUsywMzc" posterQuality="max" />
+### Stupid sidebar tricks
 
-<YouTube id="IGBEntXpbNg" posterQuality="max" />
+I wanted to add my name and some personal links to the main layout. Being a documentation framework, Starlight isn't really designed with that sort of thing in mind. I decided to use the sidebar, essentially dividing it into a header (for the author's name), main area, and footer (for external links). Note that the sidebar is hidden behind a menu button at mobile sizes.
 
-Looking into automating OpenGraph images in logs using the YouTube thumbnails:
+You can always [override the `<Sidebar>` component](https://starlight.astro.build/reference/overrides/#sidebar), which I probably should do. But for now, this kind of works, along with some custom CSS for the `.author` class.
+
+```js
+{
+  sidebar: [
+    {
+      label: 'John Sherrell',
+      link: 'https://j.ohn.sh',
+      attrs: { target: '_blank', class: 'author' },
+    },
+    { label: 'March', autogenerate: { directory: '2026/mar' } },
+    ...,
+    {
+      label: 'scratch.ohn.sh',
+      link: 'https://scratch.ohn.sh',
+      attrs: { target: '_blank', style: 'margin-top: 2em' },
+    },
+    { label: 'j.ohn.sh', link: 'https://j.ohn.sh', attrs: { target: '_blank' } },
+  ]
+}
+```
+
+### How to favicon in Starlight
+
+```js
+{
+  head: [
+    {
+      tag: 'link',
+      attrs: { rel: 'icon', href: '/favicon.ico', sizes: '32x32' }
+    },
+    {
+      tag: 'link',
+      attrs: { rel: 'icon', href: '/favicon.png', type: 'image/png' }
+    },
+  ],
+  // favicon value always rendered after custom tags, so it needs to be the preferred icon.
+  favicon: '/favicon.svg'
+}
+```
+
+### Automating OpenGraph images with route middleware and embedded YouTube thumbnails.
+
+import { Code } from '@astrojs/starlight/components'
+import routeData_ts from '@/routeData.ts?raw'
+
+<Code code={routeData_ts} lang="typescript" title="routeData.ts" />
 
 ```
 https://i.ytimg.com/vi/{id}/maxresdefault.jpg
 ```
 
 (from inspecting the `<lite-youtube>` component -- @astro-community/astro-embed-youtube)
+
+<YouTube id="SHiOWMkumJk" posterQuality="max" />
+
+<YouTube id="rvGRUsywMzc" posterQuality="max" />
+
+<YouTube id="IGBEntXpbNg" posterQuality="max" />
