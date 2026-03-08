@@ -7,9 +7,9 @@ import { YouTube } from '@astro-community/astro-embed-youtube'
 
 ### Stupid sidebar tricks
 
-I wanted to add my name and some external (non-social) links to the main layout. Starlight, being a documentation framework, isn't really designed with that sort of thing in mind. I decided to use the sidebar, essentially dividing it into a header (for the author's name), main area, and footer (for external links). Note that the sidebar is hidden behind a menu button at mobile sizes.
+I wanted to add my name and some external (non-social) links to the main layout. Starlight, being a documentation framework, isn't really designed with that sort of thing in mind. I decided to use the sidebar, essentially dividing it into a header (for the author's name), a main area, and a footer (for external links). Note that the sidebar is hidden behind a menu button at mobile sizes.
 
-You can always [override the `<Sidebar>` component](https://starlight.astro.build/reference/overrides/#sidebar), which I probably should do. But for now, this config-only hack kind of works, along with some custom CSS for the `.author` class.
+You can always [override Starlight's `<Sidebar>` component](https://starlight.astro.build/reference/overrides/#sidebar), which is probably what I should do. But for now, this config-only hack kind of works, helped by some custom CSS for the `.author` class.
 
 ```js
 // astro.config.mjs
@@ -37,6 +37,12 @@ You can always [override the `<Sidebar>` component](https://starlight.astro.buil
 
 ### How to favicon in Starlight
 
+For background, see the oft-cited Evil Martians article [How to Favicon in 2026](https://evilmartians.com/chronicles/how-to-favicon-in-2021-six-files-that-fit-most-needs). The main takeaway is that SVG favicons are perfect but Safari still doesn't support them. The obvious reason they're perfect is resolution independence. But another important reason is that, because they can embed CSS, they can adapt to light or dark color schemes with a media query.
+
+The current approach is to provide a catch-all favicon.ico (for [IE5 compatibility](https://en.wikipedia.org/wiki/Favicon#History)), a PNG for Safari (possibly several PNGs at various resolutions), and an SVG for the other modern browsers. It's important for the `<link>` tags to appear in that order, because browsers will pick the last one with an icon type they support.
+
+Unfortunately, Starlight only lets you configure one favicon directly. For the others, `<link>` tags need to be injected manually. But again, the order in which the HTML is rendered is important. Here's a configuration that works:
+
 ```js
 // astro.config.mjs
 {
@@ -55,7 +61,7 @@ You can always [override the `<Sidebar>` component](https://starlight.astro.buil
 }
 ```
 
-### Automating OpenGraph images with route middleware and embedded YouTube thumbnails.
+### Automating OpenGraph images with route middleware and embedded YouTube thumbnails
 
 import { Code } from '@astrojs/starlight/components'
 import routeData_ts from '@/routeData.ts?raw'

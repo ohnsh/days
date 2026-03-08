@@ -6,17 +6,20 @@
 }
 
 :root {
-  --sl-color-black: oklch(.2 0 0);
-  --srcery-15: #fce8c3;
-  --sl-color-accent-high: oklch(.94 .065 85);
-  --sl-color-accent: oklch(.7 .25 85);
-  --sl-color-accent-low: oklch(.5 .25 85);
-}
-:root[data-theme="light"] {
-  --sl-color-black: var(--color-paper);
-  --sl-color-accent-low: var(--srcery-15);
-  --sl-color-accent: oklch(.75 .2 85);
-  --sl-color-accent-high: oklch(.5 .25 85);
+  --sl-flexoki-text-base: 1rem;
+  --sl-flexoki-text-sm: .8rem;
+
+  --sl-color-black: oklch(0.2 0 0);
+  --sl-color-accent: oklch(0.7 0.25 85);
+  --sl-color-accent-low: oklch(0.5 0.25 85);
+  --sl-color-accent-high: oklch(0.94 0.065 85);
+
+  &[data-theme='light'] {
+    --sl-color-black: var(--color-paper);
+    --sl-color-accent: oklch(0.75 0.2 85);
+    --sl-color-accent-low: var(--srcery-15);
+    --sl-color-accent-high: oklch(0.5 0.25 85);
+  }
 }
 
 /* Abandoning custom theme for now (except a little).
