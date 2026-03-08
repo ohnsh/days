@@ -50,7 +50,7 @@ export default defineConfig({
         { label: 'j.ohn.sh', link: 'https://j.ohn.sh', attrs: { target: '_blank' } },
       ],
     }),
-    mdx({ rehypePlugins: [[rehypeExternalLinks, { target: '_blank', rel: [] }]] }),
+    // mdx({ rehypePlugins: [[rehypeExternalLinks, { target: '_blank', rel: [] }]] }),
   ],
   markdown: { rehypePlugins: [[rehypeExternalLinks, { target: '_blank', rel: [] }]] },
 })
