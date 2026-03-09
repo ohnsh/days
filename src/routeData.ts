@@ -4,9 +4,6 @@ export const onRequest = defineRouteMiddleware((context) => {
   const { entry, head } = context.locals.starlightRoute
   const { id, body, data } = entry
 
-  if (!id.startsWith('202')) {
-    return
-  }
   if (!data.ogImage) {
     const { videoId } = body?.match(/<YouTube\s+id="(?<videoId>[^"]+)"/)?.groups ?? {}
     if (videoId) {
