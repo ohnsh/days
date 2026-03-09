@@ -2,25 +2,25 @@
 import Preview from './Preview.astro'
 import { getCollection } from 'astro:content'
 
-const docEntries = await getCollection('docs')
-const filteredEntries = docEntries
-  .filter(
-    (entry) =>
-      entry.id !== 'index' &&
-      entry.data.date instanceof Date &&
-      !(import.meta.env.MODE === 'production' && entry.data.draft === true)
-  )
-  .sort((a, b) => {
-    return b.data.date.getTime() - a.data.date.getTime() || a.data.title.localeCompare(b.data.title)
-  })
+const docEntries = await getCollection(
+  'docs',
+  (entry) =>
+    entry.id !== 'index' &&
+    entry.data.date instanceof Date &&
+    !(import.meta.env.MODE === 'production' && entry.data.draft === true)
+)
+docEntries.sort((a, b) => Number(b.data.date) - Number(a.data.date))
 
 const numPosts = 5
 ---
 
 <section>
-  {filteredEntries.slice(0, numPosts).map((entry) =>
-    <Preview {entry} /><hr />
-  )}
+  {
+    docEntries.slice(0, numPosts).map((entry) => (
+        <Preview {entry} />
+        <hr />
+    ))
+  }
 </section>
 <style>
   hr {
