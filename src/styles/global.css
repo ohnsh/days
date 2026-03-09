@@ -9,55 +9,15 @@
   --sl-flexoki-text-base: 1rem;
   --sl-flexoki-text-sm: .8rem;
 
-  --sl-color-black: oklch(0.2 0 0);
-  --sl-color-accent: oklch(0.7 0.25 85);
-  --sl-color-accent-low: oklch(0.5 0.25 85);
-  --sl-color-accent-high: oklch(0.94 0.065 85);
-
-  &[data-theme='light'] {
-    --sl-color-black: var(--color-paper);
-    --sl-color-accent: oklch(0.75 0.2 85);
-    --sl-color-accent-low: var(--srcery-15);
-    --sl-color-accent-high: oklch(0.5 0.25 85);
+  &:not([data-theme='light']) {
+    --sl-color-black: oklch(0.2 0 0);
+    --sl-color-accent: oklch(0.7 0.25 85);
+    --sl-color-accent-low: oklch(0.5 0.25 85);
+    --sl-color-accent-high: oklch(0.94 0.08 85);
   }
 }
-
-/* Abandoning custom theme for now (except a little).
- * Light mode is too much to think about at this stage.
- * Might come back to it.
- */
-/* srcery/ghostty palette */
-/* :root {
-  --srcery-0: #1c1b19;
-  --srcery-1: #ef2f27;
-  --srcery-2: #519f50;
-  --srcery-3: #fbb829;
-  --srcery-4: #2c78bf;
-  --srcery-5: #e02c6d;
-  --srcery-6: #0aaeb3;
-  --srcery-7: #baa67f;
-  --srcery-8: #918175;
-  --srcery-9: #f75341;
-  --srcery-10: #98bc37;
-  --srcery-11: #fed06e;
-  --srcery-12: #68a8e4;
-  --srcery-13: #ff5c8f;
-  --srcery-14: #2be4d0;
-  --srcery-15: #fce8c3;
-  --srcery-background: var(--srcery-0);
-  --srcery-foreground: var(--srcery-15);
-  --srcery-cursor: var(--srcery-3);
-} */
-
-/* :root {
-	--sl-color-accent-low: var(--srcery-0);
-  --sl-color-accent: var(--srcery-11);
-  --sl-color-accent-high: var(--srcery-15);
-  --sl-color-white: #eeeded;
-  --sl-color-gray-1: #eeeded;
-  --sl-color-gray-2: #eeeded;
-  --sl-color-gray-4: #5a5756;
-  --sl-color-gray-5: #3a3836;
-  --sl-color-gray-6: var(--srcery-background);
-  --sl-color-black: var(--srcery-background);
-} */
+.expressive-code:not([data-theme='light']) {
+  --ec-codeBg: var(--sl-color-black);
+  --ec-frm-edBg: var(--sl-color-black);
+  --ec-frm-edActTabBg: var(--sl-color-black);
+}

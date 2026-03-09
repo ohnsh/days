@@ -9,7 +9,7 @@ export default defineConfig({
   integrations: [
     starlight({
       // pagefind: false,
-      plugins: [flexoki()],
+      plugins: [flexoki({ accentColor: 'yellow' })],
       title: 'days.',
       description:
         'A blog experiment that will emphasize automation. The idea is to bring in content from various sources (GitHub, YouTube, etc.) and allow the author to curate and customize the presentation.',
