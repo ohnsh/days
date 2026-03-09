@@ -20,7 +20,10 @@ function setOgImage(head: StarlightRouteData['head'], ogImage: string) {
 export const onRequest = defineRouteMiddleware(async (context) => {
   const { entry, head } = context.locals.starlightRoute
 
-  if (entry.id === 'index' || entry.id === '') {
+  const ogImage = extractOgImage(entry)
+  if (ogImage) {
+    setOgImage(head, ogImage)
+  } else if (entry.id === 'index' || entry.id === '') {
     const docs = await getCollection('docs', ({ id }) => id !== 'index')
     docs.sort((a, b) => Number(b.data.date) - Number(a.data.date))
     for (const doc of docs) {
@@ -29,11 +32,6 @@ export const onRequest = defineRouteMiddleware(async (context) => {
         setOgImage(head, ogImage)
         break
       }
-    }
-  } else {
-    const ogImage = extractOgImage(entry)
-    if (ogImage) {
-      setOgImage(head, ogImage)
     }
   }
 })
