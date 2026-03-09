@@ -30,7 +30,7 @@ const entry = dateId ? await getEntry('github', dateId) : null
     const { data } = entry
     return (
       <article>
-        <h3>{dateId}</h3>
+        <h3>Git Commits</h3>
         {data.map(({ repo, commits }) => {
           const { html_url, created_at, updated_at, name } = repo
           return (
