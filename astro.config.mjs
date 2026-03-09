@@ -23,7 +23,7 @@ export default defineConfig({
       customCss: ['@/styles/global.css', '@/styles/splash.css'],
       head: [
         { tag: 'link', attrs: { rel: 'icon', href: '/favicon.ico', sizes: '32x32' } },
-        { tag: 'link', attrs: { rel: 'icon', href: '/favicon.png', type: 'image/png' } },
+        { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/apple-touch-icon.png', type: 'image/png' } },
       ],
       // favicon value always rendered after custom tags, so it needs to be the preferred icon.
       favicon: '/favicon.svg',
