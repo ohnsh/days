@@ -3,6 +3,9 @@ dist/
 # generated types
 .astro/
 
+# fetched data cache
+.days/
+
 # dependencies
 node_modules/
 
