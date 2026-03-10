@@ -1,5 +1,6 @@
 import { defineRouteMiddleware } from '@astrojs/starlight/route-data'
-import { getCollection, type CollectionEntry } from 'astro:content'
+import { getPosts } from '@/lib/util'
+import type { CollectionEntry } from 'astro:content'
 import type { StarlightRouteData } from '@astrojs/starlight/route-data'
 
 function extractOgImage(entry: CollectionEntry<'docs'>) {
@@ -24,10 +25,9 @@ export const onRequest = defineRouteMiddleware(async (context) => {
   if (ogImage) {
     setOgImage(head, ogImage)
   } else if (entry.id === 'index' || entry.id === '') {
-    const docs = await getCollection('docs', ({ id }) => id !== 'index')
-    docs.sort((a, b) => Number(b.data.date) - Number(a.data.date))
-    for (const doc of docs) {
-      const ogImage = extractOgImage(doc)
+    const posts = await getPosts()
+    for (const post of posts) {
+      const ogImage = extractOgImage(post)
       if (ogImage) {
         setOgImage(head, ogImage)
         break

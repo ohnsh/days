@@ -1,22 +1,15 @@
 ---
 import Preview from './Preview.astro'
-import { getCollection } from 'astro:content'
+import { getPosts } from '@/lib/util'
 
-const docEntries = await getCollection(
-  'docs',
-  (entry) =>
-    entry.id !== 'index' &&
-    entry.data.date instanceof Date &&
-    !(import.meta.env.MODE === 'production' && entry.data.draft === true)
-)
-docEntries.sort((a, b) => Number(b.data.date) - Number(a.data.date))
+const posts = await getPosts()
 
 const numPosts = 5
 ---
 
 <section>
   {
-    docEntries.slice(0, numPosts).map((entry) => (
+    posts.slice(0, numPosts).map((entry) => (
         <Preview {entry} />
         <hr />
     ))
