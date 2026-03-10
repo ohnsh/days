@@ -18,7 +18,12 @@ const { title, hero } = frontmatter
 ---
 
 <StarlightPage
-  frontmatter={{ title, date: firstDate, hero: page.currentPage === 1 ? hero : undefined }}
+  frontmatter={{
+    title,
+    date: firstDate,
+    tableOfContents: false,
+    hero: page.currentPage === 1 ? hero : undefined,
+  }}
 >
   {
     page.data.map((entry) => (

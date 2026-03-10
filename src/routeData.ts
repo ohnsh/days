@@ -1,37 +1,31 @@
-import { defineRouteMiddleware } from '@astrojs/starlight/route-data'
-import { getPosts } from '@/lib/util'
-import type { CollectionEntry } from 'astro:content'
-import type { StarlightRouteData } from '@astrojs/starlight/route-data'
+import { defineRouteMiddleware, type StarlightRouteData } from '@astrojs/starlight/route-data'
+import { extractOgImage, setOgImage } from '@/lib/util'
 
-function extractOgImage(entry: CollectionEntry<'docs'>) {
-  const { body, data } = entry
-  if (data.ogImage) {
-    return data.ogImage
-  }
-  const { videoId } = body?.match(/<YouTube\s+id="(?<videoId>[^"]+)"/)?.groups ?? {}
-  if (videoId) {
-    return `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`
+function ogImageFromPage(page) {
+  for (const post of page.data) {
+    const ogImage = extractOgImage(post)
+    if (ogImage) {
+      return ogImage
+    }
   }
 }
 
-function setOgImage(head: StarlightRouteData['head'], ogImage: string) {
-  head.push({ tag: 'meta', attrs: { property: 'og:image', content: ogImage } })
+function getPagination(page): StarlightRouteData['pagination'] {
+  const next = page.url.next ? { href: page.url.next } : undefined
+  const prev = page.url.prev ? { href: page.url.prev } : undefined
+  return { next, prev }
 }
 
 export const onRequest = defineRouteMiddleware(async (context) => {
-  const { entry, head } = context.locals.starlightRoute
+  const { entry, head, pagination } = context.locals.starlightRoute
+  const { page } = context.locals.days ?? {}
 
-  const ogImage = extractOgImage(entry)
+  const ogImage = page ? ogImageFromPage(page) : extractOgImage(entry)
   if (ogImage) {
     setOgImage(head, ogImage)
-  } else if (entry.id === 'index' || entry.id === '') {
-    const posts = await getPosts()
-    for (const post of posts) {
-      const ogImage = extractOgImage(post)
-      if (ogImage) {
-        setOgImage(head, ogImage)
-        break
-      }
-    }
+  }
+
+  if (page) {
+    Object.assign(pagination, getPagination(page))
   }
 })
