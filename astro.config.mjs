@@ -14,7 +14,7 @@ export default defineConfig({
       // components: { Pagination: '@/components/Pagination.astro' },
       title: 'days.',
       description:
-        'A blog experiment that will emphasize automation. The idea is to bring in content from various sources (GitHub, YouTube, etc.) and allow the author to curate and customize the presentation.',
+        'A blog experiment emphasizing automation. The idea is to bring in content from various sources (GitHub, YouTube, etc.) and allow the author to curate and customize the presentation.',
       lastUpdated: false,
       routeMiddleware: '@/routeData.ts',
       logo: {
