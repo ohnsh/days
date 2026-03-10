@@ -1,63 +1,52 @@
 ---
 import { getEntry } from 'astro:content'
+import { dateIdFromProp, dateIdFromAstroLocals, dateIdFromSlug } from '@/lib/util'
 
 interface Props {
   date?: Date | string
 }
-function getDateId(date: string | Date) {
-  if (typeof date === 'string') {
-    if (date.match(/^\d{4}-\d{2}-\d{2}$/)) {
-      return date
-    }
-    date = new Date(date)
-  }
-  const [dateId] = date.toISOString().split('T')
-  return dateId
+
+const dateId =
+  dateIdFromProp(Astro.props.date) ??
+  dateIdFromSlug(Astro.url.pathname) ??
+  dateIdFromAstroLocals(Astro.locals)
+if (!dateId) {
+  return
 }
-
-const { date: propsDate } = Astro.props
-const { dateId: entryDateId } = Astro.locals.starlightRoute.entry.data
-const dateId = propsDate ? getDateId(propsDate) : entryDateId
-
-const entry = dateId ? await getEntry('github', dateId) : null
+const entry = await getEntry('github', dateId)
+if (!entry) {
+  return
+}
 ---
 
-{
-  [entry].map((entry) => {
-    if (!entry) {
-      return
-    }
-    const { data } = entry
-    return (
-      <article>
-        <h3>Git Commits</h3>
-        {data.map(({ repo, commits }) => {
-          const { html_url, created_at, updated_at, name } = repo
-          return (
-            <details>
-              <summary>{name} commits</summary>
-              <ul>
-                {commits.map((commit) => {
-                  const {
-                    html_url,
-                    commit: { author, message },
-                  } = commit
-                  const { name, email, date } = author
-                  return (
-                    <li>
-                      <p>
-                        <a href={html_url}>At {date}</a>
-                      </p>
-                      <p>By {name}</p>
-                      <p>{message}</p>
-                    </li>
-                  )
-                })}
-              </ul>
-            </details>
-          )
-        })}
-      </article>
-    )
-  })
-}
+<article>
+  <h3>Git Commits</h3>
+  {
+    entry.data.map(({ repo, commits }) => {
+      const { html_url, created_at, updated_at, name } = repo
+      return (
+        <details>
+          <summary>{name} commits</summary>
+          <ul>
+            {commits.map((commit) => {
+              const {
+                html_url,
+                commit: { author, message },
+              } = commit
+              const { name, email, date } = author
+              return (
+                <li>
+                  <p>
+                    <a href={html_url}>At {date}</a>
+                  </p>
+                  <p>By {name}</p>
+                  <p>{message}</p>
+                </li>
+              )
+            })}
+          </ul>
+        </details>
+      )
+    })
+  }
+</article>

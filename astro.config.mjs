@@ -6,6 +6,7 @@ import rehypeExternalLinks from 'rehype-external-links'
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://days.ohn.sh',
   integrations: [
     starlight({
       // pagefind: false,

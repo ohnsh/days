@@ -13,9 +13,6 @@ const loader: Loader = {
     await docsLoader().load(context)
     context.store.values().forEach((entry) => {
       const { id, data } = entry as CollectionEntry<'docs'>
-      if (!id.startsWith('202')) {
-        return
-      }
       const { date = dateFromSlug(id), sidebar } = data
 
       sidebar.order = 31 - date.getUTCDate()
@@ -25,12 +22,9 @@ const loader: Loader = {
         timeZone: 'UTC',
       })
 
-      const [dateId] = date.toISOString().split('T')
-      // data.date = date
-      // data.dateId = dateId
       // yikes
       const digest = `${entry.digest}1`
-      context.store.set({ ...entry, digest, data: { ...data, date, dateId } })
+      context.store.set({ ...entry, digest, data: { ...data, date } })
     })
   },
 }
@@ -39,8 +33,7 @@ const docs = defineCollection({
   loader,
   schema: docsSchema({
     extend: z.object({
-      date: z.date().optional(),
-      dateId: z.string().optional(),
+      date: z.date(),
       ogImage: z.string().url().optional(),
     }),
   }),

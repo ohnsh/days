@@ -10,7 +10,3 @@ hero:
       variant: minimal
       link: https://github.com/ohnsh/days
 ---
-
-import RecentPosts from '@/components/RecentPosts.astro'
-
-<RecentPosts />

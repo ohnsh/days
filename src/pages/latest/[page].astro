@@ -3,8 +3,7 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
 import { getPosts } from '@/lib/util'
 import type { GetStaticPaths } from 'astro'
 import Preview from '@/components/Preview.astro'
-import Pagination from '@/components/Pagination.astro'
-import { pathToFileURL } from 'bun'
+import { frontmatter } from './_index.md'
 
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = await getPosts()
@@ -13,11 +12,23 @@ export const getStaticPaths = (async ({ paginate }) => {
 
 const { page } = Astro.props
 Object.assign(Astro.locals, { days: { page } })
+
+const { date: firstDate } = page.data[0].data
+const { title, hero } = frontmatter
 ---
 
-<StarlightPage frontmatter={{ title: 'Latest 🗞️' }}>
-  {page.data.map((entry) => <Preview {entry} /><hr />)}
-  <!-- <Pagination {page} /> -->
+<StarlightPage
+  frontmatter={{ title, date: firstDate, hero: page.currentPage === 1 ? hero : undefined }}
+>
+  {
+    page.data.map((entry) => (
+      <>
+        <Preview {entry} />
+        <hr />
+      </>
+    ))
+  }
+  <!-- Letting Starlight render <Pagination> in the footer, where it belongs, but overriding <Pagination> to fix it with the current route. -->
 </StarlightPage>
 
 <style>

@@ -5,13 +5,40 @@ date: 2026-03-06
 
 import { YouTube } from '@astro-community/astro-embed-youtube'
 import { Code } from '@astrojs/starlight/components'
-import RecentPosts_astro from '@/components/RecentPosts.astro?raw'
 
 ### Creating an index page.
 
 On a blog, the main (root) page should contain a list of recent posts. Starlight doesn't have that functionality built-in, so here's a first pass at a custom `<RecentPosts>` component. It's already being used at [days.ohn.sh](https://days.ohn.sh).
 
-<Code code={RecentPosts_astro} lang="astro" title="RecentPosts.astro" />
+```astro
+// RecentPosts.astro
+---
+import Preview from './Preview.astro'
+import { getCollection } from 'astro:content'
+
+const posts = await getCollection('docs')
+posts.sort((a, b) => Number(b.data.date) - Number(a.data.date))
+const numPosts = 5
+---
+
+<section>
+  {
+    posts.slice(0, numPosts).map((entry) => (
+        <Preview {entry} />
+        <hr />
+    ))
+  }
+</section>
+<style>
+  hr {
+    margin-block: 3rem;
+    border: none;
+    border-top: 1px solid var(--sl-color-gray-5);
+  }
+</style>
+```
+
+{/* <Code code={RecentPosts_astro} lang="astro" title="RecentPosts.astro" /> */}
 
 Notice that [Astro's JSX-like templates](https://docs.astro.build/en/reference/astro-syntax/) can contain unwrapped fragments like `<Preview /><hr />`. Additionally, since they only render once (at build time in this case), there's no need for a React-like `key` prop on map-generated elements.
 
