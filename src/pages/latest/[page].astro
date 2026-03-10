@@ -1,0 +1,29 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
+import { getPosts } from '@/lib/util'
+import type { GetStaticPaths } from 'astro'
+import Preview from '@/components/Preview.astro'
+import Pagination from '@/components/Pagination.astro'
+import { pathToFileURL } from 'bun'
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await getPosts()
+  return paginate(posts, { pageSize: 5 })
+}) satisfies GetStaticPaths
+
+const { page } = Astro.props
+Object.assign(Astro.locals, { days: { page } })
+---
+
+<StarlightPage frontmatter={{ title: 'Latest 🗞️' }}>
+  {page.data.map((entry) => <Preview {entry} /><hr />)}
+  <!-- <Pagination {page} /> -->
+</StarlightPage>
+
+<style>
+  hr {
+    margin-block: 3rem;
+    border: none;
+    border-top: 1px solid var(--sl-color-gray-5);
+  }
+</style>
