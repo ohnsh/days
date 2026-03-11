@@ -4,6 +4,7 @@ import type { CollectionEntry } from 'astro:content'
 import { docsLoader } from '@astrojs/starlight/loaders'
 import { docsSchema } from '@astrojs/starlight/schema'
 import { githubDays } from '@/loaders/github'
+import { youtubeDays } from '@/loaders/youtube'
 import { dateFromSlug } from './lib/util'
 
 // Trying to avoid redundant frontmatter. Idk about mutating the sidebar object. Needs work.
@@ -40,5 +41,6 @@ const docs = defineCollection({
   }),
 })
 const github = defineCollection({ loader: githubDays() })
+const youtube = defineCollection({ loader: youtubeDays() })
 
-export const collections = { docs, github }
+export const collections = { docs, github, youtube }

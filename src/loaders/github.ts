@@ -17,11 +17,8 @@ export function githubDays(): Loader {
         }
       }
 
-      for (const day in dayMap) {
-        store.set({
-          id: day,
-          data: dayMap[day],
-        })
+      for (const [day, repos] of Object.entries(dayMap)) {
+        store.set({ id: day, data: repos })
       }
     },
   }
@@ -36,7 +33,9 @@ async function getRepoDays(repo) {
     return {}
   }
   return commits.reduce((map, commit) => {
-    const { author: { name, email, date: timestamp }} = commit.commit
+    const {
+      author: { name, email, date: timestamp },
+    } = commit.commit
     const date = new Date(timestamp)
     const dateId = date.toLocaleDateString('en-CA') // YYYY-mm-dd
     if (!map[dateId]) {

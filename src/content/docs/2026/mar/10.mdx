@@ -6,7 +6,7 @@ tags: [mit-xpro, run]
 
 import { YouTube } from '@astro-community/astro-embed-youtube'
 import GithubDay from '@/components/GithubDay.astro'
-
-<YouTube id="b52_HiB0Zy4" posterQuality="max" />
+import YTDay from '@/components/YTDay.astro'
 
 <GithubDay date={frontmatter.date} />
+<YTDay date={frontmatter.date} />

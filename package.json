@@ -8,7 +8,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "deploy": "astro build && wrangler deploy",
-    "sync": "bun run src/loaders/github_dl.ts"
+    "sync:github": "bun run src/loaders/github_dl.ts",
+    "sync:youtube": "bun run src/loaders/youtube_dl.ts",
+    "sync": "bun run sync:github; bun run sync:youtube"
   },
   "dependencies": {
     "@astro-community/astro-embed-youtube": "^0.5.10",

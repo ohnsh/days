@@ -1,0 +1,30 @@
+---
+import { getEntry } from 'astro:content'
+import { dateIdFromProp, dateIdFromAstroLocals, dateIdFromSlug } from '@/lib/util'
+import Video from './LiteYTVideo.astro'
+
+interface Props {
+  date?: Date | string
+}
+
+const dateId =
+  dateIdFromProp(Astro.props.date) ??
+  dateIdFromSlug(Astro.url.pathname) ??
+  dateIdFromAstroLocals(Astro.locals)
+if (!dateId) {
+  return
+}
+const entry = await getEntry('youtube', dateId)
+if (!entry) {
+  return
+}
+---
+
+<article>
+  <h3>YouTube</h3>
+  {
+    entry.data.map((video) => {
+      return <Video {...video} noMeta />
+    })
+  }
+</article>

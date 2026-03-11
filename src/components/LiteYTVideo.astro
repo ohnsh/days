@@ -1,0 +1,29 @@
+---
+import { YouTube } from '@astro-community/astro-embed-youtube'
+const { title, description, videoId, publishedAt, noMeta = false } = Astro.props
+const date = new Date(publishedAt).toLocaleDateString('en-US', { dateStyle: 'medium' })
+---
+
+<YouTube id={videoId} posterQuality="max" />
+{
+  !noMeta && (
+    <>
+      <p>
+        <>
+          <a href={`https://youtu.be/${videoId}`}>{title}</a>
+          <span>Published: {date}</span>
+        </>
+      </p>
+      {description && <p>{description}</p>}
+    </>
+  )
+}
+<style>
+  span {
+    margin-inline-start: 1em;
+  }
+  :global(lite-youtube) {
+    max-width: 500px;
+    border-radius: 1em;
+  }
+</style>
