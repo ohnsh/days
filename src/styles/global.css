@@ -6,8 +6,10 @@
 }
 
 :root {
+  --sl-sidebar-width: 15rem;
+
   --sl-flexoki-text-base: 1rem;
-  --sl-flexoki-text-sm: .8rem;
+  --sl-flexoki-text-sm: 0.8rem;
 
   &:not([data-theme='light']) {
     --sl-color-black: oklch(0.2 0 0);
@@ -20,4 +22,27 @@
   --ec-codeBg: var(--sl-color-black);
   --ec-frm-edBg: var(--sl-color-black);
   --ec-frm-edActTabBg: var(--sl-color-black);
+}
+
+/* Overrides <YouTube> component's own styles because they're wrapped in a @layer by a custom Vite plugin. */
+lite-youtube {
+  max-width: 550px;
+  border-radius: 12px;
+}
+
+.hero {
+  /* Remove second column when there's no image. */
+  grid-template-columns: auto;
+  padding-block-start: 3rem;
+
+  /* when centered */
+  padding-inline: min(3rem, 8%);
+  @media (min-width: 50rem) {
+    /* when not centered */
+    padding-inline-start: 0;
+  }
+
+  & .tagline {
+    max-width: 80ch;
+  }
 }

@@ -4,7 +4,6 @@ date: 2026-03-07
 ---
 
 import { Code } from '@astrojs/starlight/components'
-import splash_css from '@/styles/splash.css?raw'
 import { YouTube } from '@astro-community/astro-embed-youtube'
 import GithubDay from '@/components/GithubDay.astro'
 
@@ -18,7 +17,28 @@ import GithubDay from '@/components/GithubDay.astro'
 
 In Starlight, styles can be customized site-wide with the global `customCss` config option. In this case, I only wanted to modify the hero on the main index page. Luckily, you can `import` CSS into an MDX page, just like you would in an Astro component. Doing so allows for page-specific CSS tweaks.
 
-<Code code={splash_css} lang="css" title="splash.css" />
+```css
+/* splash.css */
+:root {
+  --sl-sidebar-width: 15rem;
+}
+
+.hero {
+  /* Remove second column when there's no image. */
+  grid-template-columns: auto;
+  padding-block-start: 3rem;
+
+  /* when centered */
+  padding-inline: min(3rem, 8%);
+  @media (min-width: 50rem) {
+    /* when not centered */
+    padding-inline-start: 0;
+  }
+
+  & .tagline { max-width: 80ch; }
+}
+
+```
 
 ### External links handling
 

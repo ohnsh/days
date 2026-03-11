@@ -22,10 +22,13 @@ export default defineConfig({
         dark: '@/assets/days-dark.svg',
         light: '@/assets/days-light.svg',
       },
-      customCss: ['@/styles/global.css', '@/styles/splash.css'],
+      customCss: ['@/styles/global.css'],
       head: [
         { tag: 'link', attrs: { rel: 'icon', href: '/favicon.ico', sizes: '32x32' } },
-        { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/apple-touch-icon.png', type: 'image/png' } },
+        {
+          tag: 'link',
+          attrs: { rel: 'apple-touch-icon', href: '/apple-touch-icon.png', type: 'image/png' },
+        },
       ],
       // favicon value always rendered after custom tags, so it needs to be the preferred icon.
       favicon: '/favicon.svg',
@@ -57,4 +60,19 @@ export default defineConfig({
     // mdx({ rehypePlugins: [[rehypeExternalLinks, { target: '_blank', rel: [] }]] }),
   ],
   markdown: { rehypePlugins: [[rehypeExternalLinks, { target: '_blank', rel: [] }]] },
+  vite: {
+    plugins: [
+      {
+        // Copilot pulled this one out. Works great.
+        // Now I can override <YouTube> component styles without any fuss.
+        name: 'wrap-it-up',
+        enforce: 'pre',
+        transform(code, id) {
+          if (id.endsWith('lite-youtube-embed/src/lite-yt-embed.css')) {
+            return { code: `@layer thirdparty {\n${code}\n}`, map: null }
+          }
+        },
+      },
+    ],
+  },
 })
