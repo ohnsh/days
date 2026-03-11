@@ -1,0 +1,44 @@
+---
+import { Icon } from '@astrojs/starlight/components'
+import Commit from './Commit.astro'
+
+const { repo, commits } = Astro.props
+const { html_url, full_name, name } = repo
+---
+
+<details>
+  <summary>{name} commits</summary>
+  <a class="button not-content" target="_blank" href={html_url}>
+    <Icon name="github" />
+    {full_name}
+  </a>
+  <ul>
+    {commits.map((commit) => <Commit {commit} />)}
+  </ul>
+</details>
+
+<style>
+  details > :not(summary) {
+    font-size: var(--sl-text-sm);
+    margin-inline-start: 2em;
+  }
+  ul {
+    list-style: none;
+    padding-inline-start: 5px;
+  }
+  a.button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    border: solid 1px var(--sl-color-gray-3);
+    color: var(--sl-color-gray-3);
+    border-radius: 0.4em;
+    text-decoration: none;
+    padding: 0.15em 0.5em;
+
+    &:hover {
+      color: var(--sl-color-gray-2);
+      border-color: var(--sl-color-gray-2);
+    }
+  }
+</style>

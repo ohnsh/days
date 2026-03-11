@@ -1,0 +1,30 @@
+---
+const { commit } = Astro.props
+const {
+  html_url,
+  commit: { author, message },
+} = commit
+const { name, email, date } = author
+const time = new Date(date).toLocaleTimeString('en-US', { timeStyle: 'short' }).toLowerCase()
+---
+
+<li>
+  <p>
+    <span>
+      <a target="_blank" href={html_url}>{time}</a>
+    </span>
+    <span>
+      — {name} &lt;{email}&gt;
+    </span>
+  </p>
+  <p>{message}</p>
+</li>
+
+<style>
+  li {
+    margin-block: 1em;
+  }
+  p {
+    margin-block: 0;
+  }
+</style>
