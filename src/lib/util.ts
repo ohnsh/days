@@ -47,7 +47,6 @@ export function dateFromSlug(slug: string) {
   ]
   const month = String(months.indexOf(monthStr.toLowerCase()) + 1)
   const dateIdGuess = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-  console.log({ dateIdGuess })
   const date = new Date(dateIdGuess)
   if (Number.isNaN(date.valueOf())) {
     return
