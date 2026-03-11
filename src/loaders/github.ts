@@ -6,11 +6,10 @@ export function githubDays(): Loader {
   return {
     name: 'github',
     load: async ({ store }) => {
-      const dayMap = {}
+      const dayMap: Record<string, any> = {}
       for (const repo of repos) {
         const repoDayMap = await getRepoDays(repo)
-        for (const day in repoDayMap) {
-          const commits = repoDayMap[day]
+        for (const [day, commits] of Object.entries(repoDayMap)) {
           if (!dayMap[day]) {
             dayMap[day] = []
           }
@@ -37,12 +36,13 @@ async function getRepoDays(repo) {
     return {}
   }
   return commits.reduce((map, commit) => {
-    const { author: { name, email, date }} = commit.commit
-    const [day] = date.split('T')
-    if (!map[day]) {
-      map[day] = []
+    const { author: { name, email, date: timestamp }} = commit.commit
+    const date = new Date(timestamp)
+    const dateId = date.toLocaleDateString('en-CA') // YYYY-mm-dd
+    if (!map[dateId]) {
+      map[dateId] = []
     }
-    map[day].push(commit)
+    map[dateId].push(commit)
     return map
   }, {})
 }
