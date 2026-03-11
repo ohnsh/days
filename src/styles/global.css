@@ -9,10 +9,12 @@
   --sl-sidebar-width: 15rem;
 
   --sl-flexoki-text-base: 1rem;
+  /* Font size in code blocks. Probably not okay, but Menlo (macOS) is annoyingly large at other sizes. */
   --ec-codeFontSize: var(--sl-text-xs);
 
   &:not([data-theme='light']) {
     --sl-color-black: oklch(0.2 0 0);
+    --sl-color-gray-5: var(--color-base-800);
     --sl-color-accent: oklch(0.7 0.25 85);
     --sl-color-accent-low: oklch(0.5 0.25 85);
     --sl-color-accent-high: oklch(0.94 0.08 85);

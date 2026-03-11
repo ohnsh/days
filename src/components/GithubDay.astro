@@ -1,6 +1,7 @@
 ---
 import { getEntry } from 'astro:content'
 import { dateIdFromProp, dateIdFromAstroLocals, dateIdFromSlug } from '@/lib/util'
+import { Icon } from '@astrojs/starlight/components'
 
 interface Props {
   date?: Date | string
@@ -23,10 +24,13 @@ if (!entry) {
   <h3>Git Commits</h3>
   {
     entry.data.map(({ repo, commits }) => {
-      const { html_url, created_at, updated_at, name } = repo
+      const { html_url, updated_at, name, full_name } = repo
       return (
         <details>
           <summary>{name} commits</summary>
+          <a class="button not-content" target="_blank" href={html_url}>
+            <Icon name="github" /> {full_name}
+          </a>
           <ul>
             {commits.map((commit) => {
               const {
@@ -38,8 +42,14 @@ if (!entry) {
               return (
                 <li>
                   <p>
-                    <span><a target="_blank" href={html_url}>{time}</a></span>
-                    <span>{name} &lt;{email}&gt;</span>
+                    <span>
+                      <a target="_blank" href={html_url}>
+                        {time}
+                      </a>
+                    </span>
+                    <span>
+                      {name} &lt;{email}&gt;
+                    </span>
                   </p>
                   <p>{message}</p>
                 </li>
@@ -53,9 +63,13 @@ if (!entry) {
 </article>
 
 <style>
+  details > :not(summary) {
+    font-size: var(--sl-text-sm);
+    margin-inline-start: 2em;
+  }
   ul {
     list-style: none;
-    font-size: var(--sl-text-sm);
+    padding-inline-start: 5px;
   }
   li {
     margin-block: 1em;
@@ -66,7 +80,22 @@ if (!entry) {
   span {
     &:not(:last-of-type) {
       /* content: ' '; */
-      margin-inline-end: .5em;
+      margin-inline-end: 0.5em;
+    }
+  }
+  a.button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    border: solid 1px var(--sl-color-gray-3);
+    color: var(--sl-color-gray-3);
+    border-radius: 0.4em;
+    text-decoration: none;
+    padding: 0.15em 0.5em;
+
+    &:hover {
+      color: var(--sl-color-gray-2);
+      border-color: var(--sl-color-gray-2);
     }
   }
 </style>
