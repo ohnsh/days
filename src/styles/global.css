@@ -9,7 +9,7 @@
   --sl-sidebar-width: 15rem;
 
   --sl-flexoki-text-base: 1rem;
-  --sl-flexoki-text-sm: 0.8rem;
+  --ec-codeFontSize: var(--sl-text-xs);
 
   &:not([data-theme='light']) {
     --sl-color-black: oklch(0.2 0 0);
