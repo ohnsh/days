@@ -4,26 +4,26 @@ const { title, description, videoId, publishedAt, isShort, naked = false } = Ast
 const date = new Date(publishedAt).toLocaleDateString('en-US', { dateStyle: 'medium' })
 ---
 
-<YouTube id={videoId} posterQuality="max" />
-{
-  !naked && (
-    <>
-      <p>
-        <>
+<figure>
+  <YouTube id={videoId} posterQuality="max" />
+  {
+    !naked && (
+      <figcaption>
+        <p>
           <a href={`https://youtu.be/${videoId}`}>{title}</a>
           <span>Published: {date}</span>
           {isShort && <span>(short)</span>}
-        </>
-      </p>
-      {description && <p>{description}</p>}
-    </>
-  )
-}
+        </p>
+        {description && <p>{description}</p>}
+      </figcaption>
+    )
+  }
+</figure>
 <style>
   span {
     margin-inline-start: 1em;
   }
-  :global(lite-youtube) {
+  figure :global(lite-youtube) {
     max-width: 500px;
     border-radius: 1em;
   }

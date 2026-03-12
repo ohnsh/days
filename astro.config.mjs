@@ -64,6 +64,7 @@ export default defineConfig({
       {
         // Copilot pulled this one out. Works great.
         // Now I can override <YouTube> component styles without any fuss.
+        // TODO: Delete once all instances are encapsulated by my <LiteYTVideo> scoped CSS.
         name: 'wrap-it-up',
         enforce: 'pre',
         transform(code, id) {
