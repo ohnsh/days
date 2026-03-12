@@ -1,23 +1,29 @@
 import * as Bun from 'bun'
 import { mkdir } from 'node:fs/promises'
 
-async function saveUploads(uploads: any) {
+async function savePlaylists(forHandle: string) {
+  const uploadsPlaylistId = await getUploadsPlaylistId(forHandle)
+  const shortsPlaylistId = uploadsPlaylistId.replace(/^UU/, 'UUSH')
+
+  const uploads = await getPlaylistItems(uploadsPlaylistId)
+  const shorts = await getPlaylistItems(shortsPlaylistId)
+
   await mkdir('.days/youtube', { recursive: true })
   await Bun.file('.days/youtube/uploads.json').write(JSON.stringify(uploads))
+  await Bun.file('.days/youtube/shorts.json').write(JSON.stringify(shorts))
 }
 
-async function getUploads(forHandle: string) {
-  const uploadsPlaylistId = await getUploadsPlaylistId(forHandle)
+async function getPlaylistItems(playlistId: string) {
   // https://developers.google.com/youtube/v3/docs/playlistItems#resource
-  const uploads = []
+  const allItems = []
   let pageToken = undefined
   do {
-    const { nextPageToken, items } = await getPlaylist(uploadsPlaylistId, pageToken)
-    uploads.push(...items)
+    const { nextPageToken, items } = await getPlaylist(playlistId, pageToken)
+    allItems.push(...items)
     pageToken = nextPageToken
   } while (pageToken)
 
-  return uploads
+  return allItems
 }
 
 async function api(path: string, params: Record<string, string>) {
@@ -36,7 +42,7 @@ async function api(path: string, params: Record<string, string>) {
   return json
 }
 
-async function getUploadsPlaylistId(forHandle: string) {
+async function getUploadsPlaylistId(forHandle: string): Promise<string> {
   const params = { part: 'snippet,contentDetails,statistics', forHandle }
   const json = await api('/channels', params)
   const [channel] = json.items
@@ -55,4 +61,4 @@ async function getPlaylist(playlistId: string, pageToken?: string) {
   return json
 }
 
-await saveUploads(await getUploads('ohn-sh'))
+await savePlaylists('ohn-sh')

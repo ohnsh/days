@@ -1,10 +1,12 @@
 import type { Loader } from 'astro/loaders'
 import uploads from '../../.days/youtube/uploads.json'
+import shorts from '../../.days/youtube/shorts.json'
 
 export function youtubeDays(): Loader {
   return {
     name: 'youtube',
     load: async ({ store }) => {
+      let numShorts = 0
       const dayMap: Record<string, any> = {}
       for (const { snippet } of uploads) {
         const {
@@ -15,10 +17,14 @@ export function youtubeDays(): Loader {
           resourceId: { videoId },
         } = snippet
         const dateId = getDateId(title, publishedAt)
+        const isShort = shorts.some(({ snippet }) => snippet.resourceId.videoId === videoId)
+        if (isShort) {
+          numShorts++
+        }
         if (!dayMap[dateId]) {
           dayMap[dateId] = []
         }
-        dayMap[dateId].push({ videoId, title, description, thumbnails, publishedAt })
+        dayMap[dateId].push({ videoId, title, description, thumbnails, publishedAt, isShort })
       }
 
       for (const [day, videos] of Object.entries(dayMap)) {

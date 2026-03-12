@@ -5,6 +5,7 @@ import Video from './LiteYTVideo.astro'
 
 interface Props {
   date?: Date | string
+  sort?: string
 }
 
 const dateId =
@@ -18,13 +19,27 @@ const entry = await getEntry('youtube', dateId)
 if (!entry) {
   return
 }
+
+const { sort } = Astro.props
+const vids = [...entry.data]
+if (sort) {
+  // an emoji-safe function that extracts the first character of `s` and searches for it in `sortSpec`.
+  // Returns the index of the first occurrence if found, or else the length of `sortSpec` (in characters, not UTF-16 code units).
+  // This behavior facilitates using `sortSpec` to specify a sorting order.
+  const bizarroIndexOf = (sortSpec: string, s: string) => {
+    const chars = [...sortSpec]
+    const [s0] = [...s]
+    return chars.includes(s0) ? chars.indexOf(s0) : chars.length
+  }
+  vids.sort((a, b) => bizarroIndexOf(sort, a.title) - bizarroIndexOf(sort, b.title))
+}
 ---
 
 <article>
   <h3>YouTube</h3>
   {
-    entry.data.map((video) => {
-      return <Video {...video} noMeta />
+    vids.map((video) => {
+      return <Video {...video} naked />
     })
   }
 </article>
