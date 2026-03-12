@@ -5,8 +5,12 @@ lastUpdated: 2026-03-05
 ---
 
 import { YouTube } from '@astro-community/astro-embed-youtube'
+import GithubDay from '@/components/GithubDay.astro'
+
+<GithubDay date={frontmatter.date} />
 
 <YouTube id="cGvMmxDmb-w" posterQuality="max" />
+
 
 Sample code for generating OG images with Satori and Resvg:
 

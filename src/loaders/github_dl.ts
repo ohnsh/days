@@ -1,7 +1,7 @@
 import * as Bun from 'bun'
 import { mkdir } from 'node:fs/promises'
 
-async function api(url: string) {
+async function api(url: URL | string) {
   const headers = {
     Accept: 'application/vnd.github+json',
     Authorization: `Bearer ${import.meta.env.GITHUB_TOKEN}`,
@@ -16,7 +16,7 @@ async function api(url: string) {
 }
 
 async function ghDownloader() {
-  const reposUrl = 'https://api.github.com/users/ohnsh/repos'
+  const reposUrl = 'https://api.github.com/user/repos'
   const repos = await api(reposUrl)
 
   repos.sort((a, b) => Date.parse(b.updated_at) - Date.parse(a.updated_at))
@@ -26,8 +26,9 @@ async function ghDownloader() {
 
   for (const repo of repos) {
     const { name, commits_url } = repo
-    const expandedUrl = `${commits_url.replaceAll(/{[^}]+}/g, '')}` /* ?author=ohnsh */
-    const commits = await api(expandedUrl).then((commits) =>
+    const url = new URL(commits_url.replaceAll(/{[^}]+}/g, '')) /* ?author=ohnsh */
+    url.searchParams.set('per_page', '100')
+    const commits = await api(url).then((commits) =>
       commits.filter(({ commit }) => isMyCommit(commit))
     )
 
