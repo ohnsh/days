@@ -14,12 +14,12 @@
   },
   "dependencies": {
     "@astro-community/astro-embed-youtube": "^0.5.10",
-    "@astrojs/mdx": "5.0.0",
-    "@astrojs/starlight": "0.38.0",
+    "@astrojs/mdx": "^5.0.0",
+    "@astrojs/starlight": "^0.38.1",
     "@astropub/context": "^0.1.0",
     "@lucide/astro": "^0.577.0",
     "@mux/mux-player-astro": "^3.11.5",
-    "astro": "6.0.2",
+    "astro": "^6.0.3",
     "rehype-external-links": "^3.0.0",
     "starlight-theme-flexoki": "^0.2.2"
   },
