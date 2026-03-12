@@ -36,7 +36,7 @@ const docs = defineCollection({
     extend: z.object({
       date: z.date(),
       tags: z.array(z.string()).optional(),
-      ogImage: z.string().url().optional(),
+      ogImage: z.url().optional(),
     }),
   }),
 })

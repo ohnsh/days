@@ -1,27 +1,32 @@
 ---
 import { getEntry } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
 import { dateIdFromProp, dateIdFromAstroLocals, dateIdFromSlug } from '@/lib/util'
 import Video from './LiteYTVideo.astro'
 
 interface Props {
   date?: Date | string
+  day?: CollectionEntry<'youtube'>
   sort?: string
 }
 
-const dateId =
-  dateIdFromProp(Astro.props.date) ??
-  dateIdFromSlug(Astro.url.pathname) ??
-  dateIdFromAstroLocals(Astro.locals)
-if (!dateId) {
-  return
+const _getEntry = () => {
+  const dateId =
+    dateIdFromProp(Astro.props.date) ??
+    dateIdFromSlug(Astro.url.pathname) ??
+    dateIdFromAstroLocals(Astro.locals)
+  if (!dateId) {
+    return
+  }
+  return getEntry('youtube', dateId)
 }
-const entry = await getEntry('youtube', dateId)
-if (!entry) {
+
+const { day = await _getEntry(), sort } = Astro.props
+if (!day) {
   return
 }
 
-const { sort } = Astro.props
-const vids = [...entry.data]
+const vids = [...day.data]
 if (sort) {
   // an emoji-safe function that extracts the first character of `s` and searches for it in `sortSpec`.
   // Returns the index of the first occurrence if found, or else the length of `sortSpec` (in characters, not UTF-16 code units).
