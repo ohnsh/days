@@ -1,16 +1,18 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
+import Day from '@/components/Day.astro'
 import type { GetStaticPaths } from 'astro'
-import Preview from '@/components/Preview.astro'
 import { frontmatter } from './_index.md'
-import { getCollection } from 'astro:content'
+import { getDayMap, sidebarFromKeys } from '@/lib/pathsUtil'
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const posts = await getCollection('posts')
-  return paginate(posts, { pageSize: 5 })
+  const dayMap = await getDayMap()
+  const days = [...dayMap.values()].sort((a, b) => b.dayKey.localeCompare(a.dayKey))
+  const sidebar = sidebarFromKeys([...dayMap.keys()], { collapsed: true })
+  return paginate(days, { pageSize: 5, props: { sidebar } })
 }) satisfies GetStaticPaths
 
-const { page } = Astro.props
+const { page, sidebar } = Astro.props
 Object.assign(Astro.locals, { days: { page } })
 
 // const { date: firstDate } = page.data[0].data
@@ -18,20 +20,10 @@ const { title, hero } = frontmatter
 ---
 
 <StarlightPage
-  frontmatter={{
-    title,
-    tableOfContents: false,
-    hero: page.currentPage === 1 ? hero : undefined,
-  }}
+  {sidebar}
+  frontmatter={{ title, tableOfContents: false, hero: page.currentPage === 1 ? hero : undefined }}
 >
-  {
-    page.data.map((entry) => (
-      <>
-        <Preview {entry} />
-        <hr />
-      </>
-    ))
-  }
+  {page.data.map((day) => <Day {day} />)}
 </StarlightPage>
 
 <style>

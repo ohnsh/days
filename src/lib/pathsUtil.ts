@@ -5,52 +5,25 @@ type CalendarStruct = Record<number, Record<number, string[]>>
 type SidebarItem = NonNullable<StarlightPageProps['sidebar']>[number]
 
 export interface DayEntry {
+  dayKey: string
   posts?: CollectionEntry<'posts'>[]
   day?: CollectionEntry<'days'>
   github?: CollectionEntry<'github'>
   youtube?: CollectionEntry<'youtube'>
 }
 
-function partsFromDate(date: Date | string) {
-  if (typeof date === 'string') {
-    date = new Date(date)
-  }
-  const utc = date.getUTCHours() === 0
-  if (!utc && date.getHours() !== 0) {
-    throw new Error(
-      'To ensure predictable behavior, a date slug must parse to midnight local or UTC time. Use a plain date like 2026-03-01 or 3/1/2026.'
-    )
-  }
-
-  return utc
-    ? {
-        year: date.getUTCFullYear(),
-        month: date.getUTCMonth(),
-        day: date.getUTCDate(),
-        monthStrShort: date.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' }),
-        monthStrLong: date.toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' }),
-      }
-    : {
-        year: date.getFullYear(),
-        month: date.getMonth(),
-        day: date.getDate(),
-        monthStrShort: date.toLocaleDateString('en-US', { month: 'short' }),
-        monthStrLong: date.toLocaleDateString('en-US', { month: 'long' }),
-      }
-}
-
-function slugFromDate(date: Date | string) {
+export function slugFromDate(date: Date | string) {
   const { year, monthStrShort: mo, day } = partsFromDate(date)
   return `${year}/${mo.toLowerCase()}/${day}`
 }
 
-function keyFromDate(date: Date | string) {
+export function keyFromDate(date: Date | string) {
   const { year, month, day } = partsFromDate(date)
   const [mm, dd] = [month, day].map((v) => v.toString().padStart(2, '0'))
   return `${year}-${mm}-${dd}`
 }
 
-export async function getStaticDayPaths() {
+export async function getDayMap() {
   const [github, youtube, posts, days] = await Promise.all([
     getCollection('github'),
     getCollection('youtube'),
@@ -61,44 +34,35 @@ export async function getStaticDayPaths() {
   const dayMap = new Map<string, DayEntry>()
 
   for (const entry of github) {
-    const dateSlug = entry.id
-    const dayEntry = dayMap.get(dateSlug) ?? dayMap.set(dateSlug, {}).get(dateSlug)!
+    const dayKey = entry.id
+    const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, { dayKey }).get(dayKey)!
     Object.assign(dayEntry, { github: entry })
   }
 
   for (const entry of youtube) {
-    const dateSlug = entry.id
-    const dayEntry = dayMap.get(dateSlug) ?? dayMap.set(dateSlug, {}).get(dateSlug)!
+    const dayKey = entry.id
+    const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, { dayKey }).get(dayKey)!
     Object.assign(dayEntry, { youtube: entry })
   }
 
   for (const entry of posts) {
-    const dateSlug = keyFromDate(entry.data.date)
-    const dayEntry = dayMap.get(dateSlug) ?? dayMap.set(dateSlug, {}).get(dateSlug)!
+    const dayKey = keyFromDate(entry.data.date)
+    const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, { dayKey }).get(dayKey)!
     dayEntry.posts ??= []
     dayEntry.posts.push(entry)
   }
 
   for (const entry of days) {
-    const dateSlug = keyFromDate(entry.data.date)
-    const dayEntry = dayMap.get(dateSlug) ?? dayMap.set(dateSlug, {}).get(dateSlug)!
+    const dayKey = keyFromDate(entry.data.date)
+    const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, { dayKey }).get(dayKey)!
     dayEntry.day = entry
   }
 
-  const sidebar = sidebarFromKeys([...dayMap.keys()], { collapsed: true })
-
-  const paths = dayMap
-    .entries()
-    .map(([dateKey, dayEntry]) => ({
-      params: { slug: slugFromDate(dateKey) },
-      props: { day: dayEntry, sidebar },
-    }))
-
-  return [...paths]
+  return dayMap
 }
 
-function sidebarFromKeys(keys: string[], { collapsed = true } = {}) {
-  const sidebarEmbryo = keys.reduce<CalendarStruct>(structureDateKeys, {})
+export function sidebarFromKeys(keys: string[], { collapsed = true } = {}) {
+  const sidebarEmbryo = keys.reduce<CalendarStruct>(structuredayKeys, {})
   const sidebar = Object.entries(sidebarEmbryo)
     .sort(([a], [b]) => Number(b) - Number(a))
     .map<SidebarItem>(([year, yearStruct]) => ({
@@ -106,12 +70,12 @@ function sidebarFromKeys(keys: string[], { collapsed = true } = {}) {
       collapsed,
       items: Object.entries(yearStruct)
         .sort(([a], [b]) => Number(b) - Number(a))
-        .map(([, dateKeys]) => {
-          const { monthStrLong } = partsFromDate(dateKeys[0])
+        .map(([, dayKeys]) => {
+          const { monthStrLong } = partsFromDate(dayKeys[0])
           return {
             label: monthStrLong,
             collapsed,
-            items: dateKeys
+            items: dayKeys
               .map((k) => new Date(k))
               .sort((a, b) => b.getTime() - a.getTime())
               .map((date) => ({
@@ -145,7 +109,7 @@ function sidebarFromKeys(keys: string[], { collapsed = true } = {}) {
   return sidebar
 }
 
-function structureDateKeys(struct: CalendarStruct, key: string) {
+function structuredayKeys(struct: CalendarStruct, key: string) {
   const [year, month] = key.split('-').map(Number)
 
   struct[year] ??= {}
@@ -153,4 +117,32 @@ function structureDateKeys(struct: CalendarStruct, key: string) {
   struct[year][month].push(key)
 
   return struct
+}
+
+function partsFromDate(date: Date | string) {
+  if (typeof date === 'string') {
+    date = new Date(date)
+  }
+  const utc = date.getUTCHours() === 0
+  if (!utc && date.getHours() !== 0) {
+    throw new Error(
+      'To ensure predictable behavior, a date slug must parse to midnight local or UTC time. Use a plain date like 2026-03-01 or 3/1/2026.'
+    )
+  }
+
+  return utc
+    ? {
+        year: date.getUTCFullYear(),
+        month: date.getUTCMonth(),
+        day: date.getUTCDate(),
+        monthStrShort: date.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' }),
+        monthStrLong: date.toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' }),
+      }
+    : {
+        year: date.getFullYear(),
+        month: date.getMonth(),
+        day: date.getDate(),
+        monthStrShort: date.toLocaleDateString('en-US', { month: 'short' }),
+        monthStrLong: date.toLocaleDateString('en-US', { month: 'long' }),
+      }
 }

@@ -1,0 +1,14 @@
+---
+import type { DayEntry } from '@/lib/pathsUtil'
+import GithubDay from '@/components/GithubDay.astro'
+import YTDay from '@/components/YTDay.astro'
+
+interface Props {
+  day: DayEntry
+}
+
+const { day } = Astro.props
+---
+
+<GithubDay day={day.github} />
+<YTDay day={day.youtube} />

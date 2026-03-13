@@ -20,10 +20,10 @@ export const onRequest = defineRouteMiddleware(async (context) => {
   const { entry, head, pagination } = context.locals.starlightRoute
   const { page } = context.locals.days ?? {}
 
-  const ogImage = page ? ogImageFromPage(page) : extractOgImage(entry)
-  if (ogImage) {
-    setOgImage(head, ogImage)
-  }
+  // const ogImage = page ? ogImageFromPage(page) : extractOgImage(entry)
+  // if (ogImage) {
+  //   setOgImage(head, ogImage)
+  // }
 
   if (page) {
     Object.assign(pagination, getPagination(page))
