@@ -1,13 +1,13 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
-import { getPosts } from '@/lib/util'
 import type { CollectionEntry } from 'astro:content'
 import type { GetStaticPaths } from 'astro'
 import Preview from '@/components/Preview.astro'
+import { getCollection } from 'astro:content'
 
 export async function getStaticPaths({ paginate }: Parameters<GetStaticPaths>[0]) {
-  const posts = await getPosts()
-  const tagMap = new Map<string, CollectionEntry<'docs'>[]>()
+  const posts = await getCollection('posts')
+  const tagMap = new Map<string, CollectionEntry<'posts'>[]>()
   for (const post of posts) {
     const { tags } = post.data
     if (!tags) { continue }
@@ -28,13 +28,12 @@ export async function getStaticPaths({ paginate }: Parameters<GetStaticPaths>[0]
 
 const { tag } = Astro.params
 const { posts } = Astro.props
-const { date: firstDate } = posts[0].data
+// const { date: firstDate } = posts[0].data
 ---
 
 <StarlightPage
   frontmatter={{
     title: `tag: ${tag}`,
-    date: firstDate,
     tableOfContents: false,
   }}
 >

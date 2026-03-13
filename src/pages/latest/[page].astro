@@ -1,26 +1,25 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
-import { getPosts } from '@/lib/util'
 import type { GetStaticPaths } from 'astro'
 import Preview from '@/components/Preview.astro'
 import { frontmatter } from './_index.md'
+import { getCollection } from 'astro:content'
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const posts = await getPosts()
+  const posts = await getCollection('posts')
   return paginate(posts, { pageSize: 5 })
 }) satisfies GetStaticPaths
 
 const { page } = Astro.props
 Object.assign(Astro.locals, { days: { page } })
 
-const { date: firstDate } = page.data[0].data
+// const { date: firstDate } = page.data[0].data
 const { title, hero } = frontmatter
 ---
 
 <StarlightPage
   frontmatter={{
     title,
-    date: firstDate,
     tableOfContents: false,
     hero: page.currentPage === 1 ? hero : undefined,
   }}

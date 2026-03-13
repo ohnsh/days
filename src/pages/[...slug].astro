@@ -1,0 +1,26 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
+import GithubDay from '@/components/GithubDay.astro'
+import YTDay from '@/components/YTDay.astro'
+import { getStaticDayPaths } from '@/lib/pathsUtil'
+import type { InferGetStaticPropsType } from 'astro'
+
+export async function getStaticPaths() {
+  return getStaticDayPaths()
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>
+
+const { slug } = Astro.params
+const { day, sidebar } = Astro.props
+const { github, youtube } = day
+// const { Content } = await render(day.days!)
+
+const frontmatter = { title: slug }
+---
+
+<StarlightPage {sidebar} {frontmatter}>
+  <GithubDay day={github} />
+  <YTDay day={youtube} />
+  <!-- <Content /> -->
+</StarlightPage>
