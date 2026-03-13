@@ -50,16 +50,6 @@ function keyFromDate(date: Date | string) {
   return `${year}-${mm}-${dd}`
 }
 
-function structureDateKeys(struct: CalendarStruct, key: string) {
-  const [year, month] = key.split('-').map(Number)
-
-  struct[year] ??= {}
-  struct[year][month] ??= []
-  struct[year][month].push(key)
-
-  return struct
-}
-
 export async function getStaticDayPaths() {
   const [github, youtube, posts, days] = await Promise.all([
     getCollection('github'),
@@ -95,19 +85,32 @@ export async function getStaticDayPaths() {
     dayEntry.day = entry
   }
 
-  const sidebarEmbryo = dayMap.keys().reduce<CalendarStruct>(structureDateKeys, {})
+  const sidebar = sidebarFromKeys([...dayMap.keys()], { collapsed: true })
+
+  const paths = dayMap
+    .entries()
+    .map(([dateKey, dayEntry]) => ({
+      params: { slug: slugFromDate(dateKey) },
+      props: { day: dayEntry, sidebar },
+    }))
+
+  return [...paths]
+}
+
+function sidebarFromKeys(keys: string[], { collapsed = true } = {}) {
+  const sidebarEmbryo = keys.reduce<CalendarStruct>(structureDateKeys, {})
   const sidebar = Object.entries(sidebarEmbryo)
     .sort(([a], [b]) => Number(b) - Number(a))
     .map<SidebarItem>(([year, yearStruct]) => ({
       label: year,
-      collapsed: true,
+      collapsed,
       items: Object.entries(yearStruct)
         .sort(([a], [b]) => Number(b) - Number(a))
         .map(([, dateKeys]) => {
           const { monthStrLong } = partsFromDate(dateKeys[0])
           return {
             label: monthStrLong,
-            collapsed: true,
+            collapsed,
             items: dateKeys
               .map((k) => new Date(k))
               .sort((a, b) => b.getTime() - a.getTime())
@@ -122,6 +125,10 @@ export async function getStaticDayPaths() {
           }
         }),
     }))
+  
+  if (!collapsed) {
+    return sidebar
+  }
 
   for (const year of sidebar) {
     if (typeof year === 'object' && 'items' in year && year.label.startsWith('20')) {
@@ -135,13 +142,15 @@ export async function getStaticDayPaths() {
       break
     }
   }
+  return sidebar
+}
 
-  const paths = dayMap
-    .entries()
-    .map(([dateKey, dayEntry]) => ({
-      params: { slug: slugFromDate(dateKey) },
-      props: { day: dayEntry, sidebar },
-    }))
+function structureDateKeys(struct: CalendarStruct, key: string) {
+  const [year, month] = key.split('-').map(Number)
 
-  return [...paths]
+  struct[year] ??= {}
+  struct[year][month] ??= []
+  struct[year][month].push(key)
+
+  return struct
 }
