@@ -3,6 +3,7 @@ import type { DayEntry } from '@/lib/pathsUtil'
 import { titleFromDayKey } from '@/lib/util'
 import GithubDay from '@/components/GithubDay.astro'
 import YTDay from '@/components/YTDay.astro'
+import Preview from './Preview.astro'
 
 interface Props {
   day: DayEntry
@@ -14,5 +15,6 @@ const title = titleFromDayKey(day.dayKey)
 ---
 
 {renderTitle && <h2>{title}</h2>}
-<GithubDay day={day.github} />
-<YTDay day={day.youtube} />
+{day.github && <GithubDay day={day.github} />}
+{day.youtube && <YTDay day={day.youtube} />}
+{day.posts?.map(post => <Preview entry={post} />)}

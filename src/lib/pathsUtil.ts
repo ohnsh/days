@@ -14,17 +14,16 @@ export function slugFromDate(date: Date | string) {
   return `${year}/${mo.toLowerCase()}/${day}`
 }
 
-export function keyFromDate(date: Date | string) {
-  const { year, month, day } = partsFromDate(date)
-  const [mm, dd] = [month, day].map((v) => v.toString().padStart(2, '0'))
-  return `${year}-${mm}-${dd}`
+export function keyFromDate(_date: Date | string) {
+  const { date, isUTC } = normalizeDate(_date)
+  return date.toLocaleDateString('en-CA', isUTC ? { timeZone: 'UTC' } : undefined)
 }
 
 export async function getDayMap() {
   const [github, youtube, posts, days] = await Promise.all([
     getCollection('github'),
     getCollection('youtube'),
-    getCollection('posts', ({ data }) => !data.draft || import.meta.env.DEV),
+    getCollection('posts', ({ data: { draft = false } }) => !draft || import.meta.env.DEV),
     getCollection('days'),
   ])
 
@@ -126,28 +125,34 @@ function calendarStruct(struct: CalendarStruct, key: string) {
   return struct
 }
 
-function partsFromDate(date: Date | string) {
+function normalizeDate(date: Date | string) {
   if (typeof date === 'string') {
     date = new Date(date)
   }
-  const utc = date.getUTCHours() === 0
-  if (!utc && date.getHours() !== 0) {
+
+  const isUTC = date.getUTCHours() === 0
+  if (!isUTC && date.getHours() !== 0) {
     throw new Error(
       'To ensure predictable behavior, a date slug must parse to midnight local or UTC time. Use a plain date like 2026-03-01 or 3/1/2026.'
     )
   }
 
-  return utc
+  return { date, isUTC }
+}
+
+function partsFromDate(_date: Date | string) {
+  const { date, isUTC } = normalizeDate(_date)
+  return isUTC
     ? {
         year: date.getUTCFullYear(),
-        month: date.getUTCMonth(),
+        month: date.getUTCMonth() + 1,
         day: date.getUTCDate(),
         monthStrShort: date.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' }),
         monthStrLong: date.toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' }),
       }
     : {
         year: date.getFullYear(),
-        month: date.getMonth(),
+        month: date.getMonth() + 1,
         day: date.getDate(),
         monthStrShort: date.toLocaleDateString('en-US', { month: 'short' }),
         monthStrLong: date.toLocaleDateString('en-US', { month: 'long' }),
