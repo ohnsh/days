@@ -46,7 +46,7 @@ function slugFromDate(date: Date | string) {
 
 function keyFromDate(date: Date | string) {
   const { year, month, day } = partsFromDate(date)
-  const [mm, dd] = [month, day].map(v => v.toString().padStart(2, '0'))
+  const [mm, dd] = [month, day].map((v) => v.toString().padStart(2, '0'))
   return `${year}-${mm}-${dd}`
 }
 
@@ -100,26 +100,48 @@ export async function getStaticDayPaths() {
     .sort(([a], [b]) => Number(b) - Number(a))
     .map<SidebarItem>(([year, yearStruct]) => ({
       label: year,
+      collapsed: true,
       items: Object.entries(yearStruct)
         .sort(([a], [b]) => Number(b) - Number(a))
         .map(([, dateKeys]) => {
           const { monthStrLong } = partsFromDate(dateKeys[0])
           return {
             label: monthStrLong,
-            items: dateKeys.map(k => new Date(k))
+            collapsed: true,
+            items: dateKeys
+              .map((k) => new Date(k))
               .sort((a, b) => b.getTime() - a.getTime())
               .map((date) => ({
-                label: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }),
+                label: date.toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                  timeZone: 'UTC',
+                }),
                 link: `/${slugFromDate(date)}`,
               })),
           }
         }),
     }))
 
-  const paths = [...dayMap.entries()].map(([dateKey, dayEntry]) => ({
-    params: { slug: slugFromDate(dateKey) },
-    props: { day: dayEntry, sidebar },
-  }))
+  for (const year of sidebar) {
+    if (typeof year === 'object' && 'items' in year && year.label.startsWith('20')) {
+      year.collapsed = false
+      for (const month of year.items) {
+        if (typeof month === 'object' && 'items' in month) {
+          month.collapsed = false
+          break
+        }
+      }
+      break
+    }
+  }
 
-  return paths
+  const paths = dayMap
+    .entries()
+    .map(([dateKey, dayEntry]) => ({
+      params: { slug: slugFromDate(dateKey) },
+      props: { day: dayEntry, sidebar },
+    }))
+
+  return [...paths]
 }
