@@ -1,10 +1,13 @@
 # build output
 dist/
+
 # generated types
 .astro/
 
 # fetched data cache
 .days/
+
+.wrangler
 
 # dependencies
 node_modules/
