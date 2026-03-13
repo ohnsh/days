@@ -1,13 +1,8 @@
-import { getCollection, type CollectionEntry } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
 import type { StarlightRouteData } from '@astrojs/starlight/route-data'
 
-export async function getPosts(drafts = true) {
-  const posts = await getCollection(
-    'docs',
-    ({ id, data }) => id !== 'index' && (drafts || !data.draft || import.meta.env.DEV)
-  )
-  posts.sort((a, b) => Number(b.data.date) - Number(a.data.date))
-  return posts
+export function titleFromDayKey(dayKey: string) {
+  return new Date(dayKey).toLocaleDateString('en-US', { dateStyle: 'full', timeZone: 'UTC' })
 }
 
 export function extractOgImage(entry: CollectionEntry<'docs'>) {

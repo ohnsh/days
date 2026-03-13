@@ -1,0 +1,18 @@
+---
+import type { DayEntry } from '@/lib/pathsUtil'
+import { titleFromDayKey } from '@/lib/util'
+import GithubDay from '@/components/GithubDay.astro'
+import YTDay from '@/components/YTDay.astro'
+
+interface Props {
+  day: DayEntry
+  renderTitle?: boolean
+}
+
+const { day, renderTitle = false } = Astro.props
+const title = titleFromDayKey(day.dayKey)
+---
+
+{renderTitle && <h2>{title}</h2>}
+<GithubDay day={day.github} />
+<YTDay day={day.youtube} />
