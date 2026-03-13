@@ -1,6 +1,10 @@
 import type { CollectionEntry } from 'astro:content'
 import type { StarlightRouteData } from '@astrojs/starlight/route-data'
 
+export function titleFromDayKey(dayKey: string) {
+  return new Date(dayKey).toLocaleDateString('en-US', { dateStyle: 'full', timeZone: 'UTC' })
+}
+
 export function extractOgImage(entry: CollectionEntry<'docs'>) {
   const { body, data } = entry
   if (data.ogImage) {

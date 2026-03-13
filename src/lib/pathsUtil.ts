@@ -1,9 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content'
 import type { StarlightPageProps } from '@astrojs/starlight/props'
 
-type CalendarStruct = Record<number, Record<number, string[]>>
-type SidebarItem = NonNullable<StarlightPageProps['sidebar']>[number]
-
 export interface DayEntry {
   dayKey: string
   posts?: CollectionEntry<'posts'>[]
@@ -61,8 +58,18 @@ export async function getDayMap() {
   return dayMap
 }
 
+export function filterDayMap(dayMap: Map<string, DayEntry>) {
+  return new Map(dayMap.entries().filter(([dayKey]) => {
+    const [year] = dayKey.split('-').map(Number)
+    return year >= 2025
+  }))
+}
+
+type CalendarStruct = Record<number, Record<number, string[]>>
+type SidebarItem = NonNullable<StarlightPageProps['sidebar']>[number]
+
 export function sidebarFromKeys(keys: string[], { collapsed = true } = {}) {
-  const sidebarEmbryo = keys.reduce<CalendarStruct>(structuredayKeys, {})
+  const sidebarEmbryo = keys.reduce<CalendarStruct>(calendarStruct, {})
   const sidebar = Object.entries(sidebarEmbryo)
     .sort(([a], [b]) => Number(b) - Number(a))
     .map<SidebarItem>(([year, yearStruct]) => ({
@@ -89,7 +96,7 @@ export function sidebarFromKeys(keys: string[], { collapsed = true } = {}) {
           }
         }),
     }))
-  
+
   if (!collapsed) {
     return sidebar
   }
@@ -109,7 +116,7 @@ export function sidebarFromKeys(keys: string[], { collapsed = true } = {}) {
   return sidebar
 }
 
-function structuredayKeys(struct: CalendarStruct, key: string) {
+function calendarStruct(struct: CalendarStruct, key: string) {
   const [year, month] = key.split('-').map(Number)
 
   struct[year] ??= {}
