@@ -17,7 +17,7 @@ function getPagination(page): StarlightRouteData['pagination'] {
 }
 
 export const onRequest = defineRouteMiddleware(async (context) => {
-  const { entry, head, pagination } = context.locals.starlightRoute
+  const { head, pagination } = context.locals.starlightRoute
   const { page } = context.locals.days ?? {}
 
   // const ogImage = page ? ogImageFromPage(page) : extractOgImage(entry)

@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config'
 import starlight from '@astrojs/starlight'
 import flexoki from 'starlight-theme-flexoki'
 import rehypeExternalLinks from 'rehype-external-links'
+import { sidebarTemplate } from './src/lib/config'
 
 // https://astro.build/config
 export default defineConfig({
@@ -36,25 +37,7 @@ export default defineConfig({
         { icon: 'youtube', label: 'YouTube', href: 'https://youtube.com/@ohn-sh' },
         { icon: 'instagram', label: 'Instagram', href: 'https://instagram.com/j.ohn.sh' },
       ],
-      sidebar: [
-        // header area
-        {
-          label: 'John Sherrell',
-          link: 'https://j.ohn.sh',
-          attrs: { target: '_blank', class: 'author' },
-        },
-        // main area
-        { label: 'March', autogenerate: { directory: '2026/mar' } },
-        { label: 'February', autogenerate: { directory: '2026/feb' }, collapsed: true },
-        { label: 'January', autogenerate: { directory: '2026/jan' }, collapsed: true },
-        // footer area
-        {
-          label: 'scratch.ohn.sh',
-          link: 'https://scratch.ohn.sh',
-          attrs: { target: '_blank', style: 'margin-top: 2em' },
-        },
-        { label: 'j.ohn.sh', link: 'https://j.ohn.sh', attrs: { target: '_blank' } },
-      ],
+      sidebar: sidebarTemplate
     }),
     // mdx({ rehypePlugins: [[rehypeExternalLinks, { target: '_blank', rel: [] }]] }),
   ],

@@ -4,6 +4,7 @@ import Day from '@/components/Day.astro'
 import { getDayMap, filterDayMap, sidebarFromKeys, slugFromDate } from '@/lib/pathsUtil'
 import type { InferGetStaticPropsType } from 'astro'
 import { titleFromDayKey } from '@/lib/util'
+import { applySidebarTemplate } from '@/lib/config'
 
 export async function getStaticPaths() {
   const dayMap = filterDayMap(await getDayMap())
@@ -21,8 +22,9 @@ export async function getStaticPaths() {
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>
 
-const { day, sidebar } = Astro.props
+const { day, sidebar: generatedSidebar } = Astro.props
 const title = titleFromDayKey(day.dayKey)
+const sidebar = applySidebarTemplate(generatedSidebar)
 const frontmatter = { title }
 ---
 

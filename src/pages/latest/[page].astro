@@ -4,6 +4,7 @@ import Day from '@/components/Day.astro'
 import type { GetStaticPaths } from 'astro'
 import { frontmatter } from './_index.md'
 import { getDayMap, filterDayMap, sidebarFromKeys } from '@/lib/pathsUtil'
+import { applySidebarTemplate } from '@/lib/config'
 
 export const getStaticPaths = (async ({ paginate }) => {
   const dayMap = filterDayMap(await getDayMap())
@@ -12,9 +13,10 @@ export const getStaticPaths = (async ({ paginate }) => {
   return paginate(days, { pageSize: 5, props: { sidebar } })
 }) satisfies GetStaticPaths
 
-const { page, sidebar } = Astro.props
+const { page, sidebar: generatedSidebar } = Astro.props
 Object.assign(Astro.locals, { days: { page } })
 
+const sidebar = applySidebarTemplate(generatedSidebar)
 // const { date: firstDate } = page.data[0].data
 const { title, hero } = frontmatter
 ---
