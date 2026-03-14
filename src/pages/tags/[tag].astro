@@ -11,7 +11,7 @@ export async function getStaticPaths({ paginate }: Parameters<GetStaticPaths>[0]
   const posts = await getCollection('posts')
   const days = await getCollection('days')
   const dayMap = await getFilteredDayMap()
-  const tagMap = new Map<string, DayEntry[]>()
+  const tagMap = new Map<string, Set<DayEntry>>()
   const extractTags = (entry: CollectionEntry<'posts'> | CollectionEntry<'days'>) => {
     const { tags } = entry.data
     if (!tags) {
@@ -24,8 +24,8 @@ export async function getStaticPaths({ paginate }: Parameters<GetStaticPaths>[0]
       return
     }
     for (const tag of tags) {
-      const days = tagMap.get(tag) ?? tagMap.set(tag, []).get(tag)!
-      days.push(day)
+      const days = tagMap.get(tag) ?? tagMap.set(tag, new Set).get(tag)!
+      days.add(day)
     }
   }
   posts.forEach(extractTags)
@@ -33,7 +33,7 @@ export async function getStaticPaths({ paginate }: Parameters<GetStaticPaths>[0]
   const sidebar = sidebarFromKeys([...dayMap.keys()])
   const pathIterator = tagMap
     .entries()
-    .map(([tag, days]) => ({ params: { tag }, props: { days, sidebar } }))
+    .map(([tag, days]) => ({ params: { tag }, props: { days: [...days], sidebar } }))
   return [...pathIterator]
 }
 
@@ -43,5 +43,5 @@ const { days, sidebar } = Astro.props
 ---
 
 <StarlightPage {sidebar} frontmatter={{ title: `tag: ${tag}`, tableOfContents: false }}>
-  {days.map((day) => <Day {day} />)}
+  {days.map((day) => <Day {day} renderTitle />)}
 </StarlightPage>
