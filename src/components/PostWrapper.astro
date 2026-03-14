@@ -1,0 +1,10 @@
+---
+interface Props {
+  headingOffset: number
+}
+
+const { headingOffset } = Astro.props
+const html = await Astro.slots.render('default')
+const adjusted = html.replaceAll(/(?<=<\/?h)\d(?=[ >])/g, (str) => String(parseInt(str) + headingOffset))
+---
+<Fragment set:html={adjusted} />

@@ -1,7 +1,10 @@
 ---
-const { entry } = Astro.props
-const { tags } = entry.data
-if (!tags?.length) {
+interface Props {
+  tags: string[]
+}
+
+const { tags } = Astro.props
+if (tags.length === 0) {
   return
 }
 ---

@@ -3,7 +3,7 @@ import type { DayEntry } from '@/lib/days'
 import { titleFromDayKey } from '@/lib/dates'
 import GithubDay from '@/components/GithubDay.astro'
 import YTDay from '@/components/YTDay.astro'
-import Preview from './Preview.astro'
+import Post from './Post.astro'
 import Tags from './Tags.astro'
 
 interface Props {
@@ -13,18 +13,31 @@ interface Props {
 
 const { day, renderTitle = false } = Astro.props
 const title = titleFromDayKey(day.dayKey)
+const tags = day.day?.data.tags
 ---
 
 <article>
   {renderTitle && <h2>{title}</h2>}
   {
-    day.day?.data.tags && (
-      <div class="not-content">
-        <Tags entry={day.day} />
+    tags && (
+      <div class="tags not-content">
+        <Tags {tags} />
       </div>
     )
   }
   {day.github && <GithubDay day={day.github} />}
   {day.youtube && <YTDay day={day.youtube} sort="🏃‍♂️" />}
-  {day.posts?.map((post) => <Preview entry={post} />)}
+  {day.posts?.map((post) => <Post {post} />)}
 </article>
+
+<style>
+  h2 {
+    font-size: var(--sl-text-h3);
+  }
+  article :global(h3) {
+    font-size: var(--sl-text-h4);
+  }
+  .tags {
+    margin-top: .3em;
+  }
+</style>

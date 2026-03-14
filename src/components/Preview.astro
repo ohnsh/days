@@ -1,8 +1,12 @@
 ---
-import { render } from 'astro:content'
+import { render, type CollectionEntry } from 'astro:content'
 import '@astro-community/astro-embed-youtube'
 import { Badge } from '@astrojs/starlight/components'
 import Tags from '@/components/Tags.astro'
+
+interface Props {
+  entry: CollectionEntry<'posts'>
+}
 
 const { entry } = Astro.props
 const { Content } = await render(entry)

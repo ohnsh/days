@@ -1,0 +1,46 @@
+---
+import { render, type CollectionEntry } from 'astro:content'
+import PostWrapper from './PostWrapper.astro'
+import Tags from './Tags.astro'
+
+interface Props {
+  headingOffset?: number
+  post: CollectionEntry<'posts'>
+}
+
+const defaultOffset = Astro.routePattern === '/[...slug]' ? 1 : 2
+const { post, headingOffset = defaultOffset } = Astro.props
+const { Content } = await render(post)
+const TitleTag = `h${1 + headingOffset}`
+---
+
+<article class="post">
+  <header>
+    <TitleTag>
+      <a href={`/${post.id}`}>{post.data.title}</a>
+    </TitleTag>
+  </header>
+  <div class="sl-markdown-content">
+    <PostWrapper {headingOffset}>
+      <Content />
+    </PostWrapper>
+  </div>
+  <footer class="not-content">
+    {post.data.tags && <Tags tags={post.data.tags} />}
+  </footer>
+</article>
+
+<style>
+  .post :global(h2) {
+    font-size: var(--sl-text-h3);
+  }
+  .post :global(h3) {
+    font-size: var(--sl-text-h4);
+  }
+  .post :global(h4) {
+    font-size: var(--sl-text-h5);
+  }
+  :is(h2, h3, h4, h5, h6) a {
+    text-decoration: none;
+  }
+</style>
