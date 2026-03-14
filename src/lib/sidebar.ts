@@ -1,4 +1,4 @@
-import { slugFromDate } from './days'
+import { slugFromDate, partsFromDate } from './days'
 import { sidebarTemplate, type SidebarConfig } from './const'
 
 function applySidebarTemplate(sidebar: SidebarConfig) {
@@ -27,9 +27,8 @@ function _sidebarFromKeys(keys: string[], { collapsed = true } = {}) {
       items: Object.entries(yearStruct)
         .sort(([a], [b]) => Number(b) - Number(a))
         .map(([, dayKeys]) => {
-          // const { monthStrLong } = partsFromDate(dayKeys[0])
           return {
-            label: new Date(dayKeys[0]).toLocaleDateString('en-US', { month: 'long' }),
+            label: partsFromDate(dayKeys[0]).monthLong,
             collapsed,
             items: dayKeys
               .map((k) => new Date(k))

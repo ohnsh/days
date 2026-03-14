@@ -9,13 +9,32 @@ export interface DayEntry {
 }
 
 export function slugFromDate(date: Date | string) {
-  const { year, monthStrShort: mo, day } = partsFromDate(date)
-  return `${year}/${mo.toLowerCase()}/${day}`
+  const { year, monthShort, day } = partsFromDate(date)
+  return `${year}/${monthShort.toLowerCase()}/${day}`
 }
 
 export function keyFromDate(_date: Date | string) {
   const { date, isUTC } = normalizeDate(_date)
   return date.toLocaleDateString('en-CA', isUTC ? { timeZone: 'UTC' } : undefined)
+}
+
+export function partsFromDate(_date: Date | string) {
+  const { date, isUTC } = normalizeDate(_date)
+  return isUTC
+    ? {
+        year: date.getUTCFullYear(),
+        month: date.getUTCMonth() + 1,
+        day: date.getUTCDate(),
+        monthShort: date.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' }),
+        monthLong: date.toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' }),
+      }
+    : {
+        year: date.getFullYear(),
+        month: date.getMonth() + 1,
+        day: date.getDate(),
+        monthShort: date.toLocaleDateString('en-US', { month: 'short' }),
+        monthLong: date.toLocaleDateString('en-US', { month: 'long' }),
+      }
 }
 
 let dayMap: Promise<Map<string, DayEntry>>
@@ -94,23 +113,4 @@ function normalizeDate(date: Date | string) {
   }
 
   return { date, isUTC }
-}
-
-function partsFromDate(_date: Date | string) {
-  const { date, isUTC } = normalizeDate(_date)
-  return isUTC
-    ? {
-        year: date.getUTCFullYear(),
-        month: date.getUTCMonth() + 1,
-        day: date.getUTCDate(),
-        monthStrShort: date.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' }),
-        monthStrLong: date.toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' }),
-      }
-    : {
-        year: date.getFullYear(),
-        month: date.getMonth() + 1,
-        day: date.getDate(),
-        monthStrShort: date.toLocaleDateString('en-US', { month: 'short' }),
-        monthStrLong: date.toLocaleDateString('en-US', { month: 'long' }),
-      }
 }
