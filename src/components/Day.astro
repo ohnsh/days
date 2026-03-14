@@ -1,6 +1,6 @@
 ---
 import type { DayEntry } from '@/lib/days'
-import { titleFromDayKey } from '@/lib/util'
+import { titleFromDayKey } from '@/lib/dates'
 import GithubDay from '@/components/GithubDay.astro'
 import YTDay from '@/components/YTDay.astro'
 import Preview from './Preview.astro'
@@ -17,14 +17,14 @@ const title = titleFromDayKey(day.dayKey)
 
 <article>
   {renderTitle && <h2>{title}</h2>}
+  {
+    day.day?.data.tags && (
+      <div class="not-content">
+        <Tags entry={day.day} />
+      </div>
+    )
+  }
   {day.github && <GithubDay day={day.github} />}
   {day.youtube && <YTDay day={day.youtube} sort="🏃‍♂️" />}
   {day.posts?.map((post) => <Preview entry={post} />)}
-  {
-    day.day?.data.tags && (
-      <footer class="not-content">
-        <Tags entry={day.day} />
-      </footer>
-    )
-  }
 </article>

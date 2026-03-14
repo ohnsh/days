@@ -6,7 +6,7 @@ if (!tags?.length) {
 }
 ---
 
-Tags:
+<span>tags:</span>
 <ul>
   {tags.map((tag) => (
     <li><a href={`/tags/${tag}`}>{tag}</a></li>
@@ -14,11 +14,14 @@ Tags:
 </ul>
 
 <style>
+  span {
+    color: var(--sl-color-gray-3);
+    margin-inline-end: .2em;
+  }
   ul {
     list-style: none;
     display: inline-flex;
     margin: 0;
-    margin-inline-start: .5em;
     padding: 0;
     gap: .3em;
   }
@@ -27,7 +30,7 @@ Tags:
     border-radius: .3em;
     font-size: var(--sl-text-sm);
     padding-block: .25em .3em;
-    padding-inline: .5em;
+    padding-inline: .4em;
     text-decoration: none;
 
     &:hover {

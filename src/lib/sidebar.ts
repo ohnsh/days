@@ -1,4 +1,4 @@
-import { slugFromDate, partsFromDate } from './days'
+import { slugFromDate, partsFromDate } from './dates'
 import { sidebarTemplate, type SidebarConfig } from './const'
 
 function applySidebarTemplate(sidebar: SidebarConfig) {

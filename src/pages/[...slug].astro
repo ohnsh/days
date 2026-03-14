@@ -1,9 +1,9 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
 import Day from '@/components/Day.astro'
-import { getFilteredDayMap, slugFromDate } from '@/lib/days'
+import { getFilteredDayMap } from '@/lib/days'
 import type { InferGetStaticPropsType } from 'astro'
-import { titleFromDayKey } from '@/lib/util'
+import { titleFromDayKey, slugFromDate } from '@/lib/dates'
 import { sidebarFromKeys } from '@/lib/sidebar'
 
 export async function getStaticPaths() {
