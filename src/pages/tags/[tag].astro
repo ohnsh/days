@@ -4,6 +4,7 @@ import type { CollectionEntry } from 'astro:content'
 import type { GetStaticPaths } from 'astro'
 import { getCollection } from 'astro:content'
 import { getFilteredDayMap, keyFromDate, type DayEntry } from '@/lib/days'
+import { sidebarFromKeys } from '@/lib/sidebar'
 import Day from '@/components/Day.astro'
 
 export async function getStaticPaths({ paginate }: Parameters<GetStaticPaths>[0]) {
@@ -29,15 +30,18 @@ export async function getStaticPaths({ paginate }: Parameters<GetStaticPaths>[0]
   }
   posts.forEach(extractTags)
   days.forEach(extractTags)
-  const pathIterator = tagMap.entries().map(([tag, days]) => ({ params: { tag }, props: { days } }))
+  const sidebar = sidebarFromKeys([...dayMap.keys()])
+  const pathIterator = tagMap
+    .entries()
+    .map(([tag, days]) => ({ params: { tag }, props: { days, sidebar } }))
   return [...pathIterator]
 }
 
 const { tag } = Astro.params
-const { days } = Astro.props
+const { days, sidebar } = Astro.props
 // const { date: firstDate } = posts[0].data
 ---
 
-<StarlightPage frontmatter={{ title: `tag: ${tag}`, tableOfContents: false }}>
+<StarlightPage {sidebar} frontmatter={{ title: `tag: ${tag}`, tableOfContents: false }}>
   {days.map((day) => <Day {day} />)}
 </StarlightPage>
