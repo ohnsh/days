@@ -1,5 +1,4 @@
 import { getCollection, type CollectionEntry } from 'astro:content'
-import type { StarlightPageProps } from '@astrojs/starlight/props'
 
 export interface DayEntry {
   dayKey: string
@@ -19,7 +18,16 @@ export function keyFromDate(_date: Date | string) {
   return date.toLocaleDateString('en-CA', isUTC ? { timeZone: 'UTC' } : undefined)
 }
 
-export async function getDayMap() {
+let dayMap: Promise<Map<string, DayEntry>>
+
+export function getDayMap() {
+  if (!dayMap) {
+    dayMap = _getDayMap()
+  }
+  return dayMap
+}
+
+async function _getDayMap() {
   const [github, youtube, posts, days] = await Promise.all([
     getCollection('github'),
     getCollection('youtube'),
@@ -57,72 +65,20 @@ export async function getDayMap() {
   return dayMap
 }
 
-export function filterDayMap(dayMap: Map<string, DayEntry>) {
+let filteredDayMap: typeof dayMap
+
+export function getFilteredDayMap() {
+  if (!filteredDayMap) {
+    filteredDayMap = getDayMap().then(_filterDayMap)
+  }
+  return filteredDayMap
+}
+
+function _filterDayMap(dayMap: Map<string, DayEntry>) {
   return new Map(dayMap.entries().filter(([dayKey]) => {
     const [year] = dayKey.split('-').map(Number)
     return year >= 2025
   }))
-}
-
-type CalendarStruct = Record<number, Record<number, string[]>>
-type SidebarItem = NonNullable<StarlightPageProps['sidebar']>[number]
-
-export function sidebarFromKeys(keys: string[], { collapsed = true } = {}) {
-  const sidebarEmbryo = keys.reduce<CalendarStruct>(calendarStruct, {})
-  const sidebar = Object.entries(sidebarEmbryo)
-    .sort(([a], [b]) => Number(b) - Number(a))
-    .map<SidebarItem>(([year, yearStruct]) => ({
-      label: year,
-      collapsed,
-      items: Object.entries(yearStruct)
-        .sort(([a], [b]) => Number(b) - Number(a))
-        .map(([, dayKeys]) => {
-          const { monthStrLong } = partsFromDate(dayKeys[0])
-          return {
-            label: monthStrLong,
-            collapsed,
-            items: dayKeys
-              .map((k) => new Date(k))
-              .sort((a, b) => b.getTime() - a.getTime())
-              .map((date) => ({
-                label: date.toLocaleDateString('en-US', {
-                  month: 'short',
-                  day: 'numeric',
-                  timeZone: 'UTC',
-                }),
-                link: `/${slugFromDate(date)}`,
-              })),
-          }
-        }),
-    }))
-
-  if (!collapsed) {
-    return sidebar
-  }
-
-  for (const year of sidebar) {
-    if (typeof year === 'object' && 'items' in year && year.label.startsWith('20')) {
-      year.collapsed = false
-      for (const month of year.items) {
-        if (typeof month === 'object' && 'items' in month) {
-          month.collapsed = false
-          break
-        }
-      }
-      break
-    }
-  }
-  return sidebar
-}
-
-function calendarStruct(struct: CalendarStruct, key: string) {
-  const [year, month] = key.split('-').map(Number)
-
-  struct[year] ??= {}
-  struct[year][month] ??= []
-  struct[year][month].push(key)
-
-  return struct
 }
 
 function normalizeDate(date: Date | string) {

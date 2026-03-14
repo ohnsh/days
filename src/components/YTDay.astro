@@ -1,30 +1,13 @@
 ---
-import { getEntry } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
-import { dateIdFromProp, dateIdFromAstroLocals, dateIdFromSlug } from '@/lib/util'
 import Video from './LiteYTVideo.astro'
 
 interface Props {
-  date?: Date | string
-  day?: CollectionEntry<'youtube'>
+  day: CollectionEntry<'youtube'>
   sort?: string
 }
 
-const _getEntry = () => {
-  const dateId =
-    dateIdFromProp(Astro.props.date) ??
-    dateIdFromSlug(Astro.url.pathname) ??
-    dateIdFromAstroLocals(Astro.locals)
-  if (!dateId) {
-    return
-  }
-  return getEntry('youtube', dateId)
-}
-
-const { day = await _getEntry(), sort } = Astro.props
-if (!day) {
-  return
-}
+const { day, sort } = Astro.props
 
 const vids = [...day.data]
 if (sort) {

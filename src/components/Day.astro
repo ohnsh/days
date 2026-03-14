@@ -1,5 +1,5 @@
 ---
-import type { DayEntry } from '@/lib/pathsUtil'
+import type { DayEntry } from '@/lib/days'
 import { titleFromDayKey } from '@/lib/util'
 import GithubDay from '@/components/GithubDay.astro'
 import YTDay from '@/components/YTDay.astro'
@@ -18,7 +18,7 @@ const title = titleFromDayKey(day.dayKey)
 <article>
   {renderTitle && <h2>{title}</h2>}
   {day.github && <GithubDay day={day.github} />}
-  {day.youtube && <YTDay day={day.youtube} />}
+  {day.youtube && <YTDay day={day.youtube} sort="🏃‍♂️" />}
   {day.posts?.map((post) => <Preview entry={post} />)}
   {
     day.day?.data.tags && (

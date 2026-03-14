@@ -1,28 +1,12 @@
 ---
-import { getEntry, type CollectionEntry } from 'astro:content'
-import { dateIdFromProp, dateIdFromAstroLocals, dateIdFromSlug } from '@/lib/util'
+import type { CollectionEntry } from 'astro:content'
 import RepoDay from './RepoDay.astro'
 
 interface Props {
-  date?: Date | string
-  day?: CollectionEntry<'github'>
+  day: CollectionEntry<'github'>
 }
 
-const _getEntry = () => {
-  const dateId =
-    dateIdFromProp(Astro.props.date) ??
-    dateIdFromSlug(Astro.url.pathname) ??
-    dateIdFromAstroLocals(Astro.locals)
-  if (!dateId) {
-    return
-  }
-  return getEntry('github', dateId)
-}
-
-const { day = await _getEntry() } = Astro.props
-if (!day) {
-  return
-}
+const { day } = Astro.props
 ---
 
 <article>

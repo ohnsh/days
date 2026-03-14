@@ -3,20 +3,19 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
 import Day from '@/components/Day.astro'
 import type { GetStaticPaths } from 'astro'
 import { frontmatter } from './_index.md'
-import { getDayMap, filterDayMap, sidebarFromKeys } from '@/lib/pathsUtil'
-import { applySidebarTemplate } from '@/lib/config'
+import { getFilteredDayMap } from '@/lib/days'
+import { sidebarFromKeys } from '@/lib/sidebar'
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const dayMap = filterDayMap(await getDayMap())
+  const dayMap = await getFilteredDayMap()
   const days = [...dayMap.values()].sort((a, b) => b.dayKey.localeCompare(a.dayKey))
   const sidebar = sidebarFromKeys([...dayMap.keys()], { collapsed: true })
   return paginate(days, { pageSize: 5, props: { sidebar } })
 }) satisfies GetStaticPaths
 
-const { page, sidebar: generatedSidebar } = Astro.props
+const { page, sidebar } = Astro.props
 Object.assign(Astro.locals, { days: { page } })
 
-const sidebar = applySidebarTemplate(generatedSidebar)
 // const { date: firstDate } = page.data[0].data
 const { title, hero } = frontmatter
 ---

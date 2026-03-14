@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config'
 import starlight from '@astrojs/starlight'
 import flexoki from 'starlight-theme-flexoki'
 import rehypeExternalLinks from 'rehype-external-links'
-import { sidebarTemplate } from './src/lib/config'
+import { sidebarTemplate } from './src/lib/const'
 
 // https://astro.build/config
 export default defineConfig({

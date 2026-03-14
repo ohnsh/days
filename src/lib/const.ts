@@ -1,8 +1,6 @@
 import type { StarlightUserConfig } from '@astrojs/starlight/types'
-import type { StarlightPageProps } from '@astrojs/starlight/props'
 
-type SidebarConfig = NonNullable<StarlightUserConfig['sidebar']>
-// type SidebarConfig = NonNullable<StarlightPageProps['sidebar']>
+export type SidebarConfig = NonNullable<StarlightUserConfig['sidebar']>
 
 export const sidebarTemplate: SidebarConfig = [
   // header area
@@ -21,12 +19,3 @@ export const sidebarTemplate: SidebarConfig = [
   },
   { label: 'j.ohn.sh', link: 'https://j.ohn.sh', attrs: { target: '_blank' } },
 ]
-
-export function applySidebarTemplate(sidebar: SidebarConfig) {
-  return sidebarTemplate.flatMap((item) => {
-    if (typeof item !== 'object' || !('label' in item)) {
-      return item
-    }
-    return item.label === '<slot />' ? sidebar : item
-  })
-}

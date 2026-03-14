@@ -2,56 +2,42 @@
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
 import type { CollectionEntry } from 'astro:content'
 import type { GetStaticPaths } from 'astro'
-import Preview from '@/components/Preview.astro'
 import { getCollection } from 'astro:content'
+import { getFilteredDayMap, keyFromDate, type DayEntry } from '@/lib/days'
+import Day from '@/components/Day.astro'
 
 export async function getStaticPaths({ paginate }: Parameters<GetStaticPaths>[0]) {
   const posts = await getCollection('posts')
-  const tagMap = new Map<string, CollectionEntry<'posts'>[]>()
-  for (const post of posts) {
-    const { tags } = post.data
-    if (!tags) { continue }
+  const days = await getCollection('days')
+  const dayMap = await getFilteredDayMap()
+  const tagMap = new Map<string, DayEntry[]>()
+  const extractTags = (entry: CollectionEntry<'posts'> | CollectionEntry<'days'>) => {
+    const { tags } = entry.data
+    if (!tags) {
+      return
+    }
+    const key = keyFromDate(entry.data.date)
+    const day = dayMap.get(key)
+    if (!day) {
+      console.error(`extractTags couldn't find DayEntry for key ${key}`)
+      return
+    }
     for (const tag of tags) {
-      const posts = tagMap.get(tag) ?? []
-      posts.push(post)
-      if (!tagMap.has(tag)) {
-        tagMap.set(tag, posts)
-      }
+      const days = tagMap.get(tag) ?? tagMap.set(tag, []).get(tag)!
+      days.push(day)
     }
   }
-  const pathIterator = tagMap.entries().map(([tag, posts]) => ({
-    params: { tag },
-    props: { posts },
-  }))
+  posts.forEach(extractTags)
+  days.forEach(extractTags)
+  const pathIterator = tagMap.entries().map(([tag, days]) => ({ params: { tag }, props: { days } }))
   return [...pathIterator]
 }
 
 const { tag } = Astro.params
-const { posts } = Astro.props
+const { days } = Astro.props
 // const { date: firstDate } = posts[0].data
 ---
 
-<StarlightPage
-  frontmatter={{
-    title: `tag: ${tag}`,
-    tableOfContents: false,
-  }}
->
-  {
-    posts.map((entry) => (
-      <>
-        <Preview {entry} />
-        <hr />
-      </>
-    ))
-  }
-  <!-- Letting Starlight render <Pagination> in the footer, where it belongs, but overriding <Pagination> to fix it with the current route. -->
+<StarlightPage frontmatter={{ title: `tag: ${tag}`, tableOfContents: false }}>
+  {days.map((day) => <Day {day} />)}
 </StarlightPage>
-
-<style>
-  hr {
-    margin-block: 3rem;
-    border: none;
-    border-top: 1px solid var(--sl-color-gray-5);
-  }
-</style>
