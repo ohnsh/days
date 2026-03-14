@@ -24,13 +24,5 @@ const { title, hero } = frontmatter
   {sidebar}
   frontmatter={{ title, tableOfContents: false, hero: page.currentPage === 1 ? hero : undefined }}
 >
-  {page.data.map((day) => <Day {day} renderTitle />)}
+  {page.data.map((day) => <Day {day} renderTitle /><hr />)}
 </StarlightPage>
-
-<style>
-  hr {
-    margin-block: 3rem;
-    border: none;
-    border-top: 1px solid var(--sl-color-gray-5);
-  }
-</style>
