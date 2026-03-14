@@ -31,18 +31,22 @@ export async function getStaticPaths({ paginate }: Parameters<GetStaticPaths>[0]
   }
   posts.forEach(extractTags)
   days.forEach(extractTags)
+
   const sidebar = sidebarFromKeys([...dayMap.keys()])
   const pathIterator = tagMap
     .entries()
-    .map(([tag, days]) => ({ params: { tag }, props: { days: [...days], sidebar } }))
-  return [...pathIterator]
+    .flatMap(([tag, days]) => paginate([...days], { pageSize: 3, params: { tag }, props: { sidebar } }))
+
+  const paths = [...pathIterator]
+  return paths
 }
 
 const { tag } = Astro.params
-const { days, sidebar } = Astro.props
+const { page, sidebar } = Astro.props
+Object.assign(Astro.locals, { days: { page } })
 // const { date: firstDate } = posts[0].data
 ---
 
 <StarlightPage {sidebar} frontmatter={{ title: `tag: ${tag}`, tableOfContents: false }}>
-  {days.map((day) => <Day {day} renderTitle />)}
+  {page.data.map((day) => <Day {day} renderTitle />)}
 </StarlightPage>

@@ -25,6 +25,8 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>
 const { day, sidebar } = Astro.props
 const title = titleFromDayKey(day.dayKey)
 const frontmatter = { title }
+
+Object.assign(Astro.locals, { days: { day }})
 ---
 
 <StarlightPage {sidebar} {frontmatter}>
