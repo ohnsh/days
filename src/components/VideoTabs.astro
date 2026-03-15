@@ -1,0 +1,23 @@
+---
+import type { InferEntrySchema } from 'astro:content'
+import VideoList from './VideoList.astro'
+import { Tabs, TabItem } from '@astrojs/starlight/components'
+
+type Video = InferEntrySchema<'youtube'>[number]
+
+interface Props {
+  categories: [string, Video[]][]
+}
+
+const { categories } = Astro.props
+---
+
+<Tabs>
+  {
+    categories.map(([tag, videos], i) => (
+      <TabItem label={tag}>
+        <VideoList {videos} />
+      </TabItem>
+    ))
+  }
+</Tabs>

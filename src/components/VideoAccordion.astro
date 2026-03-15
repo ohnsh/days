@@ -1,0 +1,21 @@
+---
+import type { InferEntrySchema } from 'astro:content'
+import VideoList from './VideoList.astro'
+
+type Video = InferEntrySchema<'youtube'>[number]
+
+interface Props {
+  categories: [string, Video[]][]
+}
+
+const { categories } = Astro.props
+---
+
+{
+  categories.map(([tag, videos], i) => (
+    <details open={i === 0}>
+      <summary>{tag}</summary>
+      <VideoList {videos} />
+    </details>
+  ))
+}

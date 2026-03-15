@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry, InferEntrySchema } from 'astro:content'
-import VideoList from './VideoList.astro'
+import VideoAccordion from './VideoAccordion.astro'
+import VideoTabs from './VideoTabs.astro'
 
 interface Props {
   day: CollectionEntry<'youtube'>
@@ -11,18 +12,18 @@ const { day, sort } = Astro.props
 
 type Video = InferEntrySchema<'youtube'>[number]
 
-const tagMap: Map<string, Video[]> = new Map
+const tagMap: Map<string, Video[]> = new Map()
 
 for (const vid of day.data) {
-  const [ firstTag = '' ] = vid.tags ?? []
+  const [firstTag = ''] = vid.tags ?? []
   const list = tagMap.get(firstTag) ?? tagMap.set(firstTag, []).get(firstTag)!
   list.push(vid)
 }
 
-const tagList = [...tagMap.entries()]
+const categories = [...tagMap.entries()]
 if (sort) {
   const defaultIndex = sort.includes('') ? sort.indexOf('') : sort.length
-  tagList.sort(([a], [b]) => {
+  categories.sort(([a], [b]) => {
     const a_i = sort.includes(a) ? sort.indexOf(a) : defaultIndex
     const b_i = sort.includes(b) ? sort.indexOf(b) : defaultIndex
     return a_i - b_i
@@ -32,9 +33,6 @@ if (sort) {
 
 <article>
   <h3>YouTube</h3>
-  {
-    tagList.map(([tag, videos], i) => {
-      return <VideoList {tag} {videos} open={i === 0} />
-    })
-  }
+  <VideoTabs {categories} />
+  <!-- <VideoAccordion {categories} /> -->
 </article>

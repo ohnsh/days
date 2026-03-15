@@ -37,11 +37,11 @@ export default defineConfig({
         { icon: 'youtube', label: 'YouTube', href: 'https://youtube.com/@ohn-sh' },
         { icon: 'instagram', label: 'Instagram', href: 'https://instagram.com/j.ohn.sh' },
       ],
-      sidebar: sidebarTemplate
+      sidebar: sidebarTemplate,
     }),
-    // mdx({ rehypePlugins: [[rehypeExternalLinks, { target: '_blank', rel: [] }]] }),
   ],
   markdown: { rehypePlugins: [[rehypeExternalLinks, { target: '_blank', rel: [] }]] },
+  // mdx({ rehypePlugins: [[rehypeExternalLinks, { target: '_blank', rel: [] }]] }),
   vite: {
     plugins: [
       {
