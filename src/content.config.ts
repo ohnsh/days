@@ -38,6 +38,7 @@ const youtube = defineCollection({
       thumbnails: z.object(),
       publishedAt: z.string(),
       isShort: z.boolean(),
+      tags: z.array(z.string()).optional(),
     })
   ),
 })

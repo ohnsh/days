@@ -26,7 +26,7 @@ const tags = day.day?.data.tags
     )
   }
   {day.github && <GithubDay day={day.github} />}
-  {day.youtube && <YTDay day={day.youtube} sort="🏃‍♂️" />}
+  {day.youtube && <YTDay day={day.youtube} sort={['🏃‍♂️']} />}
   {day.posts?.map((post) => <Post {post} />)}
 </article>
 

@@ -1,0 +1,19 @@
+---
+import type { InferEntrySchema } from 'astro:content'
+import LiteYTVideo from './LiteYTVideo.astro'
+
+type Video = InferEntrySchema<'youtube'>[number]
+
+interface Props {
+  tag: string
+  videos: Video[]
+  open?: boolean
+}
+
+const { tag = 'uncategorized', videos, open = false } = Astro.props
+---
+
+<details {open}>
+  <summary>{tag}</summary>
+  {videos.map((video) => <LiteYTVideo {...video} naked />)}
+</details>

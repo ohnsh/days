@@ -44,6 +44,7 @@ export function youtubeDays(): Loader {
   }
 }
 
+const emojiTest = /\p{Emoji}/v
 function tagsFromText(title: string, description?: string) {
   const tags = new Set
   // Here's a new one. Even modern, unicode-safe iteration over strings will split complex emoji into several characters.
@@ -51,7 +52,7 @@ function tagsFromText(title: string, description?: string) {
   // `Intl.Segmenter` allows iteration over 'user-perceived' characters or graphemes.
   const segmenter = new Intl.Segmenter('en', { granularity: 'grapheme' })
   for (const { segment: char } of segmenter.segment(title)) {
-    if (char.length > 1) {
+    if (emojiTest.test(char)) {
       tags.add(char)
     } else {
       break
@@ -67,8 +68,8 @@ function getDayKey(title: string, publishedAt: string) {
 
 function dateFromTitle(title: string, pubDate?: Date) {
   const longDateTemplate = `(?<month>${monthsPattern()})[.]? (?<day>\\d{1,2})\\b(, (?<year>\\d{4}))?`
-  const longDatePattern = new RegExp(longDateTemplate, 'ig')
-  const shortDatePattern = /(?<month>\d{1,2})\/(?<day>\d{1,2})\b(\/(?<year>\d{4}))?/g
+  const longDatePattern = new RegExp(longDateTemplate, 'vig')
+  const shortDatePattern = /(?<month>\d{1,2})\/(?<day>\d{1,2})\b(\/(?<year>\d{4}))?/vg
 
   const { date, match } =
     matchDate(title, shortDatePattern) ?? matchDate(title, longDatePattern) ?? {}
