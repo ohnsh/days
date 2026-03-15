@@ -45,14 +45,34 @@ function getDateId(title: string, publishedAt: string) {
   }
   const dateFromTitle = (title: string, pubDate?: Date) => {
     // TODO: some nasty time-zone edge cases to work through
-    const shortDatePattern = /(?<month>\d{1,2})\/(?<day>\d{1,2})(\/(?<year>\d{4}))?/g
-    const longDatePattern = /(?<month>\w{3,}) (?<day>\d{1,2})(, (?<year>\d{4}))?/g
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ]
+    const monthsPattern = months
+      .map((month) => month.slice(0, 3))
+      .concat(months)
+      .join('|')
+    const longDateTemplate = `(?<month>${monthsPattern})[.]? (?<day>\\d{1,2})\\b(, (?<year>\\d{4}))?`
+    const longDatePattern = new RegExp(longDateTemplate, 'ig')
+    const shortDatePattern = /(?<month>\d{1,2})\/(?<day>\d{1,2})\b(\/(?<year>\d{4}))?/g
 
     const { date, match } =
       matchDate(title, shortDatePattern) ?? matchDate(title, longDatePattern) ?? {}
     if (!match || !date) {
       return
     }
+
     if (!match.groups?.year && pubDate) {
       // no explitic year in title so use the one from published date
       date.setFullYear(pubDate.getFullYear())
