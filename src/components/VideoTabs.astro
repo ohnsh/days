@@ -15,7 +15,7 @@ const { categories } = Astro.props
 <Tabs>
   {
     categories.map(([tag, videos], i) => (
-      <TabItem label={tag}>
+      <TabItem label={tag || 'uncategorized'}>
         <VideoList {videos} />
       </TabItem>
     ))
