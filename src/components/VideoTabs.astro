@@ -21,3 +21,12 @@ const { categories } = Astro.props
     ))
   }
 </Tabs>
+
+<style>
+  :global(ul)[role='tablist'] {
+    border-bottom-color: transparent;
+    /* & :global(a)[role='tab']:not([aria-selected='true']) {
+      --sl-tab-color-border: var(--sl-color-gray-5);
+    } */
+  }
+</style>
