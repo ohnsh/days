@@ -25,9 +25,13 @@ const { html_url, full_name, name } = repo
   summary > span {
     font-size: var(--sl-text-xs);
     margin-inline-start: .5em;
+    display: inline-block;
+    text-align: center;
+    min-width: 1.5em;
+    line-height: 1.5em;
   }
   .badge {
-    padding: 0.07em 0.3em .1em;
+    padding-inline: 0.3em;
     border: solid 1px var(--sl-color-gray-4);
     color: var(--sl-color-gray-3);
     border-radius: 0.4em;
