@@ -32,9 +32,9 @@ const tags = day.day?.data.tags
         </div>
       )
     }</header>
+  {day.posts?.map((post) => <Post {post} />)}
   {day.github && <GithubDay day={day.github} />}
   {day.youtube && <YTDay day={day.youtube} sort={['🏃‍♂️']} />}
-  {day.posts?.map((post) => <Post {post} />)}
 </article>
 
 <style>
@@ -56,6 +56,9 @@ const tags = day.day?.data.tags
   }
   article :global(h3) {
     font-size: var(--sl-text-h4);
+  }
+  article > :global(article) {
+    margin-block: 2em;
   }
   .tags {
     margin-block: 0.3em;
