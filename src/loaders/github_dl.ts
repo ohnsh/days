@@ -24,7 +24,6 @@ async function apiAllPages(url: URL | string) {
     const json = await resp.json()
     data.push(...json)
     nextPage = resp.headers.get('link')?.match(nextPattern)?.[1]
-    console.log({ nextPage })
   } while (nextPage)
 
   return data

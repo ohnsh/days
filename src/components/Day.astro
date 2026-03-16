@@ -38,8 +38,9 @@ const tags = day.day?.data.tags
 </article>
 
 <style>
+  /* :not(:empty) doesn't work when an element contains whitespace */
   header:has(*) {
-    padding-bottom: 0.7rem;
+    padding-bottom: 0.3rem;
     margin-bottom: 2rem;
     border-bottom: solid 1px var(--sl-color-gray-5);
 
@@ -57,6 +58,6 @@ const tags = day.day?.data.tags
     font-size: var(--sl-text-h4);
   }
   .tags {
-    margin-top: 0.3em;
+    margin-block: 0.3em;
   }
 </style>
