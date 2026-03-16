@@ -1,6 +1,6 @@
 ---
 import type { DayEntry } from '@/lib/days'
-import { titleFromDayKey } from '@/lib/dates'
+import { titleFromDayKey, slugFromDate } from '@/lib/dates'
 import GithubDay from '@/components/GithubDay.astro'
 import YTDay from '@/components/YTDay.astro'
 import Post from './Post.astro'
@@ -13,31 +13,50 @@ interface Props {
 
 const { day, renderTitle = false } = Astro.props
 const title = titleFromDayKey(day.dayKey)
+const slug = slugFromDate(day.dayKey)
 const tags = day.day?.data.tags
 ---
 
 <article>
-  {renderTitle && <h2>{title}</h2>}
-  {
-    tags && (
-      <div class="tags not-content">
-        <Tags {tags} />
-      </div>
-    )
-  }
+  <header>{
+      renderTitle && (
+        <h2>
+          <a href={slug}>{title}</a>
+        </h2>
+      )
+    }
+    {
+      tags && (
+        <div class="tags not-content">
+          <Tags {tags} />
+        </div>
+      )
+    }</header>
   {day.github && <GithubDay day={day.github} />}
   {day.youtube && <YTDay day={day.youtube} sort={['🏃‍♂️']} />}
   {day.posts?.map((post) => <Post {post} />)}
 </article>
 
 <style>
-  h2 {
-    font-size: var(--sl-text-h3);
+  header:has(*) {
+    padding-bottom: 0.7rem;
+    margin-bottom: 2rem;
+    border-bottom: solid 1px var(--sl-color-gray-5);
+
+    &:not(:has(h2)) .tags {
+      margin-top: -.5rem;
+    }
+  }
+  h2 a {
+    text-decoration: none;
+  }
+  article:not(:first-of-type) {
+    margin-top: 5rem;
   }
   article :global(h3) {
     font-size: var(--sl-text-h4);
   }
   .tags {
-    margin-top: .3em;
+    margin-top: 0.3em;
   }
 </style>

@@ -42,7 +42,7 @@ async function ghDownloader() {
   for (const repo of repos) {
     const { name, commits_url } = repo
     const url = new URL(commits_url.replaceAll(/{[^}]+}/g, '')) /* ?author=ohnsh */
-    url.searchParams.set('per_page', '100')
+    url.searchParams.set('per_page', '50')
     const commits = await apiAllPages(url).then((commits) =>
       commits.filter(({ commit }) => isMyCommit(commit))
     )

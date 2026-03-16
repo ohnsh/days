@@ -32,12 +32,6 @@ hr {
   border-top: 1px solid var(--sl-color-gray-5);
 }
 
-/* Overrides <YouTube> component's own styles because they're wrapped in a @layer by a custom Vite plugin. */
-lite-youtube {
-  max-width: 550px;
-  border-radius: 12px;
-}
-
 .hero {
   /* Remove second column when there's no image. */
   grid-template-columns: auto;

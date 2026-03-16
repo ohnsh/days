@@ -48,5 +48,12 @@ Object.assign(Astro.locals, { days: { page } })
 ---
 
 <StarlightPage {sidebar} frontmatter={{ title: `tag: ${tag}`, tableOfContents: false }}>
-  {page.data.map((day) => <Day {day} renderTitle /><hr />)}
+  {page.data.map((day) => <Day {day} renderTitle />)}
 </StarlightPage>
+
+<style>
+  :global(h1) {
+    font-size: var(--sl-text-lg);
+    margin-bottom: .5em;
+  }
+</style>
