@@ -8,16 +8,31 @@ async function api(url: URL | string) {
   }
 
   const resp = await fetch(url, { headers })
-  const json = await resp.json()
   if (!resp.ok) {
+    const json = await resp.json()
     throw new Error(json.message)
   }
-  return json
+  return resp
+}
+
+async function apiAllPages(url: URL | string) {
+  const nextPattern = /<(\S+)>; rel="next"/i
+  const data = []
+  let nextPage: string | undefined
+  do {
+    const resp = await api(nextPage ?? url)
+    const json = await resp.json()
+    data.push(...json)
+    nextPage = resp.headers.get('link')?.match(nextPattern)?.[1]
+    console.log({ nextPage })
+  } while (nextPage)
+
+  return data
 }
 
 async function ghDownloader() {
   const reposUrl = 'https://api.github.com/user/repos'
-  const repos = await api(reposUrl)
+  const repos = await apiAllPages(reposUrl)
 
   repos.sort((a, b) => Date.parse(b.updated_at) - Date.parse(a.updated_at))
 
@@ -28,7 +43,7 @@ async function ghDownloader() {
     const { name, commits_url } = repo
     const url = new URL(commits_url.replaceAll(/{[^}]+}/g, '')) /* ?author=ohnsh */
     url.searchParams.set('per_page', '100')
-    const commits = await api(url).then((commits) =>
+    const commits = await apiAllPages(url).then((commits) =>
       commits.filter(({ commit }) => isMyCommit(commit))
     )
 
