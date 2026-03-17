@@ -11,6 +11,7 @@ function getPagination(page: Page): StarlightRouteData['pagination'] {
 export const onRequest = defineRouteMiddleware(async (context) => {
   const { head, pagination } = context.locals.starlightRoute
   const { day, page } = context.locals.days ?? {}
+  const screenshotUrl = 'https://days.ohn.sh/screenshot-3-17.png'
 
   if (page) {
     const ogImages = ogImagesFromPage(page)
@@ -20,6 +21,8 @@ export const onRequest = defineRouteMiddleware(async (context) => {
     const ogImages = extractOgImages(day)
     appendOgImages(head, ...ogImages)
   }
+
+  appendOgImages(head, screenshotUrl)
 })
 
 function extractOgImages(entry: DayEntry) {
