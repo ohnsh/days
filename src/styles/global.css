@@ -22,7 +22,11 @@
 .hero {
   /* Remove second column when there's no image. */
   grid-template-columns: auto;
-  padding-block-start: 3rem;
+  padding-block: 3rem;
+
+  @media (min-width: 50rem) {
+    padding-block-end: revert-layer;
+  }
 
   /* when centered */
   padding-inline: min(3rem, 8%);
@@ -31,7 +35,11 @@
     padding-inline-start: 0;
   }
 
+  & h1 {
+    --sl-text-3xl: var(--sl-text-h1);
+  }
   & .tagline {
+    --sl-text-base: var(--sl-text-lg);
     max-width: 80ch;
   }
 }
