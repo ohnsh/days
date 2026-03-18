@@ -1,5 +1,5 @@
 # days.
 
-A blog experiment emphasizing automation. The idea is to bring in content from various sources (GitHub, YouTube, etc.) and allow the author to curate and customize the presentation.
+A blog experiment emphasizing aggregation. Content from various sources (GitHub, YouTube, regular posts, etc.) is merged into a day-oriented feed and archive that the author can curate and customize.
 
 Live at https://days.ohn.sh
