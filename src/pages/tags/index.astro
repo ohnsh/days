@@ -1,0 +1,27 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
+import { tagDayMap, getFilteredDayMap } from '@/lib/days'
+import { sidebarFrom } from '@/lib/sidebar'
+
+const frontmatter = { title: 'Test' }
+const tags = (await tagDayMap).keys()
+const days = await getFilteredDayMap()
+const sidebar = sidebarFrom([...days.keys()], [...tags])
+---
+
+<StarlightPage {frontmatter} {sidebar}>
+  <ul>
+    {
+      (await tagDayMap).entries().map(([tag, dayKeys]) => (
+        <>
+          <li>{tag}</li>
+          <ul>
+            {dayKeys.map((key) => (
+              <li>{key}</li>
+            ))}
+          </ul>
+        </>
+      ))
+    }
+  </ul>
+</StarlightPage>

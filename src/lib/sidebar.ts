@@ -12,13 +12,18 @@ function applySidebarTemplate(sidebar: SidebarConfig) {
 
 type CalendarStruct = Record<number, Record<number, string[]>>
 type SidebarItem = SidebarConfig[number]
+type SidebarOpts = { collapsed?: boolean }
 
-export function sidebarFromKeys(...args: Parameters<typeof _sidebarFromKeys>) {
-  return applySidebarTemplate(_sidebarFromKeys(...args))
+export function sidebarFrom(dayKeys: string[], tags?: string[], opts?: SidebarOpts) {
+  const items = _sidebarFromKeys(dayKeys, opts)
+  if (tags) {
+    items.unshift(_sidebarFromTags(tags))
+  }
+  return applySidebarTemplate(items)
 }
 
 function _sidebarFromKeys(keys: string[], { collapsed = true } = {}) {
-  const sidebarEmbryo = keys.reduce<CalendarStruct>(calendarStruct, {})
+  const sidebarEmbryo = keys.reduce<CalendarStruct>(keyReducer, {})
   const sidebar = Object.entries(sidebarEmbryo)
     .sort(([a], [b]) => Number(b) - Number(a))
     .map<SidebarItem>(([year, yearStruct]) => ({
@@ -64,7 +69,18 @@ function _sidebarFromKeys(keys: string[], { collapsed = true } = {}) {
   return sidebar
 }
 
-function calendarStruct(struct: CalendarStruct, key: string) {
+function _sidebarFromTags(tags: string[]) {
+  return {
+    label: 'Tags',
+    collapsed: true,
+    items: tags.map(tag => ({
+      label: tag,
+      link: `/tags/${tag}`
+    }))
+  }
+}
+
+function keyReducer(struct: CalendarStruct, key: string) {
   const [year, month] = key.split('-').map(Number)
 
   struct[year] ??= {}
