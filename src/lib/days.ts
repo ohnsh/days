@@ -1,5 +1,6 @@
-import { getCollection, type CollectionEntry } from 'astro:content'
+import { getCollection, type CollectionEntry, type CollectionKey } from 'astro:content'
 import { keyFromDate } from './dates'
+import { getTagMap, aggregateTagMaps, tagsToDayKeys } from './tags'
 
 export interface DayEntry {
   dayKey: string
@@ -7,6 +8,7 @@ export interface DayEntry {
   day?: CollectionEntry<'days'>
   github?: CollectionEntry<'github'>
   youtube?: CollectionEntry<'youtube'>
+  tagMap?: Map<string, CollectionEntry<CollectionKey>>
 }
 
 let dayMap: Promise<Map<string, DayEntry>>
@@ -53,11 +55,23 @@ async function _getDayMap() {
     dayEntry.day = entry
   }
 
+  addTagMaps(dayMap)
+
   return dayMap
+}
+
+function addTagMaps(dayMap: Map<string, DayEntry>) {
+  for (const dayEntry of dayMap.values()) {
+    const dayTags = getTagMap(dayEntry.day ? [dayEntry.day] : [])
+    const postTags = getTagMap(dayEntry.posts ?? [])
+    const tagMap = aggregateTagMaps([dayTags, postTags])
+    Object.assign(dayEntry, { tagMap })
+  }
 }
 
 let filteredDayMap: typeof dayMap
 
+export const tagDayMap = getFilteredDayMap().then(tagsToDayKeys)
 export function getFilteredDayMap() {
   if (!filteredDayMap) {
     filteredDayMap = getDayMap().then(_filterDayMap)
@@ -66,8 +80,10 @@ export function getFilteredDayMap() {
 }
 
 function _filterDayMap(dayMap: Map<string, DayEntry>) {
-  return new Map(dayMap.entries().filter(([dayKey]) => {
-    const [year] = dayKey.split('-').map(Number)
-    return year >= 2025
-  }))
+  return new Map(
+    dayMap.entries().filter(([dayKey]) => {
+      const [year] = dayKey.split('-').map(Number)
+      return year >= 2025
+    })
+  )
 }

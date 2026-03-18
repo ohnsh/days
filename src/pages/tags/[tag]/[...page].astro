@@ -1,44 +1,26 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
-import type { CollectionEntry } from 'astro:content'
 import type { GetStaticPaths } from 'astro'
-import { getCollection } from 'astro:content'
-import { getFilteredDayMap, type DayEntry } from '@/lib/days'
-import { keyFromDate } from '@/lib/dates'
+import { getFilteredDayMap } from '@/lib/days'
 import { sidebarFromKeys } from '@/lib/sidebar'
 import Day from '@/components/Day.astro'
+import { tagDayMap } from '@/lib/days'
 
 export async function getStaticPaths({ paginate }: Parameters<GetStaticPaths>[0]) {
-  const posts = await getCollection('posts')
-  const days = await getCollection('days')
   const dayMap = await getFilteredDayMap()
-  const tagMap = new Map<string, Set<DayEntry>>()
-  const extractTags = (entry: CollectionEntry<'posts'> | CollectionEntry<'days'>) => {
-    const { tags } = entry.data
-    if (!tags) {
-      return
-    }
-    const key = keyFromDate(entry.data.date)
-    const day = dayMap.get(key)
-    if (!day) {
-      console.error(`extractTags couldn't find DayEntry for key ${key}`)
-      return
-    }
-    for (const tag of tags) {
-      const days = tagMap.get(tag) ?? tagMap.set(tag, new Set).get(tag)!
-      days.add(day)
-    }
-  }
-  posts.forEach(extractTags)
-  days.forEach(extractTags)
 
   const sidebar = sidebarFromKeys([...dayMap.keys()])
-  const pathIterator = tagMap
+  const pathIterator = (await tagDayMap)
     .entries()
-    .flatMap(([tag, days]) => paginate([...days], { pageSize: 3, params: { tag }, props: { sidebar } }))
+    .flatMap(([tag, dayKeys]) =>
+      paginate([...dayKeys.map((dayKey) => dayMap.get(dayKey)!)], {
+        pageSize: 3,
+        params: { tag },
+        props: { sidebar },
+      })
+    )
 
-  const paths = [...pathIterator]
-  return paths
+  return [...pathIterator]
 }
 
 const { tag } = Astro.params
@@ -54,6 +36,6 @@ Object.assign(Astro.locals, { days: { page } })
 <style>
   :global(h1) {
     font-size: var(--sl-text-lg);
-    margin-bottom: .5em;
+    margin-bottom: 0.5em;
   }
 </style>
