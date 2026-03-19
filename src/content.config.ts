@@ -3,8 +3,9 @@ import { glob } from 'astro/loaders'
 import { defineCollection } from 'astro:content'
 import { docsLoader } from '@astrojs/starlight/loaders'
 import { docsSchema } from '@astrojs/starlight/schema'
-import { githubDays } from '@/loaders/github'
-import { youtubeDays } from '@/loaders/youtube'
+import { commitLoader, githubDays } from '@/loaders/github'
+import { youtubeLoader } from '@/loaders/youtube'
+import { keyFromDate } from './lib/dates'
 
 const posts = defineCollection({
   loader: glob({ base: './src/content/posts', pattern: '**/*.{md,mdx}' }),
@@ -13,34 +14,17 @@ const posts = defineCollection({
     date: z.date(),
     draft: z.boolean().optional(),
     tags: z.array(z.string()).optional(),
-  })
+  }),
 })
 const days = defineCollection({
   loader: glob({ base: './src/content/days', pattern: '**/*.yml' }),
-  schema: z.object({
-    date: z.date(),
-    tags: z.array(z.string()),
-    ogImage: z.url().optional(),
-  })
+  schema: z
+    .object({ date: z.date(), tags: z.array(z.string()), ogImage: z.url().optional() })
+    .transform((data) => ({ ...data, day: keyFromDate(data.date) })),
 })
-const docs = defineCollection({
-  loader: docsLoader(),
-  schema: docsSchema(),
-})
+const docs = defineCollection({ loader: docsLoader(), schema: docsSchema() })
 const github = defineCollection({ loader: githubDays() })
-const youtube = defineCollection({
-  loader: youtubeDays(),
-  schema: z.array(
-    z.object({
-      videoId: z.string(),
-      title: z.string(),
-      description: z.string(),
-      thumbnails: z.object(),
-      publishedAt: z.string(),
-      isShort: z.boolean(),
-      tags: z.array(z.string()).optional(),
-    })
-  ),
-})
+const commits = defineCollection({ loader: commitLoader() })
+const youtube = defineCollection({ loader: youtubeLoader() })
 
-export const collections = { days, posts, docs, github, youtube }
+export const collections = { days, posts, docs, commits, github, youtube }

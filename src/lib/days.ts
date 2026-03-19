@@ -2,13 +2,26 @@ import { getCollection, type CollectionEntry, type CollectionKey } from 'astro:c
 import { keyFromDate } from './dates'
 import { getTagMap, aggregateTagMaps, tagsToDayKeys } from './tags'
 
-export interface DayEntry {
-  dayKey: string
-  posts?: CollectionEntry<'posts'>[]
-  day?: CollectionEntry<'days'>
-  github?: CollectionEntry<'github'>
-  youtube?: CollectionEntry<'youtube'>
-  tagMap?: Map<string, CollectionEntry<CollectionKey>>
+// export interface DayEntry {
+//   dayKey: string
+//   posts?: CollectionEntry<'posts'>[]
+//   day?: CollectionEntry<'days'>
+//   github?: CollectionEntry<'github'>
+//   youtube?: CollectionEntry<'youtube'>
+//   tagMap?: Map<string, CollectionEntry<CollectionKey>>
+// }
+
+export class DayEntry {
+  day: string
+  posts: CollectionEntry<'posts'>[] = []
+  meta?: CollectionEntry<'days'>
+  commits: CollectionEntry<'commits'>[] = []
+  youtube: CollectionEntry<'youtube'>[] = []
+  tagMap: Map<string, CollectionEntry<CollectionKey>[]> = new Map
+  
+  constructor(day: string) {
+    this.day = day
+  }
 }
 
 let dayMap: Promise<Map<string, DayEntry>>
@@ -22,7 +35,7 @@ export function getDayMap() {
 
 async function _getDayMap() {
   const [github, youtube, posts, days] = await Promise.all([
-    getCollection('github'),
+    getCollection('commits'),
     getCollection('youtube'),
     getCollection('posts', ({ data: { draft = false } }) => !draft || import.meta.env.DEV),
     getCollection('days'),
@@ -50,6 +63,7 @@ async function _getDayMap() {
   }
 
   for (const entry of days) {
+    console.log(entry.data.day)
     const dayKey = keyFromDate(entry.data.date)
     const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, { dayKey }).get(dayKey)!
     dayEntry.day = entry

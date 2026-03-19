@@ -1,13 +1,22 @@
 import type { Loader } from 'astro/loaders'
 import uploads from '../../.days/youtube/uploads.json'
 import shorts from '../../.days/youtube/shorts.json'
+import { z } from 'astro/zod'
 
-export function youtubeDays(): Loader {
+export const YtSchema = z.object({
+  videoId: z.string(),
+  title: z.string(),
+  description: z.string(),
+  thumbnails: z.object(),
+  publishedAt: z.string(),
+  isShort: z.boolean(),
+  tags: z.array(z.string()).optional(),
+})
+
+export function youtubeLoader(): Loader {
   return {
     name: 'youtube',
     load: async ({ store }) => {
-      let numShorts = 0
-      const dayMap: Record<string, any> = {}
       for (const { snippet } of uploads) {
         const {
           publishedAt,
@@ -16,37 +25,31 @@ export function youtubeDays(): Loader {
           thumbnails,
           resourceId: { videoId },
         } = snippet
-        const dayKey = getDayKey(title, publishedAt)
+
+        const day = getDayKey(title, publishedAt)
         const isShort = shorts.some(({ snippet }) => snippet.resourceId.videoId === videoId)
-        if (isShort) {
-          numShorts++
-        }
-        if (!dayMap[dayKey]) {
-          dayMap[dayKey] = []
-        }
         const tags = tagsFromText(title, description)
 
-        dayMap[dayKey].push({
+        const data = {
           videoId,
+          day,
           title,
           description,
           thumbnails,
           publishedAt,
           isShort,
           ...(tags.length > 0 ? { tags } : {}),
-        })
-      }
-
-      for (const [day, videos] of Object.entries(dayMap)) {
-        store.set({ id: day, data: videos })
+        }
+        store.set({ id: videoId, data })
       }
     },
+    schema: YtSchema,
   }
 }
 
 const emojiTest = /\p{Emoji}/v
 function tagsFromText(title: string, description?: string) {
-  const tags = new Set
+  const tags = new Set()
   // Here's a new one. Even modern, unicode-safe iteration over strings will split complex emoji into several characters.
   // (E.g. person, zero-width joiner, gender symbol.)
   // `Intl.Segmenter` allows iteration over 'user-perceived' characters or graphemes.
@@ -69,7 +72,7 @@ function getDayKey(title: string, publishedAt: string) {
 function dateFromTitle(title: string, pubDate?: Date) {
   const longDateTemplate = `(?<month>${monthsPattern()})[.]? (?<day>\\d{1,2})\\b(, (?<year>\\d{4}))?`
   const longDatePattern = new RegExp(longDateTemplate, 'vig')
-  const shortDatePattern = /(?<month>\d{1,2})\/(?<day>\d{1,2})\b(\/(?<year>\d{4}))?/vg
+  const shortDatePattern = /(?<month>\d{1,2})\/(?<day>\d{1,2})\b(\/(?<year>\d{4}))?/gv
 
   const { date, match } =
     matchDate(title, shortDatePattern) ?? matchDate(title, longDatePattern) ?? {}
