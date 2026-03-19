@@ -35,6 +35,10 @@ export function dayFromDate(date: Date | string, plainDate = false) {
   return date.toLocaleDateString('en-CA')
 }
 
+export function queryDay(day: string, opts: Intl.DateTimeFormatOptions = {}) {
+  return normalizePlainDate(day).toLocaleDateString('en-US', opts)
+}
+
 export function titleFromDay(day: string) {
   const date = normalizePlainDate(day)
   const now = new Date()

@@ -5,7 +5,7 @@ import { docsLoader } from '@astrojs/starlight/loaders'
 import { docsSchema } from '@astrojs/starlight/schema'
 import { commitLoader, githubDays } from '@/loaders/github'
 import { youtubeLoader } from '@/loaders/youtube'
-import { keyFromDate } from './lib/dates'
+import { dayFromDate } from './lib/dates'
 
 const posts = defineCollection({
   loader: glob({ base: './src/content/posts', pattern: '**/*.{md,mdx}' }),
@@ -20,7 +20,7 @@ const days = defineCollection({
   loader: glob({ base: './src/content/days', pattern: '**/*.yml' }),
   schema: z
     .object({ date: z.date(), tags: z.array(z.string()), ogImage: z.url().optional() })
-    .transform((data) => ({ ...data, day: keyFromDate(data.date) })),
+    .transform((data) => ({ ...data, day: dayFromDate(data.date) })),
 })
 const docs = defineCollection({ loader: docsLoader(), schema: docsSchema() })
 const github = defineCollection({ loader: githubDays() })

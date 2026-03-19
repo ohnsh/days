@@ -3,7 +3,7 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
 import type { GetStaticPaths } from 'astro'
 import { getFilteredDayMap, tagDayMap } from '@/lib/days'
 import { sidebarFrom } from '@/lib/sidebar'
-import Day from '@/components/Day.astro'
+import Day from '@/components/DayContent.astro'
 
 export async function getStaticPaths({ paginate }: Parameters<GetStaticPaths>[0]) {
   const dayMap = await getFilteredDayMap()

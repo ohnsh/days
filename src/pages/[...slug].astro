@@ -1,9 +1,9 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
-import Day from '@/components/Day.astro'
+import Day from '@/components/DayContent.astro'
 import { getFilteredDayMap, tagDayMap } from '@/lib/days'
 import type { InferGetStaticPropsType } from 'astro'
-import { titleFromDayKey, slugFromDate } from '@/lib/dates'
+import { titleFromDay, slugFromDate } from '@/lib/dates'
 import { sidebarFrom } from '@/lib/sidebar'
 
 export async function getStaticPaths() {
@@ -24,7 +24,7 @@ export async function getStaticPaths() {
 type Props = InferGetStaticPropsType<typeof getStaticPaths>
 
 const { day, sidebar } = Astro.props
-const title = titleFromDayKey(day.dayKey)
+const title = titleFromDay(day.key)
 const frontmatter = { title }
 
 Object.assign(Astro.locals, { days: { day }})

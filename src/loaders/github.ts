@@ -1,6 +1,7 @@
 import type { Loader } from 'astro/loaders'
 import { z } from 'astro/zod'
 import repos from '../../.days/github/repos.json'
+import { dayFromDate } from '@/lib/dates'
 const commitDb = import.meta.glob('../../.days/github/commits/*.json', { eager: true })
 
 const RepoSchema = z.object({
@@ -37,7 +38,7 @@ const gitCommitSchema = z.object({
   // verification
 })
 
-export const CommitSchema = z.object({
+const CommitSchema_API = z.object({
   sha: z.string(),
   commit: gitCommitSchema,
   url: z.string(),
@@ -46,15 +47,19 @@ export const CommitSchema = z.object({
   parents: z.object({ sha: z.string(), url: z.string(), html_url: z.string() }),
 })
 
+export const CommitSchema = z.intersection(CommitSchema_API, z.object({ day: z.string() }))
+
 type Repo = z.infer<typeof RepoSchema>
-type Commit = z.infer<typeof CommitSchema>
+type ApiCommit = z.infer<typeof CommitSchema_API>
 
 export function commitLoader(): Loader {
   return {
     name: 'commits',
     load: async ({ store }) => {
       for (const repo of repos as Repo[]) {
-        for (const commit of getCommits(repo.name)) {
+        for (const apiCommit of getCommits(repo.name)) {
+          const { date } = apiCommit.commit.author
+          const commit = { ...apiCommit, day: dayFromDate(date) }
           store.set({ id: commit.sha, data: commit })
         }
       }
@@ -85,7 +90,7 @@ export function githubDays(): Loader {
   }
 }
 
-function getCommits(repo: string): Commit[] {
+function getCommits(repo: string): ApiCommit[] {
   const path = `../../.days/github/commits/${repo}.json`
   const { default: commits } = commitDb[path]
 

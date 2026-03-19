@@ -1,30 +1,21 @@
 import { getCollection, type CollectionEntry, type CollectionKey } from 'astro:content'
-import { keyFromDate } from './dates'
-import { getTagMap, aggregateTagMaps, tagsToDayKeys } from './tags'
+import { dayFromDate } from './dates'
+import { tagsToDayKeys } from './tags'
 
-// export interface DayEntry {
-//   dayKey: string
-//   posts?: CollectionEntry<'posts'>[]
-//   day?: CollectionEntry<'days'>
-//   github?: CollectionEntry<'github'>
-//   youtube?: CollectionEntry<'youtube'>
-//   tagMap?: Map<string, CollectionEntry<CollectionKey>>
-// }
-
-export class DayEntry {
-  day: string
+export class Day {
+  key: string
   posts: CollectionEntry<'posts'>[] = []
   meta?: CollectionEntry<'days'>
   commits: CollectionEntry<'commits'>[] = []
   youtube: CollectionEntry<'youtube'>[] = []
   tagMap: Map<string, CollectionEntry<CollectionKey>[]> = new Map
   
-  constructor(day: string) {
-    this.day = day
+  constructor(key: string) {
+    this.key = key
   }
 }
 
-let dayMap: Promise<Map<string, DayEntry>>
+let dayMap: Promise<Map<string, Day>>
 
 export function getDayMap() {
   if (!dayMap) {
@@ -34,39 +25,37 @@ export function getDayMap() {
 }
 
 async function _getDayMap() {
-  const [github, youtube, posts, days] = await Promise.all([
+  const [commits, youtube, posts, days] = await Promise.all([
     getCollection('commits'),
     getCollection('youtube'),
     getCollection('posts', ({ data: { draft = false } }) => !draft || import.meta.env.DEV),
     getCollection('days'),
   ])
 
-  const dayMap = new Map<string, DayEntry>()
+  const dayMap = new Map<string, Day>()
 
-  for (const entry of github) {
-    const dayKey = entry.id
-    const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, { dayKey }).get(dayKey)!
-    Object.assign(dayEntry, { github: entry })
+  for (const entry of commits) {
+    const dayKey = entry.data.day
+    const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, new Day(dayKey)).get(dayKey)!
+    dayEntry.commits.push(entry)
   }
 
   for (const entry of youtube) {
     const dayKey = entry.id
-    const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, { dayKey }).get(dayKey)!
-    Object.assign(dayEntry, { youtube: entry })
+    const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, new Day(dayKey)).get(dayKey)!
+    dayEntry.youtube.push(entry)
   }
 
   for (const entry of posts) {
-    const dayKey = keyFromDate(entry.data.date)
-    const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, { dayKey }).get(dayKey)!
-    dayEntry.posts ??= []
+    const dayKey = dayFromDate(entry.data.date)
+    const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, new Day(dayKey)).get(dayKey)!
     dayEntry.posts.push(entry)
   }
 
   for (const entry of days) {
-    console.log(entry.data.day)
-    const dayKey = keyFromDate(entry.data.date)
-    const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, { dayKey }).get(dayKey)!
-    dayEntry.day = entry
+    const dayKey = dayFromDate(entry.data.date)
+    const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, new Day(dayKey)).get(dayKey)!
+    dayEntry.meta = entry
   }
 
   addTagMaps(dayMap)
@@ -74,12 +63,14 @@ async function _getDayMap() {
   return dayMap
 }
 
-function addTagMaps(dayMap: Map<string, DayEntry>) {
+function addTagMaps(dayMap: Map<string, Day>) {
   for (const dayEntry of dayMap.values()) {
-    const dayTags = getTagMap(dayEntry.day ? [dayEntry.day] : [])
-    const postTags = getTagMap(dayEntry.posts ?? [])
-    const tagMap = aggregateTagMaps([dayTags, postTags])
-    Object.assign(dayEntry, { tagMap })
+    for (const entry of [...dayEntry.posts, ...(dayEntry.meta ? [dayEntry.meta] : [])]) {
+      entry.data.tags?.forEach(tag => {
+        const list = dayEntry.tagMap.get(tag) ?? dayEntry.tagMap.set(tag, []).get(tag)!
+        list.push(entry)
+      })
+    }
   }
 }
 
@@ -93,7 +84,7 @@ export function getFilteredDayMap() {
   return filteredDayMap
 }
 
-function _filterDayMap(dayMap: Map<string, DayEntry>) {
+function _filterDayMap(dayMap: Map<string, Day>) {
   return new Map(
     dayMap.entries().filter(([dayKey]) => {
       const [year] = dayKey.split('-').map(Number)
