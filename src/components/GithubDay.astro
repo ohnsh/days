@@ -1,17 +1,22 @@
 ---
 import type { CollectionEntry } from 'astro:content'
 import RepoDay from './RepoDay.astro'
+import { getEntry } from 'astro:content'
 
 interface Props {
-  day: CollectionEntry<'github'>
+  day: CollectionEntry<'commits'>[]
 }
 
+const repoMap = new Map<string, CollectionEntry<'commits'>[]>()
 const { day } = Astro.props
+for (const commit of day) {
+  const { repo } = commit.data
+  const list = repoMap.get(repo) ?? repoMap.set(repo, []).get(repo)!
+  list.push(commit)
+}
 ---
 
 <article>
   <h3>Git Commits</h3>
-  {
-    day.data.map(({ repo, commits }) => <RepoDay {repo} {commits} />)
-  }
+  {repoMap.entries().map(async ([repo, commits]) => <RepoDay repo={await getEntry('repos', repo)} {commits} />)}
 </article>

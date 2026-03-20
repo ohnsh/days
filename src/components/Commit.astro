@@ -3,7 +3,7 @@ const { commit } = Astro.props
 const {
   html_url,
   commit: { author, message },
-} = commit
+} = commit.data
 const { name, email, date } = author
 const time = new Date(date).toLocaleTimeString('en-US', { timeStyle: 'short' }).toLowerCase()
 ---

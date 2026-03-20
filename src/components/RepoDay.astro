@@ -3,7 +3,9 @@ import { Icon, Badge } from '@astrojs/starlight/components'
 import Commit from './Commit.astro'
 
 const { repo, commits } = Astro.props
-const { html_url, full_name, name } = repo
+const { html_url, full_name, name } = repo.data
+// TODO: make not terrible
+commits.sort((a, b) => -a.data.commit.author.date.localeCompare(b.data.commit.author.date))
 ---
 
 <details>

@@ -1,20 +1,20 @@
 ---
-import type { DayEntry } from '@/lib/days'
-import { titleFromDayKey, slugFromDate } from '@/lib/dates'
+import { Day } from '@/lib/days'
+import { titleFromDay, slugFromDate } from '@/lib/dates'
 import GithubDay from '@/components/GithubDay.astro'
 import YTDay from '@/components/YTDay.astro'
 import Post from './Post.astro'
 import Tags from './Tags.astro'
 
 interface Props {
-  day: DayEntry
+  day: Day
   renderTitle?: boolean
 }
 
 const { day, renderTitle = false } = Astro.props
-const title = titleFromDayKey(day.dayKey)
-const slug = slugFromDate(day.dayKey)
-const tags = day.day?.data.tags
+const title = titleFromDay(day.key)
+const slug = slugFromDate(day.key)
+const tags = day.meta?.data.tags
 ---
 
 <article>
@@ -32,9 +32,9 @@ const tags = day.day?.data.tags
         </div>
       )
     }</header>
-  {day.posts?.map((post) => <Post {post} />)}
-  {day.github && <GithubDay day={day.github} />}
-  {day.youtube && <YTDay day={day.youtube} sort={['🏃‍♂️']} />}
+  {day.posts.map((post) => <Post {post} />)}
+  {day.commits.length > 0 && <GithubDay day={day.commits} />}
+  {day.youtube.length > 0 && <YTDay day={day.youtube} sort={['🏃‍♂️']} />}
 </article>
 
 <style>
