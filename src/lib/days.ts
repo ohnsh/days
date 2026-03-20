@@ -35,7 +35,7 @@ async function _getDayMap() {
   const dayMap = new Map<string, Day>()
 
   for (const entry of commits) {
-    const dayKey = entry.data.day
+    const { dayKey } = entry.data
     const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, new Day(dayKey)).get(dayKey)!
     dayEntry.commits.push(entry)
   }

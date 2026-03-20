@@ -3,7 +3,7 @@ import type { CollectionEntry } from 'astro:content'
 import RepoDay from './RepoDay.astro'
 
 interface Props {
-  day: CollectionEntry<'github'>
+  day: CollectionEntry<'commits'>[]
 }
 
 const { day } = Astro.props
@@ -12,6 +12,9 @@ const { day } = Astro.props
 <article>
   <h3>Git Commits</h3>
   {
-    day.data.map(({ repo, commits }) => <RepoDay {repo} {commits} />)
+    day.map(({ data }) => {
+     return data
+    //  <RepoDay {repo} {commits} />)
+    })
   }
 </article>

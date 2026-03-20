@@ -133,6 +133,5 @@ function computeImplicitYear(date: Date, refDate: Date) {
     })
     .sort(([, a], [, b]) => a - b)
 
-  // console.log({ date, refDate, implicitYear })
   return implicitYear
 }

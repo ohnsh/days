@@ -3,7 +3,7 @@ import { glob } from 'astro/loaders'
 import { defineCollection } from 'astro:content'
 import { docsLoader } from '@astrojs/starlight/loaders'
 import { docsSchema } from '@astrojs/starlight/schema'
-import { commitLoader, githubDays } from '@/loaders/github'
+import { commitLoader, commitSchema, repoLoader, repoSchema } from '@/loaders/github'
 import { youtubeLoader, youtubeSchema } from '@/loaders/youtube'
 import { dayFromDate } from './lib/dates'
 
@@ -23,8 +23,8 @@ const days = defineCollection({
     .transform((data) => ({ ...data, day: dayFromDate(data.date) })),
 })
 const docs = defineCollection({ loader: docsLoader(), schema: docsSchema() })
-const github = defineCollection({ loader: githubDays() })
-const commits = defineCollection({ loader: commitLoader() })
+const repos = defineCollection({ loader: repoLoader(), schema: repoSchema })
+const commits = defineCollection({ loader: commitLoader(), schema: commitSchema })
 const youtube = defineCollection({ loader: youtubeLoader(), schema: youtubeSchema })
 
-export const collections = { days, posts, docs, commits, github, youtube }
+export const collections = { days, posts, docs, commits, repos, youtube }

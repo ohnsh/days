@@ -4,7 +4,7 @@ import repos from '../../.days/github/repos.json'
 import { dayFromDate } from '@/lib/dates'
 const commitDb = import.meta.glob('../../.days/github/commits/*.json', { eager: true })
 
-const RepoSchema = z.object({
+const githubRepoSchema = z.object({
   name: z.string(),
   full_name: z.string(),
   private: z.boolean(),
@@ -30,67 +30,54 @@ const RepoSchema = z.object({
   default_branch: z.string(),
 })
 
-const gitCommitSchema = z.object({
-  author: z.object({ name: z.string(), email: z.string(), date: z.string() }),
-  message: z.string(),
-  tree: z.object({ sha: z.string(), url: z.string() }),
-  url: z.string(),
-  // verification
-})
+export const repoSchema = githubRepoSchema
 
-const CommitSchema_API = z.object({
+const githubCommitSchema = z.object({
   sha: z.string(),
-  commit: gitCommitSchema,
+  commit: z.object({
+    author: z.object({ name: z.string(), email: z.string(), date: z.string() }),
+    message: z.string(),
+    tree: z.object({ sha: z.string(), url: z.string() }),
+    url: z.string(),
+    // verification
+  }),
   url: z.string(),
   html_url: z.string(),
   author: z.object({ login: z.string(), url: z.string(), html_url: z.string() }),
   parents: z.object({ sha: z.string(), url: z.string(), html_url: z.string() }),
 })
 
-export const CommitSchema = z.intersection(CommitSchema_API, z.object({ day: z.string() }))
-
-type Repo = z.infer<typeof RepoSchema>
-type ApiCommit = z.infer<typeof CommitSchema_API>
+export const commitSchema = githubCommitSchema.extend({ dayKey: z.string() })
 
 export function commitLoader(): Loader {
   return {
     name: 'commits',
     load: async ({ store }) => {
-      for (const repo of repos as Repo[]) {
+      for (const repo of repos) {
         for (const apiCommit of getCommits(repo.name)) {
           const { date } = apiCommit.commit.author
-          const commit = { ...apiCommit, day: dayFromDate(date) }
+          const commit = { ...apiCommit, dayKey: dayFromDate(date) }
           store.set({ id: commit.sha, data: commit })
         }
       }
     },
-    schema: CommitSchema,
+    schema: commitSchema,
   }
 }
 
-export function githubDays(): Loader {
+export function repoLoader(): Loader {
   return {
-    name: 'github',
+    name: 'repos',
     load: async ({ store }) => {
-      const dayMap: Record<string, any> = {}
       for (const repo of repos) {
-        const repoDayMap = await getRepoDays(repo)
-        for (const [day, commits] of Object.entries(repoDayMap)) {
-          if (!dayMap[day]) {
-            dayMap[day] = []
-          }
-          dayMap[day].push({ repo, commits })
-        }
-      }
-
-      for (const [day, repos] of Object.entries(dayMap)) {
-        store.set({ id: day, data: repos })
+        store.set({ id: repo.full_name, data: repo })
       }
     },
+    schema: repoSchema
   }
 }
 
-function getCommits(repo: string): ApiCommit[] {
+function getCommits(repo: string) {
   const path = `../../.days/github/commits/${repo}.json`
   const { default: commits } = commitDb[path]
 
@@ -102,24 +89,24 @@ function getCommits(repo: string): ApiCommit[] {
   return commits
 }
 
-async function getRepoDays(repo) {
-  const { name } = repo
-  const path = `../../.days/github/commits/${name}.json`
-  const { default: commits } = commitDb[path]
+// async function getRepoDays(repo) {
+//   const { name } = repo
+//   const path = `../../.days/github/commits/${name}.json`
+//   const { default: commits } = commitDb[path]
 
-  if (!Array.isArray(commits)) {
-    return {}
-  }
-  return commits.reduce((map, commit) => {
-    const {
-      author: { name, email, date: timestamp },
-    } = commit.commit
-    const date = new Date(timestamp)
-    const dateId = date.toLocaleDateString('en-CA') // YYYY-mm-dd
-    if (!map[dateId]) {
-      map[dateId] = []
-    }
-    map[dateId].push(commit)
-    return map
-  }, {})
-}
+//   if (!Array.isArray(commits)) {
+//     return {}
+//   }
+//   return commits.reduce((map, commit) => {
+//     const {
+//       author: { name, email, date: timestamp },
+//     } = commit.commit
+//     const date = new Date(timestamp)
+//     const dateId = date.toLocaleDateString('en-CA') // YYYY-mm-dd
+//     if (!map[dateId]) {
+//       map[dateId] = []
+//     }
+//     map[dateId].push(commit)
+//     return map
+//   }, {})
+// }
