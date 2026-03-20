@@ -41,7 +41,7 @@ async function _getDayMap() {
   }
 
   for (const entry of youtube) {
-    const dayKey = entry.id
+    const { dayKey } = entry.data
     const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, new Day(dayKey)).get(dayKey)!
     dayEntry.youtube.push(entry)
   }

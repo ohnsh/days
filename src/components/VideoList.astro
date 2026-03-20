@@ -1,14 +1,13 @@
 ---
-import type { InferEntrySchema } from 'astro:content'
+import type { CollectionEntry, CollectionKey } from 'astro:content'
 import LiteYTVideo from './LiteYTVideo.astro'
 
-type Video = InferEntrySchema<'youtube'>[number]
-
 interface Props {
-  videos: Video[]
+  videos: CollectionEntry<'youtube'>[]
 }
 
 const { videos } = Astro.props
+console.log(videos)
 ---
 
-{videos.map((video) => <LiteYTVideo {...video} naked />)}
+{videos.map((video) => <LiteYTVideo {...video.data} naked />)}

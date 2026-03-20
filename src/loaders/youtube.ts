@@ -3,7 +3,7 @@ import uploads from '../../.days/youtube/uploads.json'
 import shorts from '../../.days/youtube/shorts.json'
 import { z } from 'astro/zod'
 
-export const YtSchema = z.object({
+const youtubeApiSchema = z.object({
   videoId: z.string(),
   title: z.string(),
   description: z.string(),
@@ -12,6 +12,8 @@ export const YtSchema = z.object({
   isShort: z.boolean(),
   tags: z.array(z.string()).optional(),
 })
+
+export const youtubeSchema = youtubeApiSchema.extend({ dayKey: z.string() })
 
 export function youtubeLoader(): Loader {
   return {
@@ -26,13 +28,13 @@ export function youtubeLoader(): Loader {
           resourceId: { videoId },
         } = snippet
 
-        const day = getDayKey(title, publishedAt)
+        const dayKey = getDayKey(title, publishedAt)
         const isShort = shorts.some(({ snippet }) => snippet.resourceId.videoId === videoId)
         const tags = tagsFromText(title, description)
 
         const data = {
           videoId,
-          day,
+          dayKey,
           title,
           description,
           thumbnails,
@@ -43,7 +45,7 @@ export function youtubeLoader(): Loader {
         store.set({ id: videoId, data })
       }
     },
-    schema: YtSchema,
+    schema: youtubeSchema,
   }
 }
 
