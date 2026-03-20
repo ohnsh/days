@@ -47,13 +47,16 @@ async function _getDayMap() {
   }
 
   for (const entry of posts) {
+    // second arg to dayFromDate is important. Means that this is a 'plain date' and is important
+    // to interpret as originally typed out, without implicit timezone shifts.
     const dayKey = dayFromDate(entry.data.date, true)
     const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, new Day(dayKey)).get(dayKey)!
     dayEntry.posts.push(entry)
-    console.log(dayKey)
   }
-
+  
   for (const entry of days) {
+    // second arg to dayFromDate is important. Means that this is a 'plain date' and is important
+    // to interpret as originally typed out, without implicit timezone shifts.
     const dayKey = dayFromDate(entry.data.date, true)
     const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, new Day(dayKey)).get(dayKey)!
     dayEntry.meta = entry
