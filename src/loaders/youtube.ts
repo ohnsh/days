@@ -3,17 +3,18 @@ import uploads from '../../.days/youtube/uploads.json'
 import shorts from '../../.days/youtube/shorts.json'
 import { z } from 'astro/zod'
 
-const youtubeApiSchema = z.object({
-  videoId: z.string(),
-  title: z.string(),
-  description: z.string(),
-  thumbnails: z.object(),
-  publishedAt: z.string(),
-  isShort: z.boolean(),
-  tags: z.array(z.string()).optional(),
+export const youtubeSchema = z.object({
+    videoId: z.string(),
+    title: z.string(),
+    description: z.string(),
+    thumbnails: z.looseObject({}), // TODO: maybe improve, maybe remove
+    publishedAt: z.string(),
+    dayKey: z.string(),
+    isShort: z.boolean(),
+    tags: z.array(z.string()).optional(),
 })
 
-export const youtubeSchema = youtubeApiSchema.extend({ dayKey: z.string() })
+type YoutubeData = z.infer<typeof youtubeSchema>
 
 export function youtubeLoader(): Loader {
   return {
@@ -32,7 +33,7 @@ export function youtubeLoader(): Loader {
         const isShort = shorts.some(({ snippet }) => snippet.resourceId.videoId === videoId)
         const tags = tagsFromText(title, description)
 
-        const data = {
+        const data: YoutubeData = {
           videoId,
           dayKey,
           title,
@@ -51,7 +52,7 @@ export function youtubeLoader(): Loader {
 
 const emojiTest = /\p{Emoji}/v
 function tagsFromText(title: string, description?: string) {
-  const tags = new Set()
+  const tags = new Set<string>()
   // Here's a new one. Even modern, unicode-safe iteration over strings will split complex emoji into several characters.
   // (E.g. person, zero-width joiner, gender symbol.)
   // `Intl.Segmenter` allows iteration over 'user-perceived' characters or graphemes.
