@@ -47,13 +47,14 @@ async function _getDayMap() {
   }
 
   for (const entry of posts) {
-    const dayKey = dayFromDate(entry.data.date)
+    const dayKey = dayFromDate(entry.data.date, true)
     const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, new Day(dayKey)).get(dayKey)!
     dayEntry.posts.push(entry)
+    console.log(dayKey)
   }
 
   for (const entry of days) {
-    const dayKey = dayFromDate(entry.data.date)
+    const dayKey = dayFromDate(entry.data.date, true)
     const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, new Day(dayKey)).get(dayKey)!
     dayEntry.meta = entry
   }

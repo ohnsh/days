@@ -47,7 +47,8 @@ const githubCommitSchema = z.object({
   parents: z.object({ sha: z.string(), url: z.string(), html_url: z.string() }),
 })
 
-export const commitSchema = githubCommitSchema.extend({ dayKey: z.string() })
+export const commitSchema = githubCommitSchema.extend({ dayKey: z.string(), repo: z.string() })
+export type Commit = z.infer<typeof commitSchema>
 
 export function commitLoader(): Loader {
   return {
@@ -56,7 +57,7 @@ export function commitLoader(): Loader {
       for (const repo of repos) {
         for (const apiCommit of getCommits(repo.name)) {
           const { date } = apiCommit.commit.author
-          const commit = { ...apiCommit, dayKey: dayFromDate(date) }
+          const commit: Commit = { ...apiCommit, repo: repo.full_name, dayKey: dayFromDate(date) }
           store.set({ id: commit.sha, data: commit })
         }
       }
@@ -73,7 +74,7 @@ export function repoLoader(): Loader {
         store.set({ id: repo.full_name, data: repo })
       }
     },
-    schema: repoSchema
+    schema: repoSchema,
   }
 }
 
