@@ -12,8 +12,9 @@ export async function getStaticPaths({ paginate }: Parameters<GetStaticPaths>[0]
   const pathIterator = (await tagDayMap)
     .entries()
     .flatMap(([tag, dayKeys]) =>
-      paginate([...dayKeys.map((dayKey) => dayMap.get(dayKey)!)], {
-        pageSize: 3,
+      // TODO: make not terrible
+      paginate([...dayKeys].sort().reverse().map((dayKey) => dayMap.get(dayKey)!), {
+        pageSize: 5,
         params: { tag },
         props: { sidebar },
       })
