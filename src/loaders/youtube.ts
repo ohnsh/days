@@ -51,7 +51,7 @@ export function youtubeLoader(): Loader {
 }
 
 const emojiTest = /\p{Emoji}/v
-function tagsFromText(title: string, description?: string) {
+function tagsFromText(title: string, description = '') {
   const tags = new Set<string>()
   // Here's a new one. Even modern, unicode-safe iteration over strings will split complex emoji into several characters.
   // (E.g. person, zero-width joiner, gender symbol.)
@@ -64,6 +64,10 @@ function tagsFromText(title: string, description?: string) {
       break
     }
   }
+
+  // multiline flag is important. Works for individual lines because `.` matches any character *except* line breaks.
+  const tagsFromDesc = description.match(/^Tags: (.+)$/miv)?.[1].split(', ') ?? []
+  tagsFromDesc.forEach(tag => tags.add(tag))
   return [...tags]
 }
 

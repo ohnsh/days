@@ -69,7 +69,7 @@ async function _getDayMap() {
 
 function addTagMaps(dayMap: Map<string, Day>) {
   for (const dayEntry of dayMap.values()) {
-    for (const entry of [...dayEntry.posts, ...(dayEntry.meta ? [dayEntry.meta] : [])]) {
+    for (const entry of [...dayEntry.posts, /*...dayEntry.youtube,*/ ...(dayEntry.meta ? [dayEntry.meta] : [])]) {
       entry.data.tags?.forEach(tag => {
         const list = dayEntry.tagMap.get(tag) ?? dayEntry.tagMap.set(tag, []).get(tag)!
         list.push(entry)
