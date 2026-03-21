@@ -7,7 +7,7 @@ export function slugFromDay(key: string) {
   return slugFromDate(key, true)
 }
 
-export function slugFromDate(date: Date | string, plainDate = false) {
+export function slugFromDate(date: Date | string, plainDate: boolean) {
   if (plainDate) {
     date = normalizePlainDate(date)
   }
@@ -29,7 +29,7 @@ export function slugFromDate(date: Date | string, plainDate = false) {
   return `${year}/${month.toLowerCase()}/${day}`
 }
 
-export function dayFromDate(date: Date | string, plainDate = false) {
+export function dayFromDate(date: Date | string, plainDate: boolean) {
   if (plainDate) {
     return normalizePlainDate(date).toLocaleDateString('en-CA', { timeZone: 'UTC' })
   }

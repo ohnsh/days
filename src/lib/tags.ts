@@ -1,5 +1,5 @@
 import { getCollection } from 'astro:content'
-import type { DayEntry } from './days'
+import type { Day } from './days'
 
 export const collections = {
   posts: getCollection('posts').then(getTagMap),
@@ -32,7 +32,7 @@ export function aggregateTagMaps(maps: Map<string, TaggedEntry[]>[]) {
   return aggMap
 }
 
-export function tagsToDayKeys(dayMap: Map<string, DayEntry>) {
+export function tagsToDayKeys(dayMap: Map<string, Day>) {
   const tagDayMap = new Map<string, string[]>()
   for (const [key, entry] of dayMap) {
     for (const tag of entry.tagMap?.keys() ?? []) {

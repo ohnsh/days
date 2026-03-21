@@ -19,12 +19,17 @@ const posts = defineCollection({
 const days = defineCollection({
   loader: glob({ base: './src/content/days', pattern: '**/*.yml' }),
   schema: z
-    .object({ date: z.date(), tags: z.array(z.string()), ogImage: z.url().optional() })
-    .transform((data) => ({ ...data, day: dayFromDate(data.date) })),
+    .object({
+      date: z.date(),
+      tags: z.array(z.string()).optional(),
+      ogImage: z.url().optional(),
+      youtube: z.array(z.looseObject({})).optional(),
+    })
+    .transform((data) => ({ ...data, day: dayFromDate(data.date, true) })),
 })
-const docs = defineCollection({ loader: docsLoader(), schema: docsSchema() })
+// const docs = defineCollection({ loader: docsLoader(), schema: docsSchema() })
 const repos = defineCollection({ loader: repoLoader(), schema: repoSchema })
 const commits = defineCollection({ loader: commitLoader(), schema: commitSchema })
 const youtube = defineCollection({ loader: youtubeLoader(), schema: youtubeSchema })
 
-export const collections = { days, posts, docs, commits, repos, youtube }
+export const collections = { days, posts, /*docs,*/ commits, repos, youtube }

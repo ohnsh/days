@@ -13,6 +13,8 @@ const { day, sort } = Astro.props
 const tagMap: Map<string, CollectionEntry<'youtube'>[]> = new Map()
 
 for (const vid of day) {
+  // will use this at some point. tested and works as expected.
+  // const tagsFromDesc = vid.data.description.match(/^Tags: (.+)$/miv)?.[1].split(', ') ?? []
   const [firstTag = ''] = vid.data.tags ?? []
   const list = tagMap.get(firstTag) ?? tagMap.set(firstTag, []).get(firstTag)!
   list.push(vid)

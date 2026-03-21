@@ -15,7 +15,7 @@ export function commitLoader(): Loader {
       for (const repo of repos) {
         for (const apiCommit of getCommits(repo.name)) {
           const { date } = apiCommit.commit.author
-          const commit: Commit = { ...apiCommit, repo: repo.full_name, dayKey: dayFromDate(date) }
+          const commit: Commit = { ...apiCommit, repo: repo.full_name, dayKey: dayFromDate(date, false) }
           store.set({ id: commit.sha, data: commit })
         }
       }
