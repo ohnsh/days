@@ -1,6 +1,6 @@
 ---
 import { Day } from '@/lib/days'
-import { titleFromDay, slugFromDate } from '@/lib/dates'
+import { titleFromDay, slugFromDay } from '@/lib/dates'
 import GithubDay from '@/components/GithubDay.astro'
 import YTDay from '@/components/YTDay.astro'
 import Post from './Post.astro'
@@ -13,7 +13,7 @@ interface Props {
 
 const { day, renderTitle = false } = Astro.props
 const title = titleFromDay(day.key)
-const slug = slugFromDate(day.key)
+const slug = slugFromDay(day.key)
 const tags = day.meta?.data.tags
 ---
 

@@ -3,6 +3,10 @@
 //   they were originally typed out). You explicitly specify whether it's a `plainDate` using a
 //   second parameter (default false). If so, it's normalized to midnight UTC so that later
 //   string extraction knows to always use UTC getters.
+export function slugFromDay(key: string) {
+  return slugFromDate(key, true)
+}
+
 export function slugFromDate(date: Date | string, plainDate = false) {
   if (plainDate) {
     date = normalizePlainDate(date)

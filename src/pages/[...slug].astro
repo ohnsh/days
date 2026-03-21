@@ -3,7 +3,7 @@ import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
 import Day from '@/components/DayContent.astro'
 import { getFilteredDayMap, tagDayMap } from '@/lib/days'
 import type { InferGetStaticPropsType } from 'astro'
-import { titleFromDay, slugFromDate } from '@/lib/dates'
+import { titleFromDay, slugFromDay } from '@/lib/dates'
 import { sidebarFrom } from '@/lib/sidebar'
 
 export async function getStaticPaths() {
@@ -14,7 +14,7 @@ export async function getStaticPaths() {
   const paths = dayMap
     .entries()
     .map(([dayKey, dayEntry]) => ({
-      params: { slug: slugFromDate(dayKey) },
+      params: { slug: slugFromDay(dayKey) },
       props: { day: dayEntry, sidebar },
     }))
 

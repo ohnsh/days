@@ -44,7 +44,7 @@ function _sidebarFromKeys(keys: string[], { collapsed = true } = {}) {
                   day: 'numeric',
                   timeZone: 'UTC',
                 }),
-                link: `/${slugFromDate(date)}`,
+                link: `/${slugFromDate(date, true)}`,
               })),
           }
         }),
