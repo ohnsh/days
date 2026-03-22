@@ -1,12 +1,13 @@
+// only for plain date strings like '2026-03-21'
+export function slugFromDay(key: string) {
+  return slugFromDate(key, true)
+}
+
 // `dayFromDate()` and `slugFromDate()` work with either full timestamps (which are fine to
 //   implicitly convert to local time) or plain dates (which are important to represent the way
 //   they were originally typed out). You explicitly specify whether it's a `plainDate` using a
 //   second parameter (default false). If so, it's normalized to midnight UTC so that later
 //   string extraction knows to always use UTC getters.
-export function slugFromDay(key: string) {
-  return slugFromDate(key, true)
-}
-
 export function slugFromDate(date: Date | string, plainDate: boolean) {
   if (plainDate) {
     date = normalizePlainDate(date)

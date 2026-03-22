@@ -9,12 +9,14 @@ import { dayFromDate } from './lib/dates'
 
 const posts = defineCollection({
   loader: glob({ base: './src/content/posts', pattern: '**/*.{md,mdx}' }),
-  schema: z.object({
-    title: z.string(),
-    date: z.date(),
-    draft: z.boolean().optional(),
-    tags: z.array(z.string()).optional(),
-  }),
+  schema: z
+    .object({
+      title: z.string(),
+      date: z.date(),
+      draft: z.boolean().optional(),
+      tags: z.array(z.string()).optional(),
+    })
+    .transform((data) => ({ ...data, day: dayFromDate(data.date, true) })),
 })
 const days = defineCollection({
   loader: glob({ base: './src/content/days', pattern: '**/*.yml' }),

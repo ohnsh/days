@@ -5,16 +5,19 @@ import type { GetStaticPaths } from 'astro'
 import { frontmatter } from './_index.md'
 import { getFilteredDayMap, tagDayMap } from '@/lib/days'
 import { sidebarFrom } from '@/lib/sidebar'
+import { getCollection } from 'astro:content'
+import LatestPosts from '@/components/LatestPosts.astro'
 
 export const getStaticPaths = (async ({ paginate }) => {
   const dayMap = await getFilteredDayMap()
   const days = [...dayMap.values()].sort((a, b) => b.key.localeCompare(a.key))
   const tags = (await tagDayMap).keys()
   const sidebar = sidebarFrom([...dayMap.keys()], [...tags])
-  return paginate(days, { pageSize: 5, props: { sidebar } })
+  const latestPosts = (await getCollection('posts')).sort((a, b) => -a.data.day.localeCompare(b.data.day)).slice(0, 5)
+  return paginate(days, { pageSize: 5, props: { sidebar, latestPosts } })
 }) satisfies GetStaticPaths
 
-const { page, sidebar } = Astro.props
+const { page, sidebar, latestPosts } = Astro.props
 Object.assign(Astro.locals, { days: { page } })
 
 // const { date: firstDate } = page.data[0].data
@@ -25,5 +28,6 @@ const { title, hero } = frontmatter
   {sidebar}
   frontmatter={{ title, tableOfContents: false, hero: page.currentPage === 1 ? hero : undefined }}
 >
+  {page.currentPage === 1 && <LatestPosts {latestPosts} />}
   {page.data.map((day) => <Day {day} renderTitle />)}
 </StarlightPage>

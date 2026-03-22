@@ -1,0 +1,29 @@
+---
+import { slugFromDay } from '@/lib/dates'
+import type { CollectionEntry } from 'astro:content'
+
+interface Props {
+  latestPosts: CollectionEntry<'posts'>[]
+}
+const { latestPosts } = Astro.props
+---
+
+<article>
+  <h2>Latest Posts</h2>
+  <ul>
+    {
+      latestPosts.map((post) => (
+        <li>
+          <a href={slugFromDay(post.data.day)}>{post.data.title}</a>
+          <span>
+            {post.data.date.toLocaleDateString('en-US', {
+              month: 'numeric',
+              day: 'numeric',
+              timeZone: 'UTC',
+            })}
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+</article>

@@ -1,5 +1,5 @@
 ---
-title: j.ohn.sh Back in Business
+title: j.ohn.sh back in business.
 date: 2026-03-16
 ---
 
