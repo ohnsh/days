@@ -8,7 +8,10 @@ interface Props {
 
 const { headingOffset, fallback = 'paragraph' } = Astro.props
 const html = await Astro.slots.render('default')
+
+// Excerpt delimeter (and overall component design) inspired by HiDeoo/starlight-blog
 const excerptDelimeterIndex = html.indexOf(`<!-- excerpt -->`)
+// ...but with fallback behavior if no delimeter found: just extract the first paragraph.
 const firstEndPIndex = html.indexOf(`</p>`)
 const excerpt =
   excerptDelimeterIndex === -1

@@ -4,7 +4,7 @@ import { titleFromDay, slugFromDay } from '@/lib/dates'
 import GithubDay from '@/components/GithubDay.astro'
 import YTDay from '@/components/YTDay.astro'
 import Post from './Post.astro'
-// import Excerpt from './Excerpt.astro'
+import Excerpt from './Excerpt.astro'
 import Tags from './Tags.astro'
 
 interface Props {
@@ -33,7 +33,7 @@ const tags = day.meta?.data.tags
         </div>
       )
     }</header>
-  {day.posts.map((post) => <Post {post} />)}
+  {day.posts.map((post) => <Excerpt {post} />)}
   {day.commits.length > 0 && <GithubDay day={day.commits} />}
   {day.youtube.length > 0 && <YTDay day={day.youtube} sort={['🏃‍♂️']} />}
 </article>
