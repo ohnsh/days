@@ -1,0 +1,23 @@
+---
+import PostWrapper from './PostWrapper.astro'
+
+interface Props {
+  headingOffset: number
+  fallback?: string
+}
+
+const { headingOffset, fallback = 'paragraph' } = Astro.props
+const html = await Astro.slots.render('default')
+const excerptDelimeterIndex = html.indexOf(`<!-- excerpt -->`)
+const firstEndPIndex = html.indexOf(`</p>`)
+const excerpt =
+  excerptDelimeterIndex === -1
+    ? fallback !== 'paragraph' || firstEndPIndex === -1
+      ? html
+      : html.slice(0, firstEndPIndex + 4)
+    : html.slice(0, excerptDelimeterIndex)
+---
+
+<PostWrapper {headingOffset}>
+  <Fragment set:html={excerpt} />
+</PostWrapper>

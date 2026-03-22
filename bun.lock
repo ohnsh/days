@@ -10,6 +10,7 @@
         "@astrojs/mdx": "^5.0.0",
         "@astrojs/starlight": "^0.38.1",
         "@astropub/context": "^0.1.0",
+        "@astropub/md": "^1.0.0",
         "@lucide/astro": "^0.577.0",
         "@mux/mux-player-astro": "^3.11.5",
         "astro": "^6.0.4",
@@ -50,6 +51,8 @@
     "@astrojs/yaml2ts": ["@astrojs/yaml2ts@0.2.3", "", { "dependencies": { "yaml": "^2.8.2" } }, "sha512-PJzRmgQzUxI2uwpdX2lXSHtP4G8ocp24/t+bZyf5Fy0SZLSF9f9KXZoMlFM/XCGue+B0nH/2IZ7FpBYQATBsCg=="],
 
     "@astropub/context": ["@astropub/context@0.1.0", "", {}, "sha512-6VRX3z9mhFvw9RN4hrQCrcFhcdom9lk2FUJuFOab9Vg9chInlY2LNFhHXF4HjTELIwAk3ABpUQrPpHXQ4Pf2Vw=="],
+
+    "@astropub/md": ["@astropub/md@1.0.0", "", { "peerDependencies": { "@astrojs/markdown-remark": "^5" } }, "sha512-++urcyulQogbLAF0VC2rEp6qLUfnRX9iaDREAkN1su9fF8V84DVaMHbQXn7qqQ27wYT5AVVeoK+4+vggYYVbQg=="],
 
     "@babel/helper-string-parser": ["@babel/helper-string-parser@7.27.1", "", {}, "sha512-qMlSxKbpRlAridDExk92nSobyDdpPijUq2DW6oDnUqd0iOGxmQjyqhMIihI9+zv4LPyZdRje2cavWPbCbWm3eA=="],
 

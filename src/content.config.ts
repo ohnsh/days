@@ -1,8 +1,8 @@
 import { z } from 'astro/zod'
 import { glob } from 'astro/loaders'
 import { defineCollection } from 'astro:content'
-import { docsLoader } from '@astrojs/starlight/loaders'
-import { docsSchema } from '@astrojs/starlight/schema'
+// import { docsLoader } from '@astrojs/starlight/loaders'
+// import { docsSchema } from '@astrojs/starlight/schema'
 import { commitLoader, commitSchema, repoLoader, repoSchema } from '@/loaders/github'
 import { youtubeLoader, youtubeSchema } from '@/loaders/youtube'
 import { dayFromDate } from './lib/dates'
@@ -15,6 +15,7 @@ const posts = defineCollection({
       date: z.date(),
       draft: z.boolean().optional(),
       tags: z.array(z.string()).optional(),
+      excerpt: z.string().optional(),
     })
     .transform((data) => ({ ...data, day: dayFromDate(data.date, true) })),
 })

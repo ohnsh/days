@@ -18,6 +18,7 @@
     "@astrojs/mdx": "^5.0.0",
     "@astrojs/starlight": "^0.38.1",
     "@astropub/context": "^0.1.0",
+    "@astropub/md": "^1.0.0",
     "@lucide/astro": "^0.577.0",
     "@mux/mux-player-astro": "^3.11.5",
     "astro": "^6.0.4",
