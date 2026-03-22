@@ -1,11 +1,9 @@
 ---
-import type { InferEntrySchema } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
 import VideoList from './VideoList.astro'
 
-type Video = InferEntrySchema<'youtube'>[number]
-
 interface Props {
-  categories: [string, Video[]][]
+  categories: [string, CollectionEntry<'youtube'>[]][]
 }
 
 const { categories } = Astro.props
