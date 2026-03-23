@@ -8,18 +8,36 @@ interface Props {
   post: CollectionEntry<'posts'>
 }
 
-const defaultOffset = Astro.routePattern === '/[...slug]' ? 1 : 2
-const { post, headingOffset = defaultOffset } = Astro.props
+// Astro lowercases routePattern (`/[...postslug]` instead of `/[...postSlug]`), which seems like a bug.
+const defaultOffset = () => {
+  switch (Astro.routePattern.toLocaleLowerCase()) {
+    // post route: post title h1
+    case '/[...postslug]':
+      return 0
+    // day route: day is h1, post title h2
+    case '/[...slug]':
+      return 1
+    // listing: days are h2, post titles h3
+    default:
+      return 2
+  }
+}
+
+const { post, headingOffset = defaultOffset() } = Astro.props
 const { Content } = await render(post)
 const TitleTag = `h${1 + headingOffset}`
 ---
 
 <article class="post">
-  <header>
-    <TitleTag>
-      <a href={`/${post.id}`}>{post.data.title}</a>
-    </TitleTag>
-  </header>
+  {
+    headingOffset > 0 && (
+      <header>
+        <TitleTag>
+          <a href={`/${post.id}`}>{post.data.title}</a>
+        </TitleTag>
+      </header>
+    )
+  }
   <div class="sl-markdown-content">
     <PostWrapper {headingOffset}>
       <Content />
