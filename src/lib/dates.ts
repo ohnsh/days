@@ -1,5 +1,8 @@
 // only for plain date strings like '2026-03-21'
 export function slugFromDay(key: string) {
+  if (/(\d{4})-(\d{2})-(\d{2})/.test(key)) {
+    return key.replaceAll('-', '/')
+  }
   return slugFromDate(key, true)
 }
 
@@ -9,6 +12,23 @@ export function slugFromDay(key: string) {
 //   second parameter (default false). If so, it's normalized to midnight UTC so that later
 //   string extraction knows to always use UTC getters.
 export function slugFromDate(date: Date | string, plainDate: boolean) {
+  if (plainDate) {
+    date = normalizePlainDate(date)
+  } else if (typeof date === 'string') {
+    date = new Date(date)
+  }
+
+  const mmddyyyy = date.toLocaleDateString('en-US', {
+    month: '2-digit',
+    day: '2-digit',
+    year: 'numeric',
+    ...(plainDate && { timeZone: 'UTC' }),
+  })
+  const [month, day, year] = mmddyyyy.split('/')
+  return `${year}/${month}/${day}`
+}
+
+export function legacySlugFromDate(date: Date | string, plainDate: boolean) {
   if (plainDate) {
     date = normalizePlainDate(date)
   }
