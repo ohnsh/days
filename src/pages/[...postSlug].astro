@@ -1,0 +1,19 @@
+---
+import { getCollection } from 'astro:content'
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
+import Post from '@/components/Post.astro'
+import { getSidebar } from '@/lib/sidebar'
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts')
+  const sidebar = await getSidebar()
+  posts.forEach(post => console.log(post.id))
+  return posts.map((post) => ({ params: { postSlug: post.id }, props: { post, sidebar } }))
+}
+
+const { post, sidebar } = Astro.props
+---
+
+<StarlightPage {sidebar} frontmatter={{ title: post.data.title }}>
+  <Post {post} />
+</StarlightPage>

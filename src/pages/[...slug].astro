@@ -1,14 +1,13 @@
 ---
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
 import Day from '@/components/DayContent.astro'
-import { getFilteredDayMap, tagDayMap } from '@/lib/days'
+import { getFilteredDayMap } from '@/lib/days'
 import { titleFromDay, slugFromDay } from '@/lib/dates'
-import { sidebarFrom } from '@/lib/sidebar'
+import { getSidebar } from '@/lib/sidebar'
 
 export async function getStaticPaths() {
   const dayMap = await getFilteredDayMap()
-  const tags = (await tagDayMap).keys()
-  const sidebar = sidebarFrom([...dayMap.keys()], [...tags])
+  const sidebar = await getSidebar()
 
   const paths = dayMap
     .entries()

@@ -1,5 +1,6 @@
 import { slugFromDate, queryDay } from './dates'
 import { sidebarTemplate, type SidebarConfig } from './const'
+import { getFilteredDayMap, tagDayMap } from './days'
 
 function applySidebarTemplate(sidebar: SidebarConfig) {
   return sidebarTemplate.flatMap((item) => {
@@ -13,6 +14,20 @@ function applySidebarTemplate(sidebar: SidebarConfig) {
 type CalendarStruct = Record<number, Record<number, string[]>>
 type SidebarItem = SidebarConfig[number]
 type SidebarOpts = { collapsed?: boolean }
+
+let sidebar: Promise<SidebarConfig>
+export function getSidebar(opts?: SidebarOpts) {
+  if (!sidebar) {
+    sidebar = _getSidebar(opts)
+  }
+  return sidebar
+}
+
+async function _getSidebar(opts?: SidebarOpts) {
+  const dayMap = await getFilteredDayMap()
+  const tagMap = await tagDayMap
+  return sidebarFrom([...dayMap.keys()], [...tagMap.keys()])
+}
 
 export function sidebarFrom(dayKeys: string[], tags?: string[], opts?: SidebarOpts) {
   const items = _sidebarFromKeys(dayKeys, opts)
