@@ -12,22 +12,15 @@ export function slugFromDay(key: string) {
 //   second parameter (default false). If so, it's normalized to midnight UTC so that later
 //   string extraction knows to always use UTC getters.
 export function slugFromDate(date: Date | string, plainDate: boolean) {
-  if (plainDate) {
-    date = normalizePlainDate(date)
-  } else if (typeof date === 'string') {
-    date = new Date(date)
-  }
-
-  const mmddyyyy = date.toLocaleDateString('en-US', {
-    month: '2-digit',
-    day: '2-digit',
-    year: 'numeric',
-    ...(plainDate && { timeZone: 'UTC' }),
-  })
-  const [month, day, year] = mmddyyyy.split('/')
-  return `${year}/${month}/${day}`
+  return dayFromDate(date, plainDate).replaceAll('-', '/')
 }
 
+// Finally giving in and making date slugs fully numeric.
+//  - Sorting works without conversion to javascript's truly godforsaken date object.
+//  - Simple string replacement converts between ISO-like dates (2026-03-22) and slugs (2026/03/22).
+//  - Posts are routed to, e.g., `2026/03/title-slug`. I think this per-month approach works well in general,
+//    but it looks wrong if the month isn't numeric.
+/*
 export function legacySlugFromDate(date: Date | string, plainDate: boolean) {
   if (plainDate) {
     date = normalizePlainDate(date)
@@ -49,6 +42,7 @@ export function legacySlugFromDate(date: Date | string, plainDate: boolean) {
 
   return `${year}/${month.toLowerCase()}/${day}`
 }
+*/
 
 export function dayFromDate(date: Date | string, plainDate: boolean) {
   if (plainDate) {
