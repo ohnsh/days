@@ -31,10 +31,11 @@ const TitleTag = `h${1 + headingOffset}`
         </ExcerptWrapper>
       )
     }
+    <p><a href={`/${post.id}`}>View full post…</a></p>
   </div>
-  <!-- <footer class="not-content">
+  <footer class="not-content">
     {post.data.tags && <Tags tags={post.data.tags} />}
-  </footer> -->
+  </footer>
 </article>
 
 <style>

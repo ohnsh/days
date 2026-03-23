@@ -11,14 +11,26 @@ const html = await Astro.slots.render('default')
 
 // Excerpt delimeter (and overall component design) inspired by HiDeoo/starlight-blog
 const excerptDelimeterIndex = html.indexOf(`<!-- excerpt -->`)
-// ...but with fallback behavior if no delimeter found: just extract the first paragraph.
-const firstEndPIndex = html.indexOf(`</p>`)
+// ...but with fallback behavior if no delimeter found: just extract the first two paragraphs.
+const fallbackIndex = computeFallbackIndex(html)
+
 const excerpt =
   excerptDelimeterIndex === -1
-    ? fallback !== 'paragraph' || firstEndPIndex === -1
+    ? fallback !== 'paragraph' || fallbackIndex === Infinity
       ? html
-      : html.slice(0, firstEndPIndex + 4)
+      : html.slice(0, fallbackIndex)
     : html.slice(0, excerptDelimeterIndex)
+
+function computeFallbackIndex(html: string, paragraphs = 2, greedy = true) {
+  const startDiv1 = html.match(/<div[ >]/)
+  const [endP2] = html.matchAll(/<\/p>/g).drop(paragraphs - 1)
+  const greedyIndex = endP2 ? endP2.index + endP2[0].length : Infinity
+  if (greedy) {
+    return greedyIndex
+  } else {
+    return Math.min(startDiv1?.index ?? Infinity, greedyIndex)
+  }
+}
 ---
 
 <PostWrapper {headingOffset}>

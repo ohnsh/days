@@ -1,10 +1,7 @@
 ---
 title: j.ohn.sh back in business.
 date: 2026-03-16
-excerpt: |
-  Test excerpt.
-
-  This is another paragraph.
+tags: [project]
 ---
 
 My link page at https://j.ohn.sh had been neglected for a few years, so I decided to rebuild it on Astro, the same framework I'm using here at days.ohn.sh. The [old repository](https://github.com/ohnsh/ohnsh.github.io) is still on GitHub.

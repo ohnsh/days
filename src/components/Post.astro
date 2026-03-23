@@ -9,6 +9,7 @@ interface Props {
 }
 
 // Astro lowercases routePattern (`/[...postslug]` instead of `/[...postSlug]`), which seems like a bug.
+// We'll force lowercase so this doesn't break if the behavior changes.
 const defaultOffset = () => {
   switch (Astro.routePattern.toLocaleLowerCase()) {
     // post route: post title h1
@@ -29,7 +30,7 @@ const TitleTag = `h${1 + headingOffset}`
 ---
 
 <article class="post">
-  {
+  { /* On main post routes, title provided by <StarlightPage> layout. */
     headingOffset > 0 && (
       <header>
         <TitleTag>
