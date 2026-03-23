@@ -1,0 +1,19 @@
+---
+import { getCollection } from 'astro:content'
+import { slugFromDay } from '@/lib/dates'
+
+const latest = await getCollection('youtube', (entry) => {
+  const pubDate = new Date(entry.data.publishedAt)
+  const msSincePub = Date.now() - pubDate.getTime()
+  const MS_PER_DAY = 1000 * 3600 * 24
+  return msSincePub < MS_PER_DAY * 30
+})
+latest.sort((a, b) => -a.data.publishedAt.localeCompare(b.data.publishedAt))
+---
+
+<article>
+  <h2>Latest Videos</h2>
+  <ul>
+    {latest.slice(0, 5).map((vid) => <li><a href={slugFromDay(vid.data.day)}>{vid.data.title}</a></li>)}
+  </ul>
+</article>

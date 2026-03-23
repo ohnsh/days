@@ -35,30 +35,30 @@ async function _getDayMap() {
   const dayMap = new Map<string, Day>()
 
   for (const entry of commits) {
-    const { dayKey } = entry.data
-    const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, new Day(dayKey)).get(dayKey)!
+    const { day } = entry.data
+    const dayEntry = dayMap.get(day) ?? dayMap.set(day, new Day(day)).get(day)!
     dayEntry.commits.push(entry)
   }
 
   for (const entry of youtube) {
-    const { dayKey } = entry.data
-    const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, new Day(dayKey)).get(dayKey)!
+    const { day } = entry.data
+    const dayEntry = dayMap.get(day) ?? dayMap.set(day, new Day(day)).get(day)!
     dayEntry.youtube.push(entry)
   }
 
   for (const entry of posts) {
     // second arg to dayFromDate is important. Means that this is a 'plain date' and is important
     // to interpret as originally typed out, without implicit timezone shifts.
-    const dayKey = dayFromDate(entry.data.date, true)
-    const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, new Day(dayKey)).get(dayKey)!
+    const day = dayFromDate(entry.data.date, true)
+    const dayEntry = dayMap.get(day) ?? dayMap.set(day, new Day(day)).get(day)!
     dayEntry.posts.push(entry)
   }
   
   for (const entry of days) {
     // second arg to dayFromDate is important. Means that this is a 'plain date' and is important
     // to interpret as originally typed out, without implicit timezone shifts.
-    const dayKey = dayFromDate(entry.data.date, true)
-    const dayEntry = dayMap.get(dayKey) ?? dayMap.set(dayKey, new Day(dayKey)).get(dayKey)!
+    const day = dayFromDate(entry.data.date, true)
+    const dayEntry = dayMap.get(day) ?? dayMap.set(day, new Day(day)).get(day)!
     dayEntry.meta = entry
   }
 

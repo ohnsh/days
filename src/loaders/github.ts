@@ -5,7 +5,7 @@ import { dayFromDate } from '@/lib/dates'
 const commitDb = import.meta.glob('../../.days/github/commits/*.json', { eager: true })
 
 export const repoSchema = githubRepoSchema()
-export const commitSchema = githubCommitSchema().extend({ dayKey: z.string(), repo: z.string() })
+export const commitSchema = githubCommitSchema().extend({ day: z.string(), repo: z.string() })
 export type Commit = z.infer<typeof commitSchema>
 
 export function commitLoader(): Loader {
@@ -15,7 +15,7 @@ export function commitLoader(): Loader {
       for (const repo of repos) {
         for (const apiCommit of getCommits(repo.name)) {
           const { date } = apiCommit.commit.author
-          const commit: Commit = { ...apiCommit, repo: repo.full_name, dayKey: dayFromDate(date, false) }
+          const commit: Commit = { ...apiCommit, repo: repo.full_name, day: dayFromDate(date, false) }
           store.set({ id: commit.sha, data: commit })
         }
       }

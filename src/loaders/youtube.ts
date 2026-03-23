@@ -9,7 +9,7 @@ export const youtubeSchema = z.object({
     description: z.string(),
     thumbnails: z.looseObject({}), // TODO: maybe improve, maybe remove
     publishedAt: z.string(),
-    dayKey: z.string(),
+    day: z.string(),
     isShort: z.boolean(),
     tags: z.array(z.string()).optional(),
 })
@@ -29,13 +29,13 @@ export function youtubeLoader(): Loader {
           resourceId: { videoId },
         } = snippet
 
-        const dayKey = getDayKey(title, publishedAt)
+        const day = getDayKey(title, publishedAt)
         const isShort = shorts.some(({ snippet }) => snippet.resourceId.videoId === videoId)
         const tags = tagsFromText(title, description)
 
         const data: YoutubeData = {
           videoId,
-          dayKey,
+          day,
           title,
           description,
           thumbnails,

@@ -7,6 +7,7 @@ import { getFilteredDayMap } from '@/lib/days'
 import { getSidebar } from '@/lib/sidebar'
 import { getCollection } from 'astro:content'
 import LatestPosts from '@/components/LatestPosts.astro'
+import LatestVids from '@/components/LatestVids.astro'
 
 export const getStaticPaths = (async ({ paginate }) => {
   const dayMap = await getFilteredDayMap()
@@ -28,5 +29,6 @@ const { title, hero } = frontmatter
   frontmatter={{ title, tableOfContents: false, hero: page.currentPage === 1 ? hero : undefined }}
 >
   {page.currentPage === 1 && <LatestPosts {latestPosts} />}
+  {page.currentPage === 1 && <LatestVids />}
   {page.data.map((day) => <Day {day} renderTitle />)}
 </StarlightPage>
