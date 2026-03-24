@@ -13,7 +13,9 @@ export const getStaticPaths = (async ({ paginate }) => {
   const dayMap = await getFilteredDayMap()
   const days = [...dayMap.values()].sort((a, b) => b.key.localeCompare(a.key))
   const sidebar = await getSidebar()
-  const latestPosts = (await getCollection('posts')).sort((a, b) => -a.data.day.localeCompare(b.data.day)).slice(0, 5)
+  const latestPosts = (await getCollection('posts'))
+    .sort((a, b) => -a.data.day.localeCompare(b.data.day))
+    .slice(0, 5)
   return paginate(days, { pageSize: 5, props: { sidebar, latestPosts } })
 }) satisfies GetStaticPaths
 
@@ -29,6 +31,12 @@ const { title, hero } = frontmatter
   frontmatter={{ title, tableOfContents: false, hero: page.currentPage === 1 ? hero : undefined }}
 >
   {page.currentPage === 1 && <LatestPosts {latestPosts} />}
-  {page.currentPage === 1 && <LatestVids />}
+  <!-- {page.currentPage === 1 && <LatestVids />} -->
   {page.data.map((day) => <Day {day} renderTitle />)}
 </StarlightPage>
+
+<style>
+  :global(article):not(article article, :first-of-type) {
+    margin-top: 5rem;
+  }
+</style>

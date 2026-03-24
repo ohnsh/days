@@ -11,9 +11,25 @@ const latest = await getCollection('youtube', (entry) => {
 latest.sort((a, b) => -a.data.publishedAt.localeCompare(b.data.publishedAt))
 ---
 
+<!-- TODO: this needs to be a thumbnail grid. -->
 <article>
   <h2>Latest Videos</h2>
   <ul>
-    {latest.slice(0, 5).map((vid) => <li><a href={slugFromDay(vid.data.day)}>{vid.data.title}</a></li>)}
+    {latest.slice(0, 10).map((vid) => <li><a href={slugFromDay(vid.data.day)}>{vid.data.title}</a></li>)}
   </ul>
 </article>
+
+<style>
+  ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 12em);
+    /* column-width: 12ch;
+    > li {
+      break-inside: avoid;
+    }  */
+  }
+  a:not(:hover) {
+    text-decoration: none;
+  }
+</style>
