@@ -1,6 +1,23 @@
 import * as Bun from 'bun'
 import { mkdir } from 'node:fs/promises'
 
+async function reposLatest() {
+  const json = await Bun.file('.days/github/repos.json').json()
+  for (const repo of json) {
+    const { name, pushed_at } = repo
+    repoLatest(name)
+  }
+}
+
+// https://docs.github.com/en/rest/commits/commits
+async function repoLatest(repo: string) {
+  const json = await Bun.file(`.days/github/commits/${repo}.json`).json()
+  const [latestCommit] = json
+  const { date } = latestCommit.commit.author
+  // `since` is a query parameter to commits endpoint
+  const since = date
+}
+
 async function api(url: URL | string) {
   const headers = {
     Accept: 'application/vnd.github+json',
@@ -30,8 +47,10 @@ async function apiAllPages(url: URL | string) {
 }
 
 async function ghDownloader() {
-  const reposUrl = 'https://api.github.com/user/repos'
-  const repos = await apiAllPages(reposUrl)
+  // ?sort=updated ?sort=pushed
+  // ?since=timestamp only show repositories updated after the given time
+  // 304 Not modified (?)
+  const repos = await apiAllPages('https://api.github.com/user/repos')
 
   repos.sort((a, b) => Date.parse(b.updated_at) - Date.parse(a.updated_at))
 

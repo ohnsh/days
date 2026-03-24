@@ -16,4 +16,4 @@ The deployment component was supposed to happen on Firebase, but I had already r
 
 Okay, Google, I'll use something else.
 
-I've been using Cloudflare for several things, including this blog project, so naturally I chose Cloudflare Workers. (I've never given Cloudflare a dime, but someday it'll be an honor.) Everything went pretty smoothly from there. Once again, [a link to the README for my full report](https://github.com/ohnsh/ra24-3-cloudflare).
+I've been using Cloudflare for several things, including this blog project, so naturally I chose Cloudflare Workers. (I've never given Cloudflare a dime, but only because they're shy about asking.) Everything went pretty smoothly from there. Once again, [a link to the README for my full report](https://github.com/ohnsh/ra24-3-cloudflare).
