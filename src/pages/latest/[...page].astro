@@ -10,10 +10,13 @@ import LatestPosts from '@/components/LatestPosts.astro'
 import LatestVids from '@/components/LatestVids.astro'
 
 export const getStaticPaths = (async ({ paginate }) => {
+  function getPosts() {
+    return getCollection('posts', ({ data: { draft = false } }) => !draft || import.meta.env.DEV)
+  }
   const dayMap = await getFilteredDayMap()
   const days = [...dayMap.values()].sort((a, b) => b.key.localeCompare(a.key))
   const sidebar = await getSidebar()
-  const latestPosts = (await getCollection('posts'))
+  const latestPosts = (await getPosts())
     .sort((a, b) => -a.data.day.localeCompare(b.data.day))
     .slice(0, 5)
   return paginate(days, { pageSize: 5, props: { sidebar, latestPosts } })
