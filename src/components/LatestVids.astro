@@ -15,19 +15,48 @@ latest.sort((a, b) => -a.data.publishedAt.localeCompare(b.data.publishedAt))
 <article>
   <h2>Latest Videos</h2>
   <ul>
-    {latest.slice(0, 10).map((vid) => <li><a href={slugFromDay(vid.data.day)}>{vid.data.title}</a></li>)}
+    {
+      latest.slice(0, 6).map((vid) => (
+        <li>
+          <a href={slugFromDay(vid.data.day)}>
+            <img src={vid.data.thumbnails.high.url} />
+            {vid.data.title}
+          </a>
+        </li>
+      ))
+    }
   </ul>
 </article>
 
 <style>
+  img {
+    --ratio: 16/9;
+    --b-rad: 5%;
+    aspect-ratio: var(--ratio);
+    /* thumbnails are 4/3 with letterbox for some reason. crop out the letterbox. */
+    object-fit: cover;
+    /* need to get fancy because percentages create non-circular ellipses on non-square rectangles. */
+    border-radius: var(--b-rad) / calc(var(--ratio) * var(--b-rad));
+  }
   ul {
+    margin-inline: 0;
+    padding-inline: 0;
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(auto-fill, 12em);
-    /* column-width: 12ch;
-    > li {
-      break-inside: avoid;
-    }  */
+    /* responsive grid of thumbnails */
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    /* maximum of 3 rows (see also `overflow` on li) */
+    grid-template-rows: repeat(3, auto);
+    grid-auto-rows: 0px;
+
+    /* column layout isn't half bad: */ 
+    /* column-width: 12ch; */
+    /* > li { break-inside: avoid; } */
+  }
+  li {
+    overflow: hidden;
+    /* would prefer `gap` on grid container, but it creates extra space for every "hidden" (implicit) row */
+    margin: 4px;
   }
   a:not(:hover) {
     text-decoration: none;

@@ -34,7 +34,7 @@ const { title, hero } = frontmatter
   frontmatter={{ title, tableOfContents: false, hero: page.currentPage === 1 ? hero : undefined }}
 >
   {page.currentPage === 1 && <LatestPosts {latestPosts} />}
-  <!-- {page.currentPage === 1 && <LatestVids />} -->
+  {page.currentPage === 1 && <LatestVids />}
   {page.data.map((day) => <Day {day} renderTitle />)}
 </StarlightPage>
 
