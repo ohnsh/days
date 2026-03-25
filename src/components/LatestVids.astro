@@ -16,7 +16,7 @@ latest.sort((a, b) => -a.data.publishedAt.localeCompare(b.data.publishedAt))
   <h2>Latest Videos</h2>
   <ul>
     {
-      latest.slice(0, 6).map((vid) => (
+      latest.slice(0, 8).map((vid) => (
         <li>
           <a href={slugFromDay(vid.data.day)}>
             <img src={vid.data.thumbnails.high.url} />
