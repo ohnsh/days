@@ -29,7 +29,7 @@ async function apiAllPages(url: URL | string) {
   return data
 }
 
-// https://docs.github.com/en/rest/commits/commits
+// TODO: incremental fetch of commits
 async function repoLatest(repo: string) {
   const json = await Bun.file(`.days/github/commits/${repo}.json`).json()
   const [latestCommit] = json
@@ -54,6 +54,7 @@ async function ghDownloader() {
     const saved = reposSaved.find((repo) => repo.full_name === full_name)
 
     if (!saved || isUpdated(pushed_at, saved.pushed_at)) {
+      // https://docs.github.com/en/rest/commits/commits
       const { name, commits_url } = repo
       const url = new URL(commits_url.replaceAll(/{[^}]+}/g, '')) /* ?author=ohnsh */
       url.searchParams.set('per_page', '50')
