@@ -1,6 +1,7 @@
 import { defineRouteMiddleware, type StarlightRouteData } from '@astrojs/starlight/route-data'
 import type { Day } from './lib/days'
 import type { Page } from 'astro'
+import type { CollectionEntry } from 'astro:content'
 
 function getPagination(page: Page): StarlightRouteData['pagination'] {
   const next = page.url.next ? { href: page.url.next } : undefined
@@ -31,12 +32,15 @@ function extractOgImages(entry: Day) {
     return [meta.data.ogImage]
   }
 
+  const score = (entry: CollectionEntry<'youtube'>) =>
+    entry.data.tags?.includes('🤳') ? -2 : entry.data.tags?.includes('🏃‍♂️') ? -1 : 0
+
   const videoIds =
     youtube
       // for now: remove timelapses from consideration
       .filter(({ data }) => !data.tags?.includes('⏳'))
       // for now: prioritize running vid thumbnails
-      .sort((a, b) => (a.data.tags?.includes('🏃‍♂️') ? -1 : 0) - (b.data.tags?.includes('🏃‍♂️') ? -1 : 0))
+      .sort((a, b) => score(a) - score(b))
       .map(({ data }) => data.videoId) ?? []
   // const videoId = youtube?.data[0].videoId
   // const { videoId } = body?.match(/<YouTube\s+id="(?<videoId>[^"]+)"/)?.groups ?? {}
