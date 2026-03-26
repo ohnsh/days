@@ -50,10 +50,10 @@ async function ghDownloader() {
     .catch((e) => [])
 
   for (const repo of reposFetched) {
-    const { full_name, updated_at } = repo
+    const { full_name, pushed_at } = repo
     const saved = reposSaved.find((repo) => repo.full_name === full_name)
 
-    if (!saved || isUpdated(updated_at, saved.updated_at)) {
+    if (!saved || isUpdated(pushed_at, saved.pushed_at)) {
       const { name, commits_url } = repo
       const url = new URL(commits_url.replaceAll(/{[^}]+}/g, '')) /* ?author=ohnsh */
       url.searchParams.set('per_page', '50')
