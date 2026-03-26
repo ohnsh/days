@@ -1,23 +1,6 @@
 import * as Bun from 'bun'
 import { mkdir } from 'node:fs/promises'
 
-async function reposLatest() {
-  const json = await Bun.file('.days/github/repos.json').json()
-  for (const repo of json) {
-    const { name, pushed_at } = repo
-    repoLatest(name)
-  }
-}
-
-// https://docs.github.com/en/rest/commits/commits
-async function repoLatest(repo: string) {
-  const json = await Bun.file(`.days/github/commits/${repo}.json`).json()
-  const [latestCommit] = json
-  const { date } = latestCommit.commit.author
-  // `since` is a query parameter to commits endpoint
-  const since = date
-}
-
 async function api(url: URL | string) {
   const headers = {
     Accept: 'application/vnd.github+json',
@@ -46,27 +29,42 @@ async function apiAllPages(url: URL | string) {
   return data
 }
 
+// https://docs.github.com/en/rest/commits/commits
+async function repoLatest(repo: string) {
+  const json = await Bun.file(`.days/github/commits/${repo}.json`).json()
+  const [latestCommit] = json
+  const { date } = latestCommit.commit.author
+  // `since` is a query parameter to commits endpoint
+  const since = date
+}
+
 async function ghDownloader() {
   // ?sort=updated ?sort=pushed
   // ?since=timestamp only show repositories updated after the given time
   // 304 Not modified (?)
-  const repos = await apiAllPages('https://api.github.com/user/repos')
-
-  repos.sort((a, b) => Date.parse(b.updated_at) - Date.parse(a.updated_at))
-
   await mkdir('.days/github/commits', { recursive: true })
-  await Bun.file('.days/github/repos.json').write(JSON.stringify(repos))
 
-  for (const repo of repos) {
-    const { name, commits_url } = repo
-    const url = new URL(commits_url.replaceAll(/{[^}]+}/g, '')) /* ?author=ohnsh */
-    url.searchParams.set('per_page', '50')
-    const commits = await apiAllPages(url).then((commits) =>
-      commits.filter(({ commit }) => isMyCommit(commit))
-    )
+  const reposFetched = await apiAllPages('https://api.github.com/user/repos?sort=updated')
+  const reposSaved = await Bun.file('.days/github/repos.json')
+    .json()
+    .catch((e) => [])
 
-    await Bun.file(`.days/github/commits/${name}.json`).write(JSON.stringify(commits))
+  for (const repo of reposFetched) {
+    const { full_name, updated_at } = repo
+    const saved = reposSaved.find((repo) => repo.full_name === full_name)
+
+    if (!saved || isUpdated(updated_at, saved.updated_at)) {
+      const { name, commits_url } = repo
+      const url = new URL(commits_url.replaceAll(/{[^}]+}/g, '')) /* ?author=ohnsh */
+      url.searchParams.set('per_page', '50')
+
+      const commits = await apiAllPages(url).then((commits) =>
+        commits.filter(({ commit }) => isMyCommit(commit))
+      )
+      await Bun.file(`.days/github/commits/${name}.json`).write(JSON.stringify(commits))
+    }
   }
+  await Bun.file('.days/github/repos.json').write(JSON.stringify(reposFetched))
 }
 
 function isMyCommit(commit) {
@@ -79,6 +77,10 @@ function isMyCommit(commit) {
     host === 'jom.sh' ||
     host === 'jomsh.cc'
   )
+}
+
+function isUpdated(fetchedTS: string, savedTS: string) {
+  return new Date(fetchedTS).getTime() > new Date(savedTS).getTime()
 }
 
 await ghDownloader()
