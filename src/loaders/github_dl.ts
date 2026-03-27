@@ -65,17 +65,20 @@ async function ghDownloader() {
       console.log(`${name} not saved; fetching all.`)
       url.searchParams.set('per_page', '50')
       commits = await apiAllPages(url).then((commits) =>
-        commits.filter(({ commit }) => isMyCommit(commit))
+        commits.filter((commit) => isMyCommit(commit))
       )
     } else {
       const savedCommits = await Bun.file(`.days/github/commits/${name}.json`).json()
       const [latestCommit] = savedCommits
+      const { sha } = latestCommit
       const { date } = latestCommit.commit.author
+
       url.searchParams.set('per_page', '10')
       url.searchParams.set('since', date)
+
       console.log(`${name} cache out of date; fetching new commits since ${date}`)
       const newCommits = await apiAllPages(url).then((commits) =>
-        commits.filter(({ commit }) => isMyCommit(commit))
+        commits.filter((commit) => commit.sha !== sha && isMyCommit(commit))
       )
       console.log(`${newCommits.length} new commits; ${savedCommits.length} saved commits.`)
       commits = [...newCommits, ...savedCommits]
@@ -87,7 +90,7 @@ async function ghDownloader() {
 }
 
 function isMyCommit(commit) {
-  const { name, email } = commit.author
+  const { name, email } = commit.commit.author
   const [_user, host] = email.split('@')
   return (
     name.toLowerCase() === 'jonathan sherrell' ||
