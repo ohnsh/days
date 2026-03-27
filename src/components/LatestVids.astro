@@ -11,9 +11,8 @@ const latest = await getCollection('youtube', (entry) => {
 latest.sort((a, b) => -a.data.publishedAt.localeCompare(b.data.publishedAt))
 ---
 
-<!-- TODO: this needs to be a thumbnail grid. -->
 <article>
-  <h2>Latest Videos</h2>
+  <h2>Latest Uploads</h2>
   <ul>
     {
       latest.slice(0, 8).map((vid) => (
