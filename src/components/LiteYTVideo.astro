@@ -5,7 +5,7 @@ const date = new Date(publishedAt).toLocaleDateString('en-US', { dateStyle: 'med
 ---
 
 <figure>
-  <YouTube id={videoId} posterQuality="max" />
+  <YouTube id={videoId} {title} posterQuality="max" />
   {
     !naked && (
       <figcaption>

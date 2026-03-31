@@ -9,26 +9,4 @@ interface Props {
 const { videos } = Astro.props
 ---
 
-{
-  videos.map((video) => (
-    <div>
-      <LiteYTVideo {...video.data} naked />
-      <p>{video.data.title}</p>
-    </div>
-  ))
-}
-
-<style>
-  div {
-    position: relative;
-  }
-  p {
-    position: absolute;
-    top: 0;
-    left: 0;
-    text-shadow: 0 0 .2em black;
-    font-weight: 500;
-    font-size: var(--sl-text-xl);
-    margin: .3em .5em;
-  }
-</style>
+{videos.map((video) => <LiteYTVideo {...video.data} naked />)}
