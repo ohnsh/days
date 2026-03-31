@@ -18,6 +18,10 @@ for (const vid of day) {
   list.push(vid)
 }
 
+for (const list of tagMap.values()) {
+  list.sort((a, b) => a.data.title.localeCompare(b.data.title))
+}
+
 const categories = [...tagMap.entries()]
 if (sort) {
   const defaultIndex = sort.includes('') ? sort.indexOf('') : sort.length
