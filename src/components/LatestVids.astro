@@ -13,13 +13,13 @@ latest.sort((a, b) => -a.data.publishedAt.localeCompare(b.data.publishedAt))
 
 <article>
   <h2>Latest Uploads</h2>
-  <ul>
+  <ul class="not-content">
     {
       latest.slice(0, 8).map((vid) => (
         <li>
           <a href={slugFromDay(vid.data.day)}>
             <img src={vid.data.thumbnails.high.url} />
-            {vid.data.title}
+            <span>{vid.data.title}</span>
           </a>
         </li>
       ))
@@ -28,16 +28,9 @@ latest.sort((a, b) => -a.data.publishedAt.localeCompare(b.data.publishedAt))
 </article>
 
 <style>
-  img {
-    --ratio: 16/9;
-    --b-rad: 5%;
-    aspect-ratio: var(--ratio);
-    /* thumbnails are 4/3 with letterbox for some reason. crop out the letterbox. */
-    object-fit: cover;
-    /* need to get fancy because percentages create non-circular ellipses on non-square rectangles. */
-    border-radius: var(--b-rad) / calc(var(--ratio) * var(--b-rad));
-  }
   ul {
+    --b-rad: 8px;
+
     margin-inline: 0;
     padding-inline: 0;
     list-style: none;
@@ -56,8 +49,35 @@ latest.sort((a, b) => -a.data.publishedAt.localeCompare(b.data.publishedAt))
     overflow: hidden;
     /* would prefer `gap` on grid container, but it creates extra space for every "hidden" (implicit) row */
     margin: 4px;
+    position: relative;
+    color: var(--color-paper);
+  }
+  a {
+    color: inherit;
   }
   a:not(:hover) {
     text-decoration: none;
+  }
+  img {
+    --ratio: 16/9;
+    width: 100%;
+    aspect-ratio: var(--ratio);
+    /* thumbnails are 4/3 with letterbox for some reason. crop out the letterbox. */
+    object-fit: cover;
+    /* need to get fancy because percentages create non-circular ellipses on non-square rectangles. */
+    border-radius: var(--b-rad);
+  }
+  span {
+    --margin: 3px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-shadow: 0 0 .2em black;
+    font-weight: 500;
+    margin: var(--margin);
+    padding: 0 .3em;
+    background-color: hsl(none none 0% / 35%);
+    line-height: 1.5em;
+    border-top-left-radius: calc(var(--b-rad) - var(--margin));
   }
 </style>
