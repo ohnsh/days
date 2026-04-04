@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content'
-import VideoList from './VideoList.astro'
+import LiteYTVideo from './LiteYTVideo.astro'
 import { Tabs, TabItem } from '@astrojs/starlight/components'
 
 interface Props {
@@ -14,7 +14,12 @@ const { categories } = Astro.props
   {
     categories.map(([tag, videos]) => (
       <TabItem label={tag || 'uncategorized'}>
-        <VideoList {videos} />
+        {videos.map((video) => (
+          <>
+            <LiteYTVideo {...video.data} naked />
+            {video.data.description && <p>{video.data.description}</p>}
+          </>
+        ))}
       </TabItem>
     ))
   }
