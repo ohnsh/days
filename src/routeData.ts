@@ -32,15 +32,16 @@ function extractOgImages(entry: Day) {
     return [meta.data.ogImage]
   }
 
-  const score = (entry: CollectionEntry<'youtube'>) =>
-    entry.data.tags?.includes('🤳') ? -2 : entry.data.tags?.includes('🏃‍♂️') ? -1 : 0
+  const priority = ['🐶', '🎣', '🤳', '🎙️', '🏃‍♂️', '🚗']
+
+  const tagScore = (tag: string) =>
+    priority.includes(tag) ? priority.indexOf(tag) : priority.length
+
+  const entryScore = ({ data: { tags }}: CollectionEntry<'youtube'>) => tags ? Math.min(...tags.map(tagScore)) : priority.length
 
   const videoIds =
     youtube
-      // for now: remove timelapses from consideration
-      .filter(({ data }) => !data.tags?.includes('⏳'))
-      // for now: prioritize running vid thumbnails
-      .sort((a, b) => score(a) - score(b))
+      .sort((a, b) => entryScore(a) - entryScore(b))
       .map(({ data }) => data.videoId) ?? []
   // const videoId = youtube?.data[0].videoId
   // const { videoId } = body?.match(/<YouTube\s+id="(?<videoId>[^"]+)"/)?.groups ?? {}
