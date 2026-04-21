@@ -32,7 +32,7 @@ function extractOgImages(entry: Day) {
     return [meta.data.ogImage]
   }
 
-  const priority = ['🐶', '🎣', '🤳', '🎙️', '🏃‍♂️', '🚗']
+  const priority = ['🐶', '🎣', '🎙️', '🏃‍♂️', '🤳', '🚗']
 
   const tagScore = (tag: string) =>
     priority.includes(tag) ? priority.indexOf(tag) : priority.length
