@@ -15,8 +15,8 @@
   "dependencies": {
     "@astro-community/astro-embed-youtube": "^0.5.10",
     "@astrojs/check": "^0.9.9",
-    "@astrojs/mdx": "^5.0.6",
-    "@astrojs/starlight": "^0.38.5",
+    "@astrojs/mdx": "^6.0.3",
+    "@astrojs/starlight": "^0.40.0",
     "@astropub/context": "^0.1.0",
     "@astropub/md": "^1.0.0",
     "@lucide/astro": "^1.18.0",
