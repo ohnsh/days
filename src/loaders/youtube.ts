@@ -2,6 +2,7 @@ import type { Loader } from 'astro/loaders'
 import uploads from '../../.days/youtube/uploads.json'
 import shorts from '../../.days/youtube/shorts.json'
 import { z } from 'astro/zod'
+import dropList from './droplist'
 
 export const youtubeSchema = z.object({
     videoId: z.string(),
@@ -28,6 +29,11 @@ export function youtubeLoader(): Loader {
           thumbnails,
           resourceId: { videoId },
         } = snippet
+
+        if (dropList.includes(videoId)) {
+          console.log(videoId)
+          continue
+        }
 
         const day = getDayKey(title, publishedAt)
         const isShort = shorts.some(({ snippet }) => snippet.resourceId.videoId === videoId)
