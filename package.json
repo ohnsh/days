@@ -15,14 +15,14 @@
   "dependencies": {
     "@astro-community/astro-embed-youtube": "^0.5.10",
     "@astrojs/check": "^0.9.9",
-    "@astrojs/mdx": "^6.0.3",
-    "@astrojs/starlight": "^0.40.0",
+    "@astrojs/mdx": "^7.0.0",
+    "@astrojs/starlight": "^0.41.1",
     "@astropub/context": "^0.1.0",
     "@astropub/md": "^1.0.0",
     "@lucide/astro": "^1.18.0",
     "@mux/mux-player-astro": "^3.13.0",
     "@sindresorhus/slugify": "^3.0.0",
-    "astro": "^6.4.6",
+    "astro": "^7.0.3",
     "rehype-external-links": "^3.0.0",
     "starlight-theme-flexoki": "^0.2.2",
     "typescript": "^6.0.3"
