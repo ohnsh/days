@@ -14,7 +14,7 @@ const { latestPosts } = Astro.props
     {
       latestPosts.map((post) => (
         <li>
-          <a href={slugFromDay(post.data.day)}>{post.data.title}</a>{' '}
+          <a href={`/${slugFromDay(post.data.day)}`}>{post.data.title}</a>{' '}
           <span>
             {post.data.date.toLocaleDateString('en-US', {
               month: 'numeric',
