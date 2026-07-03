@@ -1,0 +1,33 @@
+[[language]]
+name = "typescript"
+# Helix will run both servers sequentially.
+# We explicitly tell typescript-language-server NOT to touch formatting.
+language-servers = ["typescript-language-server"]
+
+[language.formatter]
+command = "prettier"
+args = [ "--stdin-filepath", "a.ts" ]
+
+[[language]]
+name = "tsx"
+language-servers = ["typescript-language-server"]
+
+[language.formatter]
+command = "prettier"
+args = [ "--stdin-filepath", "a.tsx" ]
+
+[[language]]
+name = "javascript"
+language-servers = ["typescript-language-server"]
+
+[language.formatter]
+command = "prettier"
+args = [ "--stdin-filepath", "a.js" ]
+
+[[language]]
+name = "jsx"
+language-servers = ["typescript-language-server"]
+
+[language.formatter]
+command = "prettier"
+args = [ "--stdin-filepath", "a.jsx" ]
