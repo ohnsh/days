@@ -2,7 +2,7 @@ import type { StarlightUserConfig } from '@astrojs/starlight/types'
 
 export type SidebarConfig = NonNullable<StarlightUserConfig['sidebar']>
 
-export const sidebarTemplate: SidebarConfig = [
+export const sidebarTemplate = [
   // header area
   {
     label: 'John Sherrell',
@@ -18,4 +18,4 @@ export const sidebarTemplate: SidebarConfig = [
     attrs: { target: '_blank', style: 'margin-top: 2em' },
   },
   { label: 'j.ohn.sh', link: 'https://j.ohn.sh', attrs: { target: '_blank' } },
-]
+] satisfies SidebarConfig

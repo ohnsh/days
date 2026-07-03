@@ -55,7 +55,7 @@ export function dayFromDate(date: Date | string, plainDate: boolean) {
 }
 
 export function queryDay(day: string, opts: Intl.DateTimeFormatOptions = {}) {
-  return normalizePlainDate(day).toLocaleDateString('en-US', opts)
+  return normalizePlainDate(day).toLocaleDateString('en-US', { timeZone: 'UTC', ...opts })
 }
 
 export function titleFromDay(day: string) {

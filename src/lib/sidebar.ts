@@ -88,10 +88,7 @@ function _sidebarFromTags(tags: string[]) {
   return {
     label: 'Tags',
     collapsed: true,
-    items: tags.map(tag => ({
-      label: tag,
-      link: `/tags/${tag}`
-    }))
+    items: tags.map((tag) => ({ label: tag, link: `/tags/${tag}` })),
   }
 }
 
