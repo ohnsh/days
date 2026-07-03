@@ -2,17 +2,29 @@
 import { getCollection } from 'astro:content'
 import { slugFromDay } from '@/lib/dates'
 
+interface Props {
+  include: 'live' | 'non-live' | 'all'
+}
+
+const MS_PER_DAY = 1000 * 3600 * 24
+
+const { include } = Astro.props
+
 const latest = await getCollection('youtube', (entry) => {
   const pubDate = new Date(entry.data.publishedAt)
   const msSincePub = Date.now() - pubDate.getTime()
-  const MS_PER_DAY = 1000 * 3600 * 24
-  return msSincePub < MS_PER_DAY * 30
+
+  const segmenter = new Intl.Segmenter('en', { granularity: 'grapheme' })
+  const isLive = [...segmenter.segment(entry.data.title)][0].segment === '🔴'
+  const liveFilter = isLive ? include !== 'non-live' : include !== 'live'
+
+  return liveFilter && msSincePub < MS_PER_DAY * 30
 })
 latest.sort((a, b) => -a.data.publishedAt.localeCompare(b.data.publishedAt))
 ---
 
 <article>
-  <h2>Latest Uploads</h2>
+  <h2>Latest {include !== 'live' ? 'Uploads' : 'Streams'}</h2>
   <ul class="not-content">
     {
       latest.slice(0, 8).map((vid) => (
@@ -41,7 +53,7 @@ latest.sort((a, b) => -a.data.publishedAt.localeCompare(b.data.publishedAt))
     grid-template-rows: repeat(3, auto);
     grid-auto-rows: 0px;
 
-    /* column layout isn't half bad: */ 
+    /* column layout isn't half bad: */
     /* column-width: 12ch; */
     /* > li { break-inside: avoid; } */
   }
@@ -72,10 +84,10 @@ latest.sort((a, b) => -a.data.publishedAt.localeCompare(b.data.publishedAt))
     position: absolute;
     top: 0;
     left: 0;
-    text-shadow: 0 0 .2em black;
+    text-shadow: 0 0 0.2em black;
     font-weight: 500;
     margin: var(--margin);
-    padding: 0 .3em;
+    padding: 0 0.3em;
     background-color: hsl(none none 0% / 35%);
     line-height: 1.5em;
     border-top-left-radius: calc(var(--b-rad) - var(--margin));

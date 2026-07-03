@@ -95,3 +95,21 @@ async function getPlaylist(playlistId: string, savedItems: any[]) {
 }
 
 await savePlaylists('ohn-sh')
+
+// https://www.joshvickerson.com/posts/excluding-livestreams-from-the-youtube-data-api-in-javascript/
+// for now, just using the emoji indicator, but this is the basis for a proper check whether a given video was a live broadcast.
+/*
+async function checkIfLiveStreamed(videoId) {
+  let url = `https://youtube.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&id=${videoId}&key=${API_KEY}`;
+  try {
+    const {items} = fetch(url)
+    // if liveStreamingDetails is defined, this video was livestreamed
+    return items[0].liveStreamingDetails != null;
+  } catch (ex) {
+    console.log(ex);
+
+    // If failed, return false; assume video was not livestreamed
+    return false;
+  }
+}
+*/
