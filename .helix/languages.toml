@@ -9,6 +9,14 @@ command = "prettier"
 args = [ "--stdin-filepath", "a.ts" ]
 
 [[language]]
+name = "astro"
+auto-format = true
+
+[language.formatter]
+command = "prettier"
+args = [ "--stdin-filepath", "a.astro" ]
+
+[[language]]
 name = "tsx"
 language-servers = ["typescript-language-server"]
 
