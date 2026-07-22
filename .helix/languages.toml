@@ -1,7 +1,5 @@
 [[language]]
 name = "typescript"
-# Helix will run both servers sequentially.
-# We explicitly tell typescript-language-server NOT to touch formatting.
 language-servers = ["typescript-language-server"]
 
 [language.formatter]
