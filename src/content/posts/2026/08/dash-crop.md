@@ -16,7 +16,7 @@ The basic idea is to display one quadrant at a time in a main view that occupies
 
 All four views use the same `CropCanvas` component, implemented using the `<canvas>` element. Each view registers a callback on the underlying `<video>` that draws a specific rectangle from the video frame onto its canvas. Here's the full effect:
 
-```
+```ts
   useEffect(() => {
     if (!videoRef.current || !canvasRef.current) return
     const video = videoRef.current
@@ -51,7 +51,7 @@ All four views use the same `CropCanvas` component, implemented using the `<canv
 
 Since the canvases are interactive (the layout changes when you click them), they're wrapped in `<button>` elements that handle click events, making the overlay relatively accessible, especially to keyboard users. Additionally, the static data structure that defines the quadrants includes descriptive labels for screen readers:
 
-```
+```ts
 {
   id: 'topLeft',
   name: 'Display 1 (top left)',
