@@ -5,14 +5,14 @@ import { z } from 'astro/zod'
 import dropList from './droplist'
 
 export const youtubeSchema = z.object({
-    videoId: z.string(),
-    title: z.string(),
-    description: z.string(),
-    thumbnails: z.looseObject({}), // TODO: maybe improve, maybe remove
-    publishedAt: z.string(),
-    day: z.string(),
-    isShort: z.boolean(),
-    tags: z.array(z.string()).optional(),
+  videoId: z.string(),
+  title: z.string(),
+  description: z.string(),
+  thumbnails: z.looseObject({}), // TODO: maybe improve, maybe remove
+  publishedAt: z.string(),
+  day: z.string(),
+  isShort: z.boolean(),
+  tags: z.array(z.string()).optional(),
 })
 
 type YoutubeData = z.infer<typeof youtubeSchema>
@@ -72,8 +72,8 @@ function tagsFromText(title: string, description = '') {
   }
 
   // multiline flag is important. Works for individual lines because `.` matches any character *except* line breaks.
-  const tagsFromDesc = description.match(/^Tags: (.+)$/miv)?.[1].split(', ') ?? []
-  tagsFromDesc.forEach(tag => tags.add(tag))
+  const tagsFromDesc = description.match(/^Tags: (.+)$/imv)?.[1].split(', ') ?? []
+  tagsFromDesc.forEach((tag) => tags.add(tag))
   return [...tags]
 }
 
@@ -94,7 +94,7 @@ function dateFromTitle(title: string, pubDate?: Date) {
   }
 
   if (!match.groups?.year && pubDate) {
-    // no explitic year in title so use the one from published date
+    // no explicit year in title so use the one from published date
     date.setFullYear(computeImplicitYear(date, pubDate))
   }
   return date

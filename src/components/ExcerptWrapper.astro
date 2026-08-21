@@ -9,17 +9,17 @@ interface Props {
 const { headingOffset, fallback = 'paragraph' } = Astro.props
 const html = await Astro.slots.render('default')
 
-// Excerpt delimeter (and overall component design) inspired by HiDeoo/starlight-blog
-const excerptDelimeterIndex = html.indexOf(`<!-- excerpt -->`)
-// ...but with fallback behavior if no delimeter found: just extract the first two paragraphs.
+// Excerpt delimiter (and overall component design) inspired by HiDeoo/starlight-blog
+const excerptDelimiterIndex = html.indexOf(`<!-- excerpt -->`)
+// ...but with fallback behavior if no delimiter found: just extract the first two paragraphs.
 const fallbackIndex = computeFallbackIndex(html)
 
 const excerpt =
-  excerptDelimeterIndex === -1
+  excerptDelimiterIndex === -1
     ? fallback !== 'paragraph' || fallbackIndex === Infinity
       ? html
       : html.slice(0, fallbackIndex)
-    : html.slice(0, excerptDelimeterIndex)
+    : html.slice(0, excerptDelimiterIndex)
 
 function computeFallbackIndex(html: string, paragraphs = 2, greedy = true) {
   const startDiv1 = html.match(/<div[ >]/)
