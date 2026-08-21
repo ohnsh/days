@@ -1,2 +1,11 @@
+# typos
+# https://github.com/crate-ci/typos
+#
+# Also: bunx cspell-cli --gitignore .
+# https://github.com/streetsidesoftware/cspell-cli
+#
+# Also: (bunx) vale .
+# https://docs.vale.sh/topics/quickstart
+#
 [default.extend-words]
 PN = "PN"
