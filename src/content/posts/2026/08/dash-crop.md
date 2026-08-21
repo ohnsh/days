@@ -3,7 +3,7 @@ title: First pass at an interactive picture-in-picture video component
 date: 2026-08-20
 ---
 
-<video src="/crop-demo.mp4" playsinline controls style="max-height: 500px;">
+<video src="https://assets.ohn.sh/2026/08/crop-demo.mp4" playsinline controls style="max-height: 500px;">
 </video>
 
 Much of the video that winds up on [dash.ohn.sh](https://dash.ohn.sh) is recorded in a very particular format (in [OBS Studio](https://obsproject.com/)), consisting of four 1080p tiles, each representing an "angle" of the same scene. Two of those angles are screen captures, which are difficult to read when limited to one quarter of a video player. Luckily, the web platform provides a bunch of tools to process video and create custom video players. The above demo shows a first pass at a solution, implemented as an interactive React component.
