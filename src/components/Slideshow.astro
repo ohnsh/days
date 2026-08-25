@@ -1,0 +1,118 @@
+---
+import { Image } from 'astro:assets'
+
+interface Slide {
+  image: ImageMetadata
+  alt: string
+  caption: string
+}
+
+interface Props {
+  slides: Slide[]
+}
+
+const { slides } = Astro.props
+---
+
+<div
+  class="slideshow not-content"
+  x-data={`{ index: 0, count: ${slides.length} }`}
+  :style="{ '--index': index }"
+>
+  <section class="toolbar">
+    <nav>
+      <button type="button" @click="index = (index + count - 1) % count">←</button>
+      <button type="button" @click="index = (index + 1) % count">→</button>
+    </nav>
+    <p><span x-text="index + 1"></span> of <span x-text="count"></span></p>
+  </section>
+  <section class="viewport">
+    <!-- inline-size container with `overflow: clip` -->
+    <div class="track">
+      {
+        slides.map(({ image, alt, caption }) => (
+          <figure>
+            <figcaption>{caption}</figcaption>
+            <Image src={image} alt={alt} />
+          </figure>
+        ))
+      }
+    </div>
+  </section>
+</div>
+
+<style>
+  .slideshow {
+    margin-inline: auto;
+    background-color: hsl(210deg 30% 40% / 0.2);
+    border-radius: 0.5rem;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-block-start: 1rem;
+  }
+
+  .toolbar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    padding-inline: 2rem;
+
+    p {
+      grid-column: 3;
+      justify-self: right;
+    }
+
+    nav {
+      grid-column: 2;
+      display: flex;
+      gap: 0.3rem;
+      justify-content: center;
+
+      button {
+        font-weight: bold;
+        padding-inline: 0.8rem;
+      }
+    }
+  }
+
+  .viewport {
+    width: 100%;
+    container-type: inline-size;
+    overflow: hidden;
+    margin-inline: auto;
+  }
+
+  .track {
+    width: 100%;
+    display: flex;
+    align-items: start;
+    transform: translateX(calc(var(--index) * (-100%)));
+    /*transition: 0.2s ease;*/
+  }
+
+  figure {
+    width: 100cqi;
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-inline: 1rem;
+    padding-block-end: 1rem;
+
+    figcaption {
+      font-size: 0.94em;
+      padding: 0.3rem 0.5rem;
+    }
+
+    img {
+      align-self: center;
+      border-radius: 5cqi;
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 450px;
+      box-shadow: 0 0 0.7rem rgb(0 0 0 / 0.6);
+    }
+  }
+</style>
