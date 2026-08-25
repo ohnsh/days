@@ -35,7 +35,7 @@ const { title, hero } = frontmatter
 >
   {page.currentPage === 1 && <LatestPosts {latestPosts} />}
   {page.currentPage === 1 && <LatestVids include="non-live" />}
-  {page.currentPage === 1 && <LatestVids include="live" />}
+  <!--{page.currentPage === 1 && <LatestVids include="live" />}-->
   {page.data.map((day) => <Day {day} renderTitle />)}
 </StarlightPage>
 
