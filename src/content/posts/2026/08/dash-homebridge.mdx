@@ -12,8 +12,8 @@ import Slideshow from '@/components/Slideshow.astro'
 import { Image } from 'astro:assets'
 
 export const slides = [
-    { image: actionHome, alt: '', caption: 'In Apple Home, an action runs whenever the Homebridge virtual (dummy) switch is "pressed" (every 15 minutes). The action sends a JSON payload to dashd (the backend server/database) consisting of HomePod sensor readings and a timestamp.' },
-    { image: configHomebridge, alt: '', caption: 'In Homebridge, the virtual switch is set to trigger every 15 minutes, and also to create a local webhook (simple HTTP endpoint) at which it can be triggered on-demand.' },
+    { image: actionHome, alt: '', caption: 'In Apple Home, an action runs whenever the Homebridge dummy switch is "pressed" (every 15 minutes). The action sends a JSON payload to dashd (the backend server/database) consisting of HomePod sensor readings and a timestamp.' },
+    { image: configHomebridge, alt: '', caption: 'In Homebridge, the virtual switch is set to trigger every 15 minutes, and also to create a local webhook where it can be triggered on-demand.' },
     { image: dummySwitchHome, alt: 'Apple Home provides a settings panel for the Homebridge virtual switch, including actions that can be run on single press, double press, and long press.', caption: `Main settings panel for virtual switch in Apple Home.` },
 ]
 
