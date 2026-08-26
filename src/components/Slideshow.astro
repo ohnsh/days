@@ -14,6 +14,9 @@ interface Props {
 const { slides } = Astro.props
 ---
 
+<!-- made this an Alpine.js component. In Astro, an Alpine component is just an Astro
+component, so no need to worry about rendering <Image> in React, which may not even be
+possible. -->
 <div
   class="slideshow not-content"
   x-data={`{ index: 0, count: ${slides.length} }`}
@@ -44,25 +47,30 @@ const { slides } = Astro.props
 <style>
   .slideshow {
     margin-inline: auto;
+    /* low opacity so it works with either light or dark theme */
     background-color: hsl(210deg 30% 40% / 0.2);
     border-radius: 0.5rem;
     max-width: 500px;
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    /* the slide itself provides the padding at the bottom (important for shadow) */
     padding-block-start: 1rem;
   }
 
   .toolbar {
+    /* grid so we can have centered and right-aligned content with an empty left column */
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     padding-inline: 2rem;
 
+    /* "${index} of ${count}" */
     p {
       grid-column: 3;
       justify-self: right;
     }
 
+    /* centered nav buttons */
     nav {
       grid-column: 2;
       display: flex;
@@ -70,14 +78,21 @@ const { slides } = Astro.props
       justify-content: center;
 
       button {
+        cursor: pointer;
         font-weight: bold;
         padding-inline: 0.8rem;
+        &:hover {
+          color: var(--sl-color-accent-high);
+        }
       }
     }
   }
 
+  /* a window into the slide track that clips all but the current slide */
   .viewport {
+    /* now we're a flex item, so full-width is not implied */
     width: 100%;
+    /* allow querying size from slides, which are not direct children */
     container-type: inline-size;
     overflow: hidden;
     margin-inline: auto;
@@ -87,16 +102,23 @@ const { slides } = Astro.props
     width: 100%;
     display: flex;
     align-items: start;
+    /* --index is set by alpine when slide changes */
     transform: translateX(calc(var(--index) * (-100%)));
+    /* don't bother animating until the carousel illusion is implemented */
+    /* (typically involves duplicating the first and last element) */
     /*transition: 0.2s ease;*/
   }
 
   figure {
+    /* fill the "slide viewport" */
+    /* percentage might actually work since the track overflows,
+       but this seems more robust */
     width: 100cqi;
     flex: none;
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    /* room for box-shadow on img */
     padding-inline: 1rem;
     padding-block-end: 1rem;
 
@@ -107,7 +129,9 @@ const { slides } = Astro.props
 
     img {
       align-self: center;
+      /* proportional to slide size, sidesteps problems with percentage */
       border-radius: 5cqi;
+      /* if I only specify max constraints, the image tends to distort */
       width: auto;
       height: auto;
       max-width: 100%;

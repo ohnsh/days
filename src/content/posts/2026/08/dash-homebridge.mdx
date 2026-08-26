@@ -1,5 +1,5 @@
 ---
-title: Using a fake HomeKit switch to automate capturing sensor data
+title: Using a fake HomeKit switch to automate capturing real sensor data
 date: 2026-08-25
 ---
 
@@ -21,4 +21,4 @@ export const slides = [
 
 [Homebridge](https://homebridge.io/) is an open-source, virtual HomeKit bridge that runs on inexpensive hardware (I'm using a Raspberry Pi). With it, non-HomeKit devices can be added to, and controlled by, Apple Home. [homebridge-dummy](https://github.com/mpatfield/homebridge-dummy) is a Homebridge plugin providing virtual switches and other fake "devices" that can trigger or extend HomeKit automations.
 
-As a demo, I'm using this setup to push sensor readings from my HomePods to a database that powers live charts on [dash.ohn.sh](https://dash.ohn.sh). Readings are taken every 15 minutes in response to the virtual switch being "pressed." The automation takes the form of a [Shortcut](https://apps.apple.com/us/app/shortcuts/id915249334) that uses the built-in "Get Contents of URL" action to send the data to my [custom backend](https://github.com/ohnsh/dash/blob/main/dashd/src/index.ts).
+As a demo, I'm using this setup to push sensor readings from my HomePods to a database that powers live charts on [dash.ohn.sh](https://dash.ohn.sh). Readings are taken every 15 minutes in response to the virtual switch being "pressed." The automation takes the form of a [Shortcut](https://apps.apple.com/us/app/shortcuts/id915249334) that uses the built-in "Get Contents of URL" action to send the data to dashd, my [custom backend](https://github.com/ohnsh/dash/blob/main/dashd/src/index.ts).
