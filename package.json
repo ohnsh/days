@@ -33,6 +33,7 @@
 		"typescript": "^6.0.3"
 	},
 	"devDependencies": {
+		"@octokit/types": "^18.0.0",
 		"@types/bun": "^1.4.0",
 		"prettier": "^3.9.6",
 		"prettier-plugin-astro": "^0.14.1",

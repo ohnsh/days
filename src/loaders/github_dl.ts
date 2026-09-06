@@ -1,5 +1,6 @@
 import * as Bun from 'bun'
 import { mkdir } from 'node:fs/promises'
+import type { Endpoints } from '@octokit/types'
 
 async function api(url: URL | string, params?: Record<string, string>) {
   const headers = {
@@ -37,6 +38,13 @@ async function apiAllPages(url: URL | string, params?: Record<string, string>) {
   return data
 }
 
+type GithubRepos = Endpoints['GET /user/repos']['response']['data']
+type ElementOf<T extends Array<any>> = T extends Array<infer R> ? R : never
+type GithubRepo = ElementOf<GithubRepos>
+
+// simpler
+type GithubCommit = Endpoints['GET /repos/{owner}/{repo}/commits']['response']['data'][number]
+
 async function ghDownloader() {
   // ?sort=updated ?sort=pushed
   // ?since=timestamp only show repositories updated after the given time
@@ -46,16 +54,18 @@ async function ghDownloader() {
   // that's cool, right?
   await mkdir('.days/github/commits', { recursive: true })
 
-  const reposFetched = await apiAllPages('https://api.github.com/user/repos?sort=pushed')
-  const reposSaved = await Bun.file('.days/github/repos.json')
+  const reposFetched = (await apiAllPages(
+    'https://api.github.com/user/repos?sort=pushed'
+  )) as GithubRepo[]
+  const reposSaved = (await Bun.file('.days/github/repos.json')
     .json()
-    .catch(() => [])
+    .catch(() => [])) as GithubRepo[]
 
   for (const repo of reposFetched) {
-    const { full_name, pushed_at } = repo
+    const { full_name } = repo
     const saved = reposSaved.find((repo) => repo.full_name === full_name)
 
-    if (saved && !isUpdated(pushed_at, saved.pushed_at)) {
+    if (saved && !isUpdated(repo, saved)) {
       // console.log(`${repo.name} not updated; skipping.`)
       continue
     }
@@ -63,10 +73,10 @@ async function ghDownloader() {
     const { name, commits_url } = repo
     // https://docs.github.com/en/rest/commits/commits
     const url = new URL(commits_url.replaceAll(/{[^}]+}/g, '')) /* ?author=ohnsh */
-    const savedCommits = saved
+    const savedCommits: GithubCommit[] = saved
       ? await Bun.file(`.days/github/commits/${name}.json`).json()
       : undefined
-    let commits
+    let commits: GithubCommit[]
 
     if (!savedCommits || savedCommits.length === 0) {
       console.log(`${name} not saved; fetching all.`)
@@ -77,10 +87,12 @@ async function ghDownloader() {
     } else {
       const [latestCommit] = savedCommits
       const { sha } = latestCommit
-      const { date } = latestCommit.commit.author
+      const { date } = latestCommit.commit.author ?? {}
 
       url.searchParams.set('per_page', '10')
-      url.searchParams.set('since', date)
+      if (date) {
+        url.searchParams.set('since', date)
+      }
 
       console.log(`${name} cache out of date; fetching new commits since ${date}`)
       const newCommits = await apiAllPages(url).then((commits) =>
@@ -95,8 +107,12 @@ async function ghDownloader() {
   await Bun.file('.days/github/repos.json').write(JSON.stringify(reposFetched))
 }
 
-function isMyCommit(commit) {
+function isMyCommit(commit: GithubCommit) {
+  if (!commit.commit.author) return false
+
   const { name, email } = commit.commit.author
+  if (!name || !email) return false
+
   const [_user, host] = email.split('@')
   return (
     name.toLowerCase() === 'jonathan sherrell' ||
@@ -107,8 +123,10 @@ function isMyCommit(commit) {
   )
 }
 
-function isUpdated(fetchedTS: string, savedTS: string) {
-  return new Date(fetchedTS).getTime() > new Date(savedTS).getTime()
+function isUpdated(repo: GithubRepo, savedRepo: GithubRepo) {
+  if (!repo.pushed_at) return false
+  if (!savedRepo.pushed_at) return true
+  return new Date(repo.pushed_at).getTime() > new Date(savedRepo.pushed_at).getTime()
 }
 
 await ghDownloader()
