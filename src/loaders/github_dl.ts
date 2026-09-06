@@ -41,12 +41,15 @@ async function ghDownloader() {
   // ?sort=updated ?sort=pushed
   // ?since=timestamp only show repositories updated after the given time
   // 304 Not modified (?)
+
+  // meant to be run as an npm script, so working dir should be predictable.
+  // that's cool, right?
   await mkdir('.days/github/commits', { recursive: true })
 
   const reposFetched = await apiAllPages('https://api.github.com/user/repos?sort=pushed')
   const reposSaved = await Bun.file('.days/github/repos.json')
     .json()
-    .catch((e) => [])
+    .catch(() => [])
 
   for (const repo of reposFetched) {
     const { full_name, pushed_at } = repo
@@ -60,15 +63,18 @@ async function ghDownloader() {
     const { name, commits_url } = repo
     // https://docs.github.com/en/rest/commits/commits
     const url = new URL(commits_url.replaceAll(/{[^}]+}/g, '')) /* ?author=ohnsh */
+    const savedCommits = saved
+      ? await Bun.file(`.days/github/commits/${name}.json`).json()
+      : undefined
     let commits
-    if (!saved) {
+
+    if (!savedCommits || savedCommits.length === 0) {
       console.log(`${name} not saved; fetching all.`)
       url.searchParams.set('per_page', '50')
       commits = await apiAllPages(url).then((commits) =>
         commits.filter((commit) => isMyCommit(commit))
       )
     } else {
-      const savedCommits = await Bun.file(`.days/github/commits/${name}.json`).json()
       const [latestCommit] = savedCommits
       const { sha } = latestCommit
       const { date } = latestCommit.commit.author
