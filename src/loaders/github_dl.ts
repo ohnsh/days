@@ -73,6 +73,14 @@ async function ghDownloader() {
     const { name, commits_url } = repo
     // https://docs.github.com/en/rest/commits/commits
     const url = new URL(commits_url.replaceAll(/{[^}]+}/g, '')) /* ?author=ohnsh */
+
+    if (name === 'mdn-content') {
+      // might be a good idea to do this for all or most repos.
+      // in general, I should probably be fetching my commits from upstream instead of
+      // keeping around forks.
+      url.searchParams.append('author', 'ohnsh')
+    }
+
     const savedCommits: GithubCommit[] = saved
       ? await Bun.file(`.days/github/commits/${name}.json`).json()
       : undefined
