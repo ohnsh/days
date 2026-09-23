@@ -10,6 +10,11 @@ import LatestPosts from '@/components/LatestPosts.astro'
 import LatestVids from '@/components/LatestVids.astro'
 
 export const getStaticPaths = (async ({ paginate }) => {
+  // should import these from a constants.ts file. making them module-scope
+  // doesn't work due to the way Astro evaluates `getStaticPaths`
+  const PAGE_SIZE = 10
+  const NUM_LATEST_POSTS = 5
+
   function getPosts() {
     return getCollection('posts', ({ data: { draft = false } }) => !draft || import.meta.env.DEV)
   }
@@ -18,8 +23,8 @@ export const getStaticPaths = (async ({ paginate }) => {
   const sidebar = await getSidebar()
   const latestPosts = (await getPosts())
     .sort((a, b) => -a.data.day.localeCompare(b.data.day))
-    .slice(0, 5)
-  return paginate(days, { pageSize: 5, props: { sidebar, latestPosts } })
+    .slice(0, NUM_LATEST_POSTS)
+  return paginate(days, { pageSize: PAGE_SIZE, props: { sidebar, latestPosts } })
 }) satisfies GetStaticPaths
 
 const { page, sidebar, latestPosts } = Astro.props
