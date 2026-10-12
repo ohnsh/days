@@ -8,7 +8,7 @@ import { youtubeLoader, youtubeSchema } from '@/loaders/youtube'
 import { dayFromDate } from './lib/dates'
 
 const posts = defineCollection({
-  loader: glob({ base: './src/content/posts', pattern: '**/*.{md,mdx}' }),
+  loader: glob({ base: './src/content/posts', pattern: '**/[^_]*.{md,mdx}' }),
   schema: z
     .object({
       title: z.string(),
