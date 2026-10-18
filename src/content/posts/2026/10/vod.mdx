@@ -5,8 +5,6 @@ date: 2026-10-17
 
 import VodPlayer from 'vod-player-astro'
 
-I'm working on a better embedded experience. See the full site at [https://vod.ohn.sh](https://vod.ohn.sh).
-
 <VodPlayer
   poster="https://vod-media.ohn.sh/2026-10/16/quad-priv/_assets/quad-priv_2026-10-16_15-43-23.mp4/thumb.webp"
   title="October 16"
@@ -17,4 +15,11 @@ I'm working on a better embedded experience. See the full site at [https://vod.o
   zoom="1h"
 />
 
+It's a video player component that streams camera footage from R2, seamlessly covering timelines of arbitrary length. This is a plain Vite project. The frontend is a React SPA. The backend is a Cloudflare Worker in front of a Turso/libSQL database. There is an authenticated admin route for editing metadata, but since it's only me, I just added some Cloudflare Access rules and called it a day.
+
+There's also a local command that ingests raw footage into the database and R2. The whole package is an upgrade to [dash](https://github.com/ohnsh/dash) and its `video.sh` command.
+
+The source video is MP4, which makes playback a little sluggish. HLS is a possibility, especially since most of the video likely wouldn't need to be re-encoded, but it would at least double the storage requirements.
+
+I'm working on a better embedded experience. See the full site at [https://vod.ohn.sh](https://vod.ohn.sh).
 

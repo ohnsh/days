@@ -1,0 +1,9 @@
+dictionaries = ["custom-words"]
+
+# create list:
+# bunx cspell --words-only --unique "**/*.md" | sort --ignore-case >> project-words.txt
+
+[[dictionaryDefinitions]]
+name = "custom-words"
+path = ".custom-words.txt"
+addWords = true
