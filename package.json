@@ -30,7 +30,8 @@
 		"astro": "^7.3.8",
 		"satteri": "^0.10.5",
 		"starlight-theme-flexoki": "^0.3.0",
-		"typescript": "^6.0.3"
+		"typescript": "^6.0.3",
+		"vod-player-astro": "/Users/jms/.dev/vod/vod-player-astro"
 	},
 	"devDependencies": {
 		"@octokit/types": "^18.0.0",
