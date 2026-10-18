@@ -15,11 +15,11 @@ import VodPlayer from 'vod-player-astro'
   zoom="1h"
 />
 
-[VOD is a video player](https://vod.oh.sh) component that streams camera footage from R2, seamlessly covering timelines of arbitrary length. This is a plain Vite project. The frontend is a React SPA. The backend is a Cloudflare Worker in front of a Turso/libSQL database. There is an authenticated admin route for editing metadata, but since it's only me, I just added some Cloudflare Access rules and called it a day.
+[VOD is a video player](https://vod.oh.sh) component that streams camera footage from R2, seamlessly covering timelines of arbitrary length. This is a plain React/Vite SPA with a Cloudflare Worker backend in front of a Turso/libSQL database. There's an authenticated admin route for editing metadata, but since it's only me, I just added some Cloudflare Access rules and called it a day.
 
-There's also a local command that ingests raw footage into the database and R2. The whole package is an upgrade to [dash](https://github.com/ohnsh/dash) and its `video.sh` command.
+There's also a local command that ingests raw footage into Turso and R2. The whole package is an upgrade to my recent [dash](https://github.com/ohnsh/dash) project and its `video.sh` command.
 
 The source video is MP4, which makes playback a little sluggish. HLS is a possibility, especially since most of the video likely wouldn't need to be re-encoded, but it would at least double the storage requirements.
 
-I'm working on a better embedded experience. See the full site at [https://vod.ohn.sh](https://vod.ohn.sh).
+I'm working on a better embedded experience for this blog and elsewhere. See the full site at [https://vod.ohn.sh](https://vod.ohn.sh).
 
