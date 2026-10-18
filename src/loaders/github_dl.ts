@@ -99,6 +99,8 @@ async function ghDownloader() {
 
       url.searchParams.set('per_page', '10')
       if (date) {
+        // TODO: this logic effectively ignores `--amend` commits.
+        // Those are going to be tricky.
         url.searchParams.set('since', date)
       }
 
