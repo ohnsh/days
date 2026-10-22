@@ -1,43 +1,43 @@
 {
-	"name": "days",
-	"type": "module",
-	"version": "0.0.1",
-	"scripts": {
-		"dev": "astro dev",
-		"build": "astro build",
-		"preview": "astro preview",
-		"astro": "astro",
-		"deploy": "astro build && wrangler deploy",
-		"sync:github": "bun run src/loaders/github_dl.ts",
-		"sync:youtube": "bun run src/loaders/youtube_dl.ts",
-		"sync": "bun run sync:github; bun run sync:youtube",
-		"sp:typos": "bunx typos",
-		"sp:cspell": "bunx cspell-cli --gitignore ."
-	},
-	"dependencies": {
-		"@astro-community/astro-embed-youtube": "^0.5.10",
-		"@astrojs/alpinejs": "^1.0.0",
-		"@astrojs/check": "^0.9.10",
-		"@astrojs/markdown-satteri": "^0.4.3",
-		"@astrojs/mdx": "^8.0.3",
-		"@astrojs/starlight": "^0.42.6",
-		"@astropub/md": "^1.0.0",
-		"@lucide/astro": "^1.53.0",
-		"@mux/mux-player-astro": "^3.14.0",
-		"@sindresorhus/slugify": "^3.0.1",
-		"@types/alpinejs": "^3.17.0",
-		"alpinejs": "^3.17.4",
-		"astro": "^7.3.8",
-		"satteri": "^0.10.5",
-		"starlight-theme-flexoki": "^0.3.0",
-		"typescript": "^6.0.3",
-		"vod-player-astro": "/Users/jms/.dev/vod/vod-player-astro"
-	},
-	"devDependencies": {
-		"@octokit/types": "^18.0.0",
-		"@types/bun": "^1.4.2",
-		"prettier": "^3.9.9",
-		"prettier-plugin-astro": "^1.1.0",
-		"wrangler": "^4.149.0"
-	}
+  "name": "days",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "deploy": "astro build && wrangler deploy",
+    "sync:github": "bun run src/loaders/github_dl.ts",
+    "sync:youtube": "bun run src/loaders/youtube_dl.ts",
+    "sync": "bun run sync:github; bun run sync:youtube",
+    "sp:typos": "bunx typos",
+    "sp:cspell": "bunx cspell-cli --gitignore ."
+  },
+  "dependencies": {
+    "@astro-community/astro-embed-youtube": "^0.5.10",
+    "@astrojs/alpinejs": "^1.0.0",
+    "@astrojs/check": "^0.9.12",
+    "@astrojs/markdown-satteri": "^0.4.5",
+    "@astrojs/mdx": "^8.1.1",
+    "@astrojs/starlight": "^0.42.6",
+    "@astropub/md": "^1.0.0",
+    "@lucide/astro": "^1.61.0",
+    "@mux/mux-player-astro": "^3.14.0",
+    "@sindresorhus/slugify": "^3.0.1",
+    "@types/alpinejs": "^3.17.0",
+    "alpinejs": "^3.17.5",
+    "astro": "^7.4.2",
+    "satteri": "^0.10.5",
+    "starlight-theme-flexoki": "^0.3.0",
+    "typescript": "^6.0.3",
+    "vod-player-astro": "/Users/jms/.dev/vod-misc/vod-player-astro"
+  },
+  "devDependencies": {
+    "@octokit/types": "^18.0.0",
+    "@types/bun": "^1.4.3",
+    "prettier": "^3.9.10",
+    "prettier-plugin-astro": "^1.1.1",
+    "wrangler": "^4.151.3"
+  }
 }
